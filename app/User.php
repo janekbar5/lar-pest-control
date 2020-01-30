@@ -7,17 +7,26 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 //jan
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
     //use Notifiable;
     use HasRoles, Notifiable;
     
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    ////////////////////////////////////////////first photo  Assesors setAttribute
+    protected $appends = [
+        'firstPhoto',
+    ];
+    function getfirstPhotoAttribute()
+    {        
+        return $this->photos->first();	  
+    }
+
+
+
+
     protected $fillable = [
         'name', 'email', 'password',
     ];
@@ -39,4 +48,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /////////////////////////////////////////////////////////////////HASMANY    //    
+    public function photos()
+    {
+        return $this->morphMany('App\Image', 'photoable');
+    }
+
+
+
+
+    ////////////////////////////////////////////////Vue Permissions
+    public function getAllPermissionsAttribute() {
+        $permissions = [];
+          foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+              $permissions[] = $permission->name;
+            }
+          }
+          return $permissions;
+      }
+
 }

@@ -3,3 +3,5 @@
 2 auth OK
 3 GIT ini ok
 ////////////ADMIN LTE
+3 npm install OK
+4 npm install admin-lte@^3.0 --save OK 

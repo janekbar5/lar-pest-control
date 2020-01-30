@@ -1,8 +1,42 @@
+
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
 // Variables
 @import 'variables';
-
+$fa-font-path:        "../webfonts";
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~admin-lte/dist/css/adminlte.css';
+@import '~admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.css';
+
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.router-link-exact-active{
+    background-color: #3f51b5;
+    color:#fff !important;
+}
+.router-link-active{
+  // background-color: #eb2344;
+  // color:#fff !important;
+}
+/////////////////////////for menu
+.sub{
+  padding: 0px 0px 0px 0px !important;
+  margin-left: 30px	!important;
+ }
+
+ table.janek_custom td.janek_custom {
+  text-align: left !important;
+  word-break: break-word;
+  overflow: hidden;
+  width: 100px !important;
+  padding: 0px
+}

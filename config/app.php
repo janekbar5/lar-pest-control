@@ -176,6 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         //jan
         Spatie\Permission\PermissionServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class, //providers
 
     ],
 
@@ -227,6 +229,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        //jan
+        'Image' => Intervention\Image\Facades\Image::class,//aliases
 
     ],
 
