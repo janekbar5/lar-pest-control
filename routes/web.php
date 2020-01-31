@@ -39,7 +39,33 @@ Route::group(['middleware' => ['auth']], function() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////IMAGES      
 Route::post('/v1/api/images/index', 'ImageController@index');
 Route::delete('/v1/api/images/delete/{id}', 'ImageController@destroy');
-  Route::post('/images/post', 'ImageController@post');                
+Route::post('/images/post', 'ImageController@post');    
+///////////////////////////////////////////////////////////////////////////////////////////////////////TREATMENT
+Route::get('v1/api/treatments/index', 'TreatmentController@index'); //list    
+Route::get('v1/api/treatments/{id}/edit', 'TreatmentController@edit'); //edit
+Route::get('v1/api/treatments/create', 'TreatmentController@create'); //create     
+Route::post('v1/api/treatments/create', 'TreatmentController@store'); //create post
+Route::post('v1/api/treatments/update/{id}', 'TreatmentController@update'); //update  post
+Route::put('v1/api/treatments/update/{id}', 'TreatmentController@update'); //update  post 
+Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); //update  post  
+///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
+Route::get('v1/api/tasks/index', 'TaskController@index'); //list    
+Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit
+Route::get('v1/api/tasks/create', 'TaskController@create'); //create     
+Route::post('v1/api/tasks/create', 'TaskController@store'); //create post
+Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post
+Route::put('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post 
+Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  post 
+///////////////////////////////////////////////////////////////////////////////////////////////////////LOCATIONS
+Route::get('v1/api/locations/index', 'LocationController@index'); //list    
+Route::get('v1/api/locations/{id}/edit', 'LocationController@edit'); //edit
+Route::get('v1/api/locations/create', 'LocationController@create'); //create     
+Route::post('v1/api/locations/create', 'LocationController@store'); //create post
+Route::post('v1/api/locations/update/{id}', 'LocationController@update'); //update  post
+Route::put('v1/api/locations/update/{id}', 'LocationController@update'); //update  post 
+Route::delete('v1/api/locations/delete/{id}', 'LocationController@destroy'); //update  post 
+
+
 });    
     
 Route::get('{path}','HomeController@index')->where( 'path', '([A-z\d-/_.]+)?' ); //match any route in VUE

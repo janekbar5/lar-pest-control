@@ -10,23 +10,50 @@ use DB;
 class BackendRepository implements BackendRepositoryInterface
 {
 
+    
+    /////////////////////////////////////////////////////////////////////////////////TREATMENT    
+    public function getTreatmentById($id){
+        return Treatment::where('id', '=', $id)
+                   ->first(); 
+    }    
+    public function getAllTreatments(){  //Admin only
+        return Treatment::
+                   //where('user_id', '=', $user_id)  
+                  orderBy('created_at', 'desc')
+                  //->withTrashed()
+                  ->paginate(10); 
+    }
+    /////////////////////////////////////////////////////////////////////////////////ADMIN TASKS
+    public function getAllTasks(){
+        return Task::  
+                  orderBy('created_at', 'desc')
+                  ->paginate(10); 
+    }
+    public function getTaskById($id){
+        return Task::where('id', '=', $id) 
+                   ->first(); 
+    }
     /////////////////////////////////////////////////////////////////////////////////Address    
     public function getUserAddressById($type,$id){         
         return Address::where('addressable_id', '=', $id) 
                     ->where('addressable_type', '=', $type)                  
                     ->first();
       }
-
      /////////////////////////////////////////////////////////////////////////////////Locations
      public function getLocations($user_id){
-        return Location::where('user_id', '=', $user_id)  
-                  ->orderBy('created_at', 'desc')
+        return Location::where('user_id', '=', $user_id) 
+                  ->with('address') 
+                  ->orderBy('created_at', 'desc')                  
                   ->paginate(10); 
     }
     public function getLocationsById($id){
         return Location::where('id', '=', $id) 
                    ->with('address')
-                   ->with('treatments')
+                   //->with('treatments')
+                   ->with(['treatments' => function ($q) {
+                    $q->withTrashed();
+                   }])
+                   //->withTrashed()
                    ->first(); 
     }
     /////////////////////////////////////////////////////////////////////////////////STATUSES
@@ -53,17 +80,7 @@ class BackendRepository implements BackendRepositoryInterface
     public function getSubStatusesById($id){
         return SubStatus::where('id', '=', $id) 
                    ->first(); 
-    }
-    /////////////////////////////////////////////////////////////////////////////////ADMIN USERS
-    public function getAllTasks(){
-        return Task::  
-                  orderBy('created_at', 'desc')
-                  ->paginate(10); 
-    }
-    public function getTasksById($id){
-        return Task::where('id', '=', $id) 
-                   ->first(); 
-    }
+    }    
     /////////////////////////////////////////////////////////////////////////////////ADMIN USERS
     public function getAdminUsers(){
         return User::
@@ -76,7 +93,7 @@ class BackendRepository implements BackendRepositoryInterface
         return User::where('id', '=', $id) 
                     ->with('photos')                  
                     ->first();
-      }
+    }
      /////////////////////////////////////////////////////////////////////////////////ADMIN ROLES
      public function getAdminRoles(){
         return Role::  
@@ -93,8 +110,7 @@ class BackendRepository implements BackendRepositoryInterface
         return DB::table('audits')  
                   ->orderBy('created_at', 'desc')                  
                   ->paginate(10); 
-    }
-    
+    }   
     
     
 }

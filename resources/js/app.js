@@ -44,6 +44,17 @@ import RolesIndex from './views/roles/RolesIndex'
 import RolesShow from './views/roles/RolesShow'
 import RolesEdit from './views/roles/RolesEdit'
 
+import TasksIndex from './views/tasks/TasksIndex'
+import TasksShow from './views/tasks/TasksShow'
+import TasksEdit from './views/tasks/TasksEdit'
+
+import TreatmentsIndex from './views/treatments/TreatmentsIndex'
+import TreatmentsShow from './views/treatments/TreatmentsShow'
+import TreatmentsEdit from './views/treatments/TreatmentsEdit'
+
+import LocationsIndex from './views/locations/LocationsIndex'
+import LocationsShow from './views/locations/LocationsShow'
+import LocationsEdit from './views/locations/LocationsEdit'
 
 //////////////////////////////////////////////// 2 routers
 let routes = [
@@ -61,7 +72,22 @@ let routes = [
     { path: '/roles/:id/edit', name: 'RolesEdit', component: RolesEdit, meta: {mode: 'edit'} },
     { path: '/roles/:id',  name: 'RolesShow', component: RolesShow, meta: {mode: 'view'} },  
 
+    { path: '/tasks', name: 'TasksIndex', component:TasksIndex, meta: {mode: 'list'} },
+    { path: '/tasks/create', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'create'} },
+    { path: '/tasks/:id/edit', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'edit'} },
+    { path: '/tasks/:id',  name: 'TasksShow', component: TasksShow, meta: {mode: 'view'} },  
     
+    { path: '/treatments', name: 'TreatmentsIndex', component:TreatmentsIndex, meta: {mode: 'list'} },
+    { path: '/treatments/create', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'create'} },
+    { path: '/treatments/:id/edit', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'edit'} },
+    { path: '/treatments/:id',  name: 'TreatmentsShow', component: TreatmentsShow, meta: {mode: 'view'} },
+
+    { path: '/locations', name: 'LocationsIndex', component:LocationsIndex, meta: {mode: 'list'} },
+    { path: '/locations/create', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'create'} },
+    { path: '/locations/:id/edit', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'edit'} },
+    { path: '/locations/:id',  name: 'LocationsShow', component: LocationsShow, meta: {mode: 'view'} },
+
+
     ]
 
 

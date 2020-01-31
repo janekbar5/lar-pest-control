@@ -63,7 +63,12 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['name' => 'location-list','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'location-create','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'location-edit','guard_name' => 'web']);
-		DB::table('permissions')->insert(['name' => 'location-delete','guard_name' => 'web']);
+        DB::table('permissions')->insert(['name' => 'location-delete','guard_name' => 'web']);
+        ///////////37-40 Treatment
+        DB::table('permissions')->insert(['name' => 'treatment-list','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'treatment-create','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'treatment-edit','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'treatment-delete','guard_name' => 'web']);
 		
 		//////////////////////////////////Admin		
         DB::table('role_has_permissions')->insert(['permission_id' => 1,'role_id' => 1]);  		
@@ -110,7 +115,11 @@ class PermissionsTableSeeder extends Seeder
         DB::table('role_has_permissions')->insert(['permission_id' => 34,'role_id' => 1]);  
         DB::table('role_has_permissions')->insert(['permission_id' => 35,'role_id' => 1]);  
         DB::table('role_has_permissions')->insert(['permission_id' => 36,'role_id' => 1]);
-       
+       ///////////37-40 Location
+       DB::table('role_has_permissions')->insert(['permission_id' => 37,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 38,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 39,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 40,'role_id' => 1]);
         
         /////////////////////////////////////Desk User
         DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 2]);

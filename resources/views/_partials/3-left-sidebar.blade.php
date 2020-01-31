@@ -55,6 +55,15 @@
           </li>
           @endcan
 
+          @can('treatment-list') 
+          <li class="nav-item">
+             <router-link to="/treatments" class="nav-link">
+               <i class="nav-icon fas fa-cogs orange"></i> <p>Treatment </p>
+             </router-link>
+           </li>
+           @endcan
+
+
           @can('history-list') 
           <li class="nav-item">
               <router-link to="/history" class="nav-link">

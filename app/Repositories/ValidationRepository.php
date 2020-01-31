@@ -7,7 +7,27 @@ use Illuminate\Support\Facades\Validator;
 class ValidationRepository
 {
 
-     /////////////////////////////////////////////////////////////////////////////////////////////////Status
+
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////TREATMENT
+    public function treatmentUpdate()
+     {        
+         $rules = array(
+            'title' => 'required',
+            'description' => 'required',          
+         );        
+         return $rules;
+     }
+    /////////////////////////////////////////////////////////////////////////////////////////////////TASKS
+    public function taskUpdate()
+     {        
+         $rules = array(
+            'title' => 'required',
+            //'description' => 'required',          
+         );        
+         return $rules;
+     }
+     /////////////////////////////////////////////////////////////////////////////////////////////////LOCATIONS
      public function locationUpdate()
      {        
          $rules = array(
@@ -54,26 +74,7 @@ class ValidationRepository
         );        
         return $rules;
     }    
-     /**/////////////////////////////////////////////////////////////////////////////////////////////BOOKINGS
-     public function newBookings()
-     {        
-         $rules = array(
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'time_from' => 'required',
-            'time_to' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
-            'address_line1' => 'required',
-            'address_line2' => 'required',
-            'city' => 'required',
-            'post_code' => 'required',
-            'status_id' => 'required',
-            'payment_id' => 'required',
- 
-         );        
-         return $rules;
-     }
+    
     public function bookingValidator(array $data)
     {
         $messsages = array(
@@ -118,88 +119,5 @@ class ValidationRepository
         return Validator::make($data, $rules, $messsages);
     }
 
-    
-    /**/////////////////////////////////////////////////////////////////////////////////////////////PROPERTIES
-    public function propertyUpdate()
-    {        
-        $rules = array(
-            'title' => 'required',
-            'area' => 'required',
-            'room_nubr' => 'required',
-            'max_pers' => 'required',
-            'title' => 'required',
-            'description' => 'required',
-            'group_id' => 'required|integer',
-            'seasongroup_id' => 'required|integer',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/', //double
-        );        
-        return $rules;
-    }
-     public function peopertyValidator(array $data)
-    {
-        $messsages = array(
-            'title.required' => 'You cant leave title empty',
-            'description.required' => 'You cant leave description empty',
-            'seasongroup_id.required' => 'You cant leave seasongroup empty',
-            'price.required' => 'You cant leave price empty',
-        );
-        $rules = array(
-            'title' => 'required',
-            'description' => 'required',
-            'seasongroup_id' => 'required',
-            'price' => 'required',
-        );
-        return Validator::make($data, $rules, $messsages);
-    }
-    /**/////////////////////////////////////////////////////////////////////////////////////////////GROUPS
-    public function groupUpdate()
-    {        
-        $rules = array(
-            'title' => 'required',            
-            'description' => 'required',      
-        );        
-        return $rules;
-    }
-    /**/////////////////////////////////////////////////////////////////////////////////////////////SEASON GROUPS    
-    public function seasongroupValidator()
-    {
-        $rules = array(
-            'title' => 'required',            
-            'description' => 'required',      
-        );        
-        return $rules;
-        
-    }
-     /**/////////////////////////////////////////////////////////////////////////////////////////////SEASONs    
-     public function seasonupdate()
-     {
-         $rules = array(
-             'title' => 'required',            
-             'start_date' => 'required',
-             'end_date' => 'required',
-             'price' => 'required',
-             //'colour' => 'required',
-            );
-         return $rules;
-         
-     }
-    /**/////////////////////////////////////////////////////////////////////////////////////////////INVENTORIES
-    public function inventoryUpdate()
-    {        
-        $rules = array(
-            'title' => 'required',            
-            //'description' => 'required',      
-        );        
-        return $rules;
-    }
-     /**/////////////////////////////////////////////////////////////////////////////////////////////BOOKING STATUSES
-     public function bookingStatusUpdate() 
-     {        
-         $rules = array(
-             'title' => 'required',
-             'colour' => 'required',              
-             //'description' => 'required',      
-         );        
-         return $rules;
-     }
+       
 }
