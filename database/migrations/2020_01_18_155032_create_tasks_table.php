@@ -16,7 +16,8 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');            
             $table->integer('location_id')->unsigned(); //unsigned only positive val
-            $table->integer('treatment_id')->unsigned(); //unsigned only positive val
+            //
+            //$table->integer('treatment_id')->unsigned(); //unsigned only positive val
             $table->integer('status_id')->unsigned(); //unsigned only positive val
             $table->integer('price_id')->unsigned(); //unsigned only positive val
             //$table->integer('user_id')->unsigned(); //unsigned only positive val
@@ -31,7 +32,17 @@ class CreateTasksTable extends Migration
             $table->softDeletes();  //add this line
             $table->timestamps();
         });
-   //App\User::create(['location_id' => 1,'treatment_id' => 1,'status_id' => 1,'price_id' => '1','title'=>'Task 1' ]);      
+       
+   
+        Schema::create('task_user', function (Blueprint $table) {			
+            //$table->increments('id');	if on error	Multiple primary key defined
+            $table->integer('task_id')->unsigned(); //unsigned only positive val
+            //$table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+            $table->primary(['task_id','user_id']); //prevent repeating (1,1  1,2  1,3  1,1)			
+            $table->integer('user_id')->unsigned();											
+            //$table->foreign('treatment_id')->references('id')->on('treatments')->onDelete('cascade');  
+            $table->timestamps();
+        });
         
     }
 

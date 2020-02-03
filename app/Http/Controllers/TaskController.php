@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Task;
+use App\{Task,User};
+
 use Illuminate\Http\Request;
 use App\Repositories\ValidationRepository;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
@@ -30,9 +31,11 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)
     {        
-        $task = $this->br->getTaskById($id);           
+        $task = $this->br->getTaskById($id); 
+        $fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();          
         return response()->json([
-            'form' => $task,           
+            'form' => $task, 
+            'fieldusers' => $fieldusers->toArray(['name'])          
             ]);         
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
@@ -58,7 +61,15 @@ class TaskController extends Controller
         //$property = Property::findOrFail($id);
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdate());       
-        $task->update($request->all());      
+        $task->update($request->all());   
+        $array_users = [];
+        foreach($request->input('selected_users') as $user){
+           
+            $array_users[] = $user['id'];
+        }
+        $task->selectedUsers()->sync($array_users);
+            
+       
         return ['saved' => 'true','id' => $task->id];        
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY 

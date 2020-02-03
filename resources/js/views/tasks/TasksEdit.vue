@@ -36,6 +36,14 @@
                                          <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
                                     </div>                                                                    
                                 </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
+                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                    </div>                                                                    
+                                </div>
                                                            
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
@@ -44,30 +52,10 @@
                                          <div class="alert alert-danger" v-if="errors.email"> {{errors.email[0]}}</div>
                                     </div>  
                                 </div>
-
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group"> 
-                                        <label>Role</label>
-                                       <multiselect 
-                                        v-model="form.roles" 
-                                        deselect-label="Can't remove this value" 
-                                        track-by="name" 
-                                        label="name" 
-                                        placeholder="Select one" 
-                                        :options="allroles" 
-                                        :multiple="true" 
-                                        :searchable="true" 
-                                        :allow-empty="true"
-                                        :taggable="true" 
-                                        @tag="addTag2"
-                                        :class="{ 'is-invalid': errors.roles }"                          
-                                        >
-                                            <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong> </template>
-                                            <pre class="language-json"><code>{{ roles  }}</code></pre>
-                                            <pre class="language-json"><code>{{ allroles  }}</code></pre>
-                                        </multiselect>
-                                     <div class="alert alert-danger" v-if="errors.roles"> {{errors.roles[0]}}</div>  
-                                    </div>       
+                                    ddd
                                  </div> 
 
                                  <div class="col-md-4">                                   
@@ -87,6 +75,61 @@
                                 </div>   
 
 
+                            </div>
+                           <div class="row">
+                                <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                       selected_users {{ form.selected_users }} </br>
+                                       allFieldUsers {{ allFieldUsers }}
+                                        <multiselect 
+                                        v-model="form.selected_users" 
+                                        :options="allFieldUsers"                                          
+                                        placeholder="Select one"
+                                        :multiple="true"
+                                       @tag="addTag2"
+                                        label="name" 
+                                        track-by="name"></multiselect>
+                                  </div>  
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">  
+                            <div class="form-group"> 
+                                        <label>Users</label>
+
+                                       <!-- <multiselect 
+                                        v-model="form.value" 
+                                        deselect-label="Can't remove this value" 
+                                        track-by="name" 
+                                        label="name" 
+                                        placeholder="Select one" 
+                                        :options="options" 
+                                        :multiple="true" 
+                                        :searchable="true" 
+                                        :allow-empty="true"
+                                        :taggable="true" 
+                                        @tag="grantedUsers"
+                                        :class="{ 'is-invalid': errors.roles }"                          
+                                        >
+                                            <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong> </template>
+                                            <pre class="language-json"><code>{{ roles  }}</code></pre>
+                                            <pre class="language-json"><code>{{ allroles  }}</code></pre>
+                                        </multiselect> -->
+                                     <div class="alert alert-danger" v-if="errors.roles"> {{errors.roles[0]}}</div>  
+                                    </div>
+                             </div> 
+                            </div>              
+
+                            <div class="row">
+                                <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': errors.description }" >
+                                        </textarea>    
+                                         <div class="alert alert-danger" v-if="errors.description"> {{errors.description[0]}}</div>
+                                    </div>  
+                                </div> 
                             </div>
                                     
                        </div> 
@@ -111,14 +154,7 @@
     //import {Typeahead } from '../../components/typeahead'
     import DzoneComponent from '../../components/dzone/DzoneComponent';
     import Buttons from './Buttons';
-    import Multiselect from 'vue-multiselect'
-    // function initialize(to) {
-    //     let urls = {
-    //         'create': `/v1/api/properties/create`,
-    //         'edit':  `/v1/api/properties/edit/${to.params.id}`
-    //     }
-    //     return (urls[to.meta.mode] || urls['create'])
-    // }
+    import Multiselect from 'vue-multiselect'  
     export default {
         components: { DzoneComponent, Buttons, Multiselect },
         data () {
@@ -126,20 +162,20 @@
                 apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
                 //
                 urlList:'', urlCreate:'', urlEdit:'',              
-                ////////////////////////////////////////////////////////// 
+                // 
                 editMode: this.$route.meta.mode,
-                form: {},
-                errors: {},
-                // isProcessing: false,
-                // show: false,              
-                //////////////////////////////////////////////////////////
-                // groups:[],
-                // seasonGroups:[],
-                // grantedInventories:[], //dont need allPermissions in form only selected 
-                // allInventories:[], //dont need allPermissions in form only selected 
-                // grantedAdvantages:[], //dont need allPermissions in form only selected 
-                // allAdvantages:[], //dont need allPermissions in form only selected 
-                //showSubmitFeedback: false,
+                form: {
+                   
+                },
+                 //value: { name: 'Vue.js', language: 'JavaScript' },
+                //  options: [
+                //     { name: 'jan 1', language: 'JavaScript' },
+                //     { name: 'Rails', language: 'Ruby' },
+                //     { name: 'Sinatra', language: 'Ruby' },
+                //     { name: 'Laravel', language: 'PHP' },
+                //     { name: 'Phoenix', language: 'Elixir' }
+                // ],
+                errors: {},               
                 //
                 photable_Type: "App\\User",
                 photable_Id: this.$route.params.id,
@@ -147,18 +183,24 @@
                 //
                 roles: null,
                 allroles: [],
+                //
+                
+                //fieldusers: [],
+                //options:[],
+                selected_users:[], //dont need allPermissions in form only selected 
+                allFieldUsers:[], //dont need allPermissions in form only selected 
+                
+               
             }
         },
-        beforeRouteEnter(to, from, next) {
-            //console.log(to)
+        beforeRouteEnter(to, from, next) {            
             get('/v1/api'+to.path)
                 .then((res) => {
                     next(vm => vm.setData(res))
                 })
         },
         beforeRouteUpdate(to, from, next) {
-            this.show = false
-            //get(initialize(to))
+            this.show = false           
             get('/v1/api'+to.path)
                 .then((res) => {
                     this.setData(res)
@@ -192,37 +234,28 @@
                     this.store = this.apiUpdate + this.$route.params.id
                     this.method = 'PUT'
                     this.title = 'Edit'                    
-                    this.roles =  res.data.form.roles //assigned roles
-                    // this.grantedInventories = res.data.form.inventories
-                    // this.grantedAdvantages = res.data.form.advantages
-                     this.photos_List = res.data.form.photos;
+                    this.roles =  res.data.form.roles //assigned roles                   
+                    this.photos_List = res.data.form.photos;
                 }
-                this.allroles =  res.data.allroles //all roles
-                //  this.allInventories = res.data.allinventories  
-                //  this.allAdvantages = res.data.alladvantages           
-                //  this.groups = res.data.allgroups.data
-                //  this.seasonGroups = res.data.seasonGroups.data
-                 ////   
+                this.allFieldUsers =  res.data.fieldusers //all roles
                 //this.objectToArray(); 
-                // this.show = true
-                //this.$bar.finish()
             },
-            //  addTag (newTag) {
-            //     const tag = {
-            //         name: newTag,
-            //         code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-            //     }
-            //     this.options.push(tag)
-            //     this.value.push(tag)
-            //     console.log(options)
-            // },
-             addTag2 (newTag) {
+            nameWithLang ({ name, language }) {
+            return `${name} — [${language}]`
+            },
+            objectToArray() {                
+                var user_array = [];               
+                this.allFieldUsers.forEach(element => {
+                    user_array.push(element.id);
+                });
+                this.selected_users = user_array;
+            },   
+            addTag2 (newTag) {
                 const tag = {
-                    name: newTag,
-                    code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+                    name: newTag,                   
                 }
-                this.allroles.push(tag)
-                this.roles.push(tag)
+                this.selected_users.push(tag)
+                this.allFieldUsers.push(tag)
                 //console.log(options)
             },
             onSave() {

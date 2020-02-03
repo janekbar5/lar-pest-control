@@ -175,10 +175,8 @@
                     this.store = this.apiUpdate + this.$route.params.id
                     this.method = 'PUT'
                     this.title = 'Edit'                    
-                    this.roles =  res.data.form.roles //assigned roles
-                    // this.grantedInventories = res.data.form.inventories
-                    // this.grantedAdvantages = res.data.form.advantages
-                     this.photos_List = res.data.form.photos;
+                    this.roles =  res.data.form.roles //assigned roles                  
+                    this.photos_List = res.data.form.photos;
                 }
                 this.allroles =  res.data.allroles //all roles
                 
@@ -190,8 +188,7 @@
                     code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
                 }
                 this.allroles.push(tag)
-                this.roles.push(tag)
-                //console.log(options)
+                this.roles.push(tag)               
             },
             onSave() {
                 this.errors = {}

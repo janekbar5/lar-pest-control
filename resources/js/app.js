@@ -29,11 +29,18 @@ const toast = swal.mixin({
     timer: 3000
   });
 window.toast = toast;
-
-
+/////////////////////////////////////////////////////////////////////////polyfill
+require('es6-promise').polyfill();
+/////////////////////////////////////////////////////////////fullcal
+import FullCalendar from "vue-full-calendar";
+import "fullcalendar/dist/fullcalendar.min.css";
+Vue.use(FullCalendar);
+Vue.config.productionTip = false;
+////////////////////////////////////////////////////////////fullcal
 
 
 ////////////////////////////////////////////////////
+import Calendar from './views/calendar/Calendar'
 import Dashboard from './components/Dashboard.vue'
 
 import UsersIndex from './views/users/UsersIndex'
@@ -56,10 +63,18 @@ import LocationsIndex from './views/locations/LocationsIndex'
 import LocationsShow from './views/locations/LocationsShow'
 import LocationsEdit from './views/locations/LocationsEdit'
 
+import StatusesIndex from './views/statuses/StatusesIndex'
+import StatusesShow from './views/statuses/StatusesShow'
+import StatusesEdit from './views/statuses/StatusesEdit'
+
+import SubStatusesIndex from './views/substatuses/SubStatusesIndex'
+import SubStatusesShow from './views/substatuses/SubStatusesShow'
+import SubStatusesEdit from './views/substatuses/SubStatusesEdit'
 //////////////////////////////////////////////// 2 routers
 let routes = [
 
     { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+    { path: '/calendar', name: 'Calendar', component: Calendar },
 
     ////////////////    
     { path: '/users', name: 'UsersIndex', component:UsersIndex, meta: {mode: 'list'} },
@@ -86,6 +101,16 @@ let routes = [
     { path: '/locations/create', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'create'} },
     { path: '/locations/:id/edit', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'edit'} },
     { path: '/locations/:id',  name: 'LocationsShow', component: LocationsShow, meta: {mode: 'view'} },
+
+    { path: '/statuses', name: 'StatusesIndex', component:StatusesIndex, meta: {mode: 'list'} },
+    { path: '/statuses/create', name: 'StatusesEdit', component: StatusesEdit, meta: {mode: 'create'} },
+    { path: '/statuses/:id/edit', name: 'StatusesEdit', component: StatusesEdit, meta: {mode: 'edit'} },
+    { path: '/statuses/:id',  name: 'StatusesShow', component: StatusesShow, meta: {mode: 'view'} },
+
+    { path: '/substatuses', name: 'SubStatusesIndex', component:SubStatusesIndex, meta: {mode: 'list'} },
+    { path: '/substatuses/create', name: 'SubStatusesEdit', component: SubStatusesEdit, meta: {mode: 'create'} },
+    { path: '/substatuses/:id/edit', name: 'SubStatusesEdit', component: SubStatusesEdit, meta: {mode: 'edit'} },
+    { path: '/substatuses/:id',  name: 'SubStatusesShow', component: SubStatusesShow, meta: {mode: 'view'} },
 
 
     ]

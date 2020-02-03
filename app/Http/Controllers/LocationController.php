@@ -60,7 +60,7 @@ class LocationController extends Controller
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
    public function update(Request $request, $id)
    {
-       //dd($request->all());
+       dd($request->all());
        //$property = Property::findOrFail($id);
        $location = $this->br->getLocationsById($id);
        $fv = $this->validate($request, $this->vr->locationUpdate());       
@@ -75,9 +75,9 @@ class LocationController extends Controller
    /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   
    public function destroy($id)
    {
-       $user = $this->br->getAdminUsersById($id);
+       $location = $this->br->getLocationsById($id);
        $this->im->destroyAllImages($type='App\User',$id);
-       $user->delete();
+       $location->delete();
        return response()
            ->json(['deleted' => true]);
    }

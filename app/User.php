@@ -55,9 +55,6 @@ class User extends Authenticatable
         return $this->morphMany('App\Image', 'photoable');
     }
 
-
-
-
     ////////////////////////////////////////////////Vue Permissions
     public function getAllPermissionsAttribute() {
         $permissions = [];

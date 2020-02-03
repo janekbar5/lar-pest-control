@@ -23,6 +23,20 @@ class Location extends Model implements Auditable
     {
         return $this->belongsToMany(Treatment::class, 'location_treatment', 'location_id', 'treatment_id');
     }
+ 
+    ////////////////////////////////////////////////////////////////HASMANY
+    // Task-->hasMany-->Location   <==>  Location-->belongsTo-->Task
+    public function tasks()
+    {
+	return $this->HasMany('App\Task');	
+    }
+    
+    ////////////////////////////////////////////////////////////////BELONGSTO
+    // Task-->belongsTo-->Location   <==>  Location-->hasMany-->Task
+    public function clients()
+    {
+        return $this->belongsTo('App\Client', 'client_id');		
+    }
 
     /////////////////////////////////////////////////////////////Address
     public function address()

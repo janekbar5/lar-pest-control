@@ -27,10 +27,15 @@ class BackendRepository implements BackendRepositoryInterface
     public function getAllTasks(){
         return Task::  
                   orderBy('created_at', 'desc')
+                  ->with('locations')
+                  ->with('statuses')                  
                   ->paginate(10); 
     }
     public function getTaskById($id){
         return Task::where('id', '=', $id) 
+                   ->with('locations')
+                   ->with('statuses')
+                   ->with('selectedUsers')
                    ->first(); 
     }
     /////////////////////////////////////////////////////////////////////////////////Address    
@@ -43,6 +48,7 @@ class BackendRepository implements BackendRepositoryInterface
      public function getLocations($user_id){
         return Location::where('user_id', '=', $user_id) 
                   ->with('address') 
+                  ->with('clients') 
                   ->orderBy('created_at', 'desc')                  
                   ->paginate(10); 
     }

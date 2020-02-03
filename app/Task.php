@@ -15,7 +15,7 @@ class Task extends Model
     
     protected $fillable = [
 	    'location_id',
-        'treatment_id', 
+        //'treatment_id', 
 		'status_id',
 		'price_id',
 		'title',
@@ -23,6 +23,23 @@ class Task extends Model
         'comment',		
         'deadline',
     ];
+    ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
+    // Location-->belongsToMany-->Treatment   <==>  Treatment-->belongsToMany-->Location
+    public function selectedUsers()
+    {
+        return $this->belongsToMany(User::class, 'task_user', 'task_id', 'user_id');
+    }
+    ////////////////////////////////////////////////////////////////belongsTo
+    // Task-->belongsTo-->Location   <==>  Location-->hasMany-->Task
+    public function locations()
+    {
+        return $this->belongsTo('App\Location', 'location_id');		
+    }
+    public function statuses()
+    {
+        return $this->belongsTo('App\Status', 'status_id');		
+    }
+    
 
    
 }

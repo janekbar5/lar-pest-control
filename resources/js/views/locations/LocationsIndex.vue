@@ -11,9 +11,10 @@
             <table class="table table-link">
                 <thead>
                     <tr>
-                        <th style="width: 10%">ID</th>                       
-                        <th style="width: 40%">Title</th>
-                        <th style="width: 40%">City</th>
+                        <th style="width: 5%">ID</th>                       
+                        <th style="width: 20%">Client</th>
+                        <th style="width: 20%">City</th>
+                        <th style="width: 20%">Address</th>
                         <th style="width: 10%">Actions</th>                       
                        
                     </tr>
@@ -22,8 +23,14 @@
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data">
                         <td>{{item.id}}</td> 
-                        <td>{{item.title}}</td>
-                        <td>{{item.address.city}}</td>
+                        <td>{{item.clients.name}}</td>
+                        <td>{{item.address.city}} </td>
+                        <td>{{item.address.address_line1}} </br>
+                            {{item.address.address_line2}}
+
+                        </td>
+                        
+                       
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-success" @click="modelView(item)"> View</button>

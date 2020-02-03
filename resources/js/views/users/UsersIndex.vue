@@ -1,8 +1,90 @@
 <template>
-    <div class="panel">
-        <div class="panel-heading">
+    <div>
+  
+
+<div class="row">  
+          <div class="col-md-12">  
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Users</h3> 
+
+                <div style="float:right"><Buttons :editMode="editMode" ></Buttons></div>
+
+              
+              </div>
+         
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                        <th style="width: 5%">ID</th>
+                        <th style="width: 10%">Image</th>
+                        <th style="width: 10%">Name</th>
+                        <th style="width: 10%">Surname</th>
+                        <th style="width: 10%">Email</th> 
+                        <th style="width: 20%">Work Phone</th>      
+                        <th style="width: 10%">Leave Days Taken/Left</th>    
+                        <th style="width: 20%">Personal Phone</th>                 
+                        <th style="width: 10%">Roles</th>
+                        <th style="width: 10%">Status</th>                       
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in model.data" :key="item.data">
+                        <td>{{item.id}}</td>
+                        <td>
+                            <img v-if="item.firstPhoto == null" :src="'https://dummyimage.com/50x50/807c80/fff'" style="width:50px;height:50px">
+                            <img v-else :src="'images/thumb_medium-' + item.firstPhoto.path" style="width:50px;height:50px">
+                        </td>
+
+                        <td>{{item.name}}</td>
+                        <td>{{item.last_name}}</td>
+                        <td>{{item.email}}</td>      
+                        <td>{{item.work_phone}}</td>
+                        <td>{{item.leaves_day}}</td>
+                        <td>{{item.personal_phone}}</td>
+
+                        <td> <span class="badge bg-secondary" v-for="role in item.roles" style="font-size:8px">{{role.name}} </span> </td>   
+                        <td> Active </td>                    
+                        <td>
+                            <div class="btn-group">
+                                <i aria-hidden="true" class="fa fa-eye" @click="modelView(item)"></i>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                 <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(item)"></i>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                <!-- <button type="button" class="btn btn-info" @click="modelEdit(item)">Edit</button> -->
+                                 <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(item)"></i> 
+                                <!-- <button type="button" class="btn btn-danger" @click="modelDelete(item)">Delete</button> -->
+                            </div>
+
+                        </td>
+                    </tr>  
+                   
+                  </tbody>
+                </table>
+              </div>
+            
+               <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                  <li class="page-item"><a class="page-link" href="#">«</a></li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">»</a></li>
+                </ul>
+              </div>
+
+            </div>
+         
+          </div>
+         
+        </div> -->
+
+
+
+
+        <!-- <div class="panel-heading">
             <div>             
-                <!-- <h1>Hello World, I'm {{ settings.modelPlural }}</h1> -->
+                
                 <Buttons :editMode="editMode" ></Buttons>
             </div>
         </div>
@@ -43,6 +125,7 @@
                 </tbody>
             </table>
         </div>
+
         <div class="panel-footer flex-between">
             <div>
                 <small>Showing {{model.from}} - {{model.to}} of {{model.total}}</small>
@@ -55,7 +138,8 @@
                     Next
                 </button>
             </div>
-        </div>
+        </div> -->
+
     </div>
 </template>
 

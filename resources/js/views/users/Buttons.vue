@@ -13,7 +13,7 @@
 
 
 <!----------------NEW-------------------------> 
-<router-link v-show="editMode==='list'" :to="{path: this.modelSettings.urlCreate}" class="btn btn-primary"> New {{modelSettings.modelSingular}} </router-link>
+<router-link v-show="editMode==='list'" :to="{path: this.modelSettings.urlCreate}" class="btn btn-secondary"> New {{modelSettings.modelSingular}} </router-link>
 
 <!----------------SAVE-------------------------> 
 <button v-show="editMode==='edit' || editMode==='create'" class="btn btn-success" @click="onSave">Save</button>
