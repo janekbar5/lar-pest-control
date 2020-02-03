@@ -80,8 +80,8 @@
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
                                         <label>Description</label>
-                                       selected_users {{ form.selected_users }} </br>
-                                       allFieldUsers {{ allFieldUsers }}
+                                       <!--selected_users {{ form.selected_users }} </br>
+                                       allFieldUsers {{ allFieldUsers }}-->
                                         <multiselect 
                                         v-model="form.selected_users" 
                                         :options="allFieldUsers"                                          

@@ -28,8 +28,27 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   orderBy('created_at', 'desc')
                   ->with('locations')
-                  ->with('statuses')                  
+                  ->with('statuses')
+                  ->with('selectedUsers')    
                   ->paginate(10); 
+    }
+    public function getUnassignedTasks(){
+        return Task::  
+                  //orderBy('created_at', 'desc')
+                  with('locations')
+                  ->with('statuses')
+                  //->with('selectedUsers') 
+                  ->doesntHave('selectedUsers')    
+                  ->get(); 
+    }
+    public function getAssignedTasks(){
+        return Task::  
+                  //orderBy('created_at', 'desc')
+                  with('locations')
+                  ->with('statuses')
+                  //->with('selectedUsers') 
+                  ->has('selectedUsers')    
+                  ->get(); 
     }
     public function getTaskById($id){
         return Task::where('id', '=', $id) 

@@ -213,24 +213,12 @@
                     })
             },
             success(res) {
-                this.$router.push(this.urlList+'/'+res.data.id)
+                //this.$router.push(this.urlList+'/'+res.data.id)
                 //console.log(this.urlList+'/'+res.data.id)
-                //this.$router.push('/properties/1')
+                this.$router.push(this.urlList)
                 
             },
-            // objectToArray() {
-            //     var invent_array = [];
-            //     var advant_array = [];
-            //     this.grantedInventories.forEach(element => {
-            //         invent_array.push(element.id);
-            //     });
-            //     this.grantedAdvantages.forEach(element => {
-            //         advant_array.push(element.id);
-            //     });
-
-            //     this.form.selectedInventories = invent_array;
-            //     this.form.selectedAdvantages = advant_array;
-            // },
+            
             loadToast(icon,text){
               toast.fire({icon: icon,title: text })
             }, 

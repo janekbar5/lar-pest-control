@@ -18,7 +18,11 @@ class PermissionsTableSeeder extends Seeder
 		/////////////////////////////
 		DB::table('model_has_roles')->insert(['role_id' => 1,'model_type' => 'App\User','model_id' => 1]);
 		DB::table('model_has_roles')->insert(['role_id' => 2,'model_type' => 'App\User','model_id' => 1]);
-		DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => 1]);		
+		DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => 1]);
+        
+        for($i=2; $i<=20; $i++):
+        DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => $i]);
+        endfor;
         ///////////////////////////1-4 Role
 		DB::table('permissions')->insert(['name' => 'role-list','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'role-create','guard_name' => 'web']);

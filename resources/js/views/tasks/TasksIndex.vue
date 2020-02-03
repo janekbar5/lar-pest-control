@@ -11,8 +11,10 @@
             <table class="table table-link">
                 <thead>
                     <tr>
-                        <th style="width: 50%">ID</th>                       
-                        <th style="width: 40%">Name</th>
+                        <th style="width: 10%">ID</th>                       
+                        <th style="width: 20%">Title</th>
+                        <th style="width: 20%">Location</th>
+                        <th style="width: 20%">Users</th>
                         <th style="width: 10%">Actions</th>                       
                        
                     </tr>
@@ -24,7 +26,8 @@
                        
 
                         <td>{{item.title}}</td>
-                                           
+                        <td>{{item.locations.title}}</td>
+                        <td> <span class="badge bg-secondary" v-for="user in item.selected_users" style="font-size:8px">{{user.name}} </span> </td>                   
                                              
                         <td>
                             <div class="btn-group">

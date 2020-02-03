@@ -13,6 +13,14 @@ class Task extends Model
     //////////////////////////////////////////
     protected $dates = ['deleted_at'];
     
+    //////////////////////////////////////////
+    protected $appends = [
+        'color',
+    ];
+    function getColorAttribute() {
+        return $this->statuses->colour;   
+    }
+    
     protected $fillable = [
 	    'location_id',
         //'treatment_id', 

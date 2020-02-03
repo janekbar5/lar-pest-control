@@ -1,56 +1,70 @@
 <template>
   <div>
-             <div class="row">
+      
+      <div class="row">
                 
                <div class="col-md-3">
                    <div id='external-events'>
                     <div id='external-events-listing' @mouseover="getNotifications">
                         <h4> Tasks </h4> 
-                        <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in persons" v-bind:key="idx" v-bind:id="per.id">
+                       <!-- v-show="per.selected_users.length === 0"-->
+                          <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in unassignedtasks" v-bind:key="idx" v-bind:id="per.id">
                           {{ per.title }}
-                           {{ per.locations.title }}
+                          {{ per.locations.title }}
+                          {{ per.selected_users }}  
                           </div>
                     </div>
-
                       
                       <p style="display:none">
                         <input type='checkbox' id='drop-remove' checked='checked' />
                         <label for='drop-remove'>remove after drop</label>
                       </p>
                     </div>                                                                            
-               </div>
-                                                           
-              <div class="col-md-9">                
-                  <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" />                
-               </div>                               
+               </div>    
+               
+              <div class="col-md-9">
+                 
+                  <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Bordered Table</h3>
+                      </div>
+                      
+                      <div class="card-body">                  
+                      <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                      </div>
+                        <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
+                     
+                      <div class="card-footer clearfix">
+                       sdvsdfv
+                      </div>
+                    </div>
+              </div>   
                    
-            </div>
-         </div>
-     
-  </div>
+        </div>
+      
+      <Modal />
+   </div>     
+ 
 </template>
 
 <script>
 
-import moment from "moment";
-import "jquery-ui-bundle";
+import moment from "moment"
+import "jquery-ui-bundle"
 import $ from 'jquery'
+import Modal from './Modal.vue'    
 
 export default {
   name: "hello",
+  components: { Modal },  
   data() {
     var $this = this;
     return {
-      persons:[],
+      unassignedtasks:[],
       value:'',
-      events: [
-        {"id":1,title: "test 1","start":"2020-02-05","end":"2020-02-05",color: '#01bd61',eventTextColor:'#fff',allDay:false},// #c9b606 yellow
-        {"id":2,title: "test 2","start":"2020-02-07","end":"2020-02-07",color: '#01bd61',eventTextColor:'#fff',allDay:false},// #0c6924 green
-        {"id":3,title: "test 3","start":"2020-02-15","end":"2020-02-15",color: '#01bd61',eventTextColor:'#fff',allDay:false},// #9c0505 red
-        {"id":4,title: "test 4","start":"2020-02-12","end":"2020-02-12",color: '#01bd61',eventTextColor:'#fff',allDay:false},
-        {"id":5,title: "test 5","start":"2020-02-13","end":"2020-02-14",color: '#ff3142',eventTextColor:'#fff',allDay:false},
-             
-      ],
+      events: [],  
+      
       config: {
         //defaultView: "agendaWeek",
         defaultView: "month",
@@ -64,14 +78,15 @@ export default {
         contentHeight: "auto",
         slotLabelFormat: "LT",
         allDayText: "All Day Events",
-        allDaySlot: false,
+        //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
         drop(calEvent, jsEvent, view) {
           // is the "remove after drop" checkbox checked?
           if ($("#drop-remove").is(":checked")) {
             // if so, remove the element from the "Draggable Events" list
             $(this).remove();
-            console.log(calEvent)
+            //console.log(calEvent)
+            alert('jan1')  
           }
         },
         //////////////////////////////////////////////////////////////////////
@@ -91,15 +106,13 @@ export default {
           }
         },
         //////////////////////////////////////////////////////////////////////
-        // eventClick() {
-        //   alert('eventClick')
-        //   console.log(event.target.innerText)
-        // },
+        
         eventClick(calEvent, jsEvent, view) {
         var dt = calEvent.start;
           alert('Event Clicked on : ' + calEvent.id);
          // var r = confirm("Delete " + calEvent.title + "\n" + dt);
           console.log(calEvent)
+          alert('jan2')   
           // if (r === true) {
           //   $('#calendar').fullCalendar('removeEvents', calEvent._id);
           // }
@@ -125,13 +138,34 @@ export default {
   },
 
   created() { 
-    axios.get('/v1/api/tasks/index').then(res => (this.persons = res.data.results.data))
+    axios.get('/v1/api/tasks/calendar').then((res) => {
+   if(res.data) {
+     this.unassignedtasks = res.data.unassignedtasks
+        this.events = res.data.assignedtasks
+    }
+    })
+    .catch((error) => {
+      if(error.response.status === 422) {
+        this.errors = error.response.data.errors
+      }
+      this.isProcessing = false
+    })
+    
+    
+   /* then(res => (
+        this.unassignedtasks = res.data.unassignedtasks
+        this.events = res.data.assignedtasks
+    ))*/
   },
   mounted() {
     //this.getNotifications()
   },
   //
   methods: {
+    callModal() {        
+      $("#addNew").modal("show")
+    }, 
+      
     handleDateClick(arg) {
       alert(arg.date)
     },

@@ -22,11 +22,32 @@ class TaskController extends Controller
         $this->vr = $vr;
         $this->im = $im;
     }    
-
+    /**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
+    public function calendar()    {       
+       /* $tasks = $this->br->getAllTasks();       
+        return response()->json(['results' => $tasks]);*/
+        
+        //$alltasks = $this->br->getAllTasks();
+        $unassignedtasks = $this->br->getUnassignedTasks(); 
+        $assignedtasks = $this->br->getAssignedTasks(); 
+        //$assignedtasks->color = $assignedtasks->statuses()->color;
+        return response()->json([
+            //'alltasks' => $alltasks,
+            'unassignedtasks' => $unassignedtasks,
+            'assignedtasks' => $assignedtasks,
+        ]);
+    }
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()    {       
         $tasks = $this->br->getAllTasks();       
         return response()->json(['results' => $tasks]);
+        
+         /* $alltasks = $this->br->getAllTasks();
+        $unassignedtasks = $this->br->getUnassignedTasks();       
+        return response()->json([
+            'alltasks' => $alltasks,
+            'unassignedtasks' => $unassignedtasks,
+        ]);*/
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)

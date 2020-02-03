@@ -49,6 +49,7 @@ Route::post('v1/api/treatments/update/{id}', 'TreatmentController@update'); //up
 Route::put('v1/api/treatments/update/{id}', 'TreatmentController@update'); //update  post 
 Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); //update  post  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
+Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list      
 Route::get('v1/api/tasks/index', 'TaskController@index'); //list    
 Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit
 Route::get('v1/api/tasks/create', 'TaskController@create'); //create     
