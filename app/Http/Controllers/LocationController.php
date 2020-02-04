@@ -60,16 +60,22 @@ class LocationController extends Controller
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
    public function update(Request $request, $id)
    {
-       //dd($request->all());
+       //dd($request->all()['clients']['id']);
        //$property = Property::findOrFail($id);
        $location = $this->br->getLocationsById($id);
        $fv = $this->validate($request, $this->vr->locationUpdate());       
+       
        $location->update($request->all());   
+       $location->update(array_merge($request->all(), ['client_id' => $request->all()['clients']['id']]));
        
        $address = $this->br->getUserAddressById($type='App\Location',$id);
        $address->update($request->all()['address']);
+       
 
        $location->treatments()->sync($request->input('selectedTreatments'));
+       //$location->clients()->sync($request->input('selectedTreatments'));
+       
+       
        return ['saved' => 'true','id' => $location->id];        
    }
    /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   

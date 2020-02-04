@@ -71,7 +71,7 @@ class ClientController extends Controller
 		    //->with('address')
             ->when(request('q'), function($query) {
                 $query->where('name', 'like', '%'.request('q').'%')
-                    ->orWhere('last_name', 'like', '%'.request('q').'%')
+                    ->orWhere('email', 'like', '%'.request('q').'%')
                     //->orWhere('email', 'like', '%'.request('q').'%')
                     ;
             })

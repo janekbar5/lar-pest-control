@@ -32,7 +32,7 @@ class Location extends Model implements Auditable
     }
     
     ////////////////////////////////////////////////////////////////BELONGSTO
-    // Task-->belongsTo-->Location   <==>  Location-->hasMany-->Task
+    // Location-->belongsTo-->Client   <==>  Client-->hasMany-->Location
     public function clients()
     {
         return $this->belongsTo('App\Client', 'client_id');		

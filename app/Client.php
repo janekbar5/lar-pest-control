@@ -12,5 +12,18 @@ class Client extends Model
         'title',
         'description',        
     ];
+    /////////////////////////////////////////////////////////////For typehead search
+    protected $appends = ['text'];
+    public function getTextAttribute()
+    {
+        return $this->attributes['name']. ' - '.$this->attributes['person_name'];
+    }
+    
+    ////////////////////////////////////////////////////////////////HASMANY
+    // Location-->belongsTo-->Client   <==>  Client-->hasMany-->Location
+    public function locations()
+    {
+        return $this->hasMany('App\Location');		
+    }
 
 }

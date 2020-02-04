@@ -9,17 +9,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Task extends Model
 {
     use SoftDeletes;
-
-    //////////////////////////////////////////
-    protected $dates = ['deleted_at'];
+    
+   
     
     //////////////////////////////////////////
+    protected $dates = ['deleted_at'];    
+    //////////////////////////////////////////
     protected $appends = [
-        'color',
+        'color','firstPhoto',
     ];
     function getColorAttribute() {
         return $this->statuses->colour;   
     }
+    function getfirstPhotoAttribute()
+    {        
+        return $this->photos->first();	  
+    }
+
     
     protected $fillable = [
 	    'location_id',
@@ -46,6 +52,11 @@ class Task extends Model
     public function statuses()
     {
         return $this->belongsTo('App\Status', 'status_id');		
+    }
+    /////////////////////////////////////////////////////////////////HASMANY    //    
+    public function photos()
+    {
+        return $this->morphMany('App\Image', 'photoable');
     }
     
 

@@ -23,11 +23,14 @@
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data">
                         <td>{{item.id}}</td>
-                       
+                       <td>
+                            <img v-if="item.firstPhoto == null" :src="'https://dummyimage.com/50x50/807c80/fff'" style="width:50px;height:50px">
+                            <img v-else :src="'images/thumb_medium-' + item.firstPhoto.path" style="width:50px;height:50px">
+                        </td>
 
                         <td>{{item.title}}</td>
                         <td>{{item.locations.title}}</td>
-                        <td> <span class="badge bg-secondary" v-for="user in item.selected_users" style="font-size:8px">{{user.name}} </span> </td>                   
+                        <td> <span class="badge bg-secondary" v-for="user in item.selected_users" style="font-size:10px">{{user.name}} {{user.last_name}}</span> </td>                   
                                              
                         <td>
                             <div class="btn-group">

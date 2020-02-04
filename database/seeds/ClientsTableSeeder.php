@@ -30,7 +30,7 @@ class ClientsTableSeeder extends Seeder
 		for($i=1; $i<=20; $i++):
             DB::table('clients')
                 ->insert([ 
-                    'name' => $faker->name,                     
+                    'name' => 'Client '.$i ,                     
 					'email' => $faker->email,
 					'is_company' => $faker->numberBetween($min = 0, $max = 1),
                     'contract_number' => 123456,

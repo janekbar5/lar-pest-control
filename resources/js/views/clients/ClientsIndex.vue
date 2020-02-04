@@ -12,14 +12,14 @@
                     <tr>
                         <th style="width: 2%">ID</th>                       
                         <th style="width: 10%">Name</th>
+                        <th style="width: 30%">Location</th> 
+                        <th style="width: 10%">Contract</th>
+                        <th style="width: 10%">Vat </th> 
+                        <th style="width: 10%">Reccurence</th> 
+                        <th style="width: 10%">Active</th> 
                         <th style="width: 10%">Email</th> 
-                        <th style="width: 10%">Is Company</th>
-                        <th style="width: 10%">Contract Number</th> 
-                        <th style="width: 10%">Email</th> 
-                        <th style="width: 10%">Email</th> 
-                        <th style="width: 10%">Email</th> 
-                        <th style="width: 10%">Email</th> 
-                        <th style="width: 10%">Email</th> 
+                       
+                      
 
                                        
                        
@@ -30,13 +30,11 @@
                     <tr v-for="item in model.data" :key="item.data">
                         <td>{{item.id}}</td> 
                         <td>{{item.name}}</td>
-                        <td>{{item.email}}</td>
-                        <td>{{item.is_company}}</td>
-                        <td>{{item.contract_number}}</td>
-                        <td>{{item.contract_start}}</td>
+                        <td> <span class="badge bg-secondary" v-for="location in item.locations" style="font-size:10px">{{location.title}} </span> </td>                          
+                        <td>{{item.contract_number}}</td>                     
                         <td>{{item.vat_number}}</td>
-                        <td>{{item.person_title}}</td>
-                        <td>{{item.person_name}}</td>
+                        <td>recuurence</td>
+                        <td>active</td>
                         <td>{{item.contract_end}}</td>
                         
                         

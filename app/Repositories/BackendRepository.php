@@ -14,7 +14,7 @@ class BackendRepository implements BackendRepositoryInterface
 	public function getClients(){
         return Client::  
                   orderBy('created_at', 'desc')
-                  //->with('locations')
+                  ->with('locations')
                   //->with('statuses')
                   //->with('selectedUsers')    
                   ->paginate(10); 
@@ -41,6 +41,7 @@ class BackendRepository implements BackendRepositoryInterface
                   orderBy('created_at', 'desc')
                   ->with('locations')
                   ->with('statuses')
+                  ->with('photos')    
                   ->with('selectedUsers')    
                   ->paginate(10); 
     }

@@ -31,25 +31,25 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Name</label>
-                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                        <label>Title</label>
+                                        <input v-model="form.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
+                                         <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
                                     </div>                                                                    
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Name</label>
-                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                        <label>Start</label>
+                                        <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" >
+                                         <div class="alert alert-danger" v-if="errors.start"> {{errors.start[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                                            
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
-                                        <label>Email</label>
-                                        <input v-model="form.email" type="text" name="email" class="form-control" :class="{ 'is-invalid': errors.email }" >
-                                         <div class="alert alert-danger" v-if="errors.email"> {{errors.email[0]}}</div>
+                                        <label>End</label>
+                                        <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" >
+                                         <div class="alert alert-danger" v-if="errors.end"> {{errors.end[0]}}</div>
                                     </div>  
                                 </div>
                             </div>
@@ -60,9 +60,9 @@
 
                                  <div class="col-md-4">                                   
                                     <div class="form-group">
-                                        <label>Password</label>
-                                        <input v-model="form.password" type="text" name="password" class="form-control" :class="{ 'is-invalid': errors.password }" >
-                                         <div class="alert alert-danger" v-if="errors.password"> {{errors.password[0]}}</div>
+                                        <label>Location</label>
+                                        <input v-model="form.locations.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
+                                         <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
                                     </div>  
                                 </div> 
 
@@ -79,13 +79,13 @@
                            <div class="row">
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
-                                        <label>Description</label>
+                                        <label>Assigned Users</label>
                                        <!--selected_users {{ form.selected_users }} </br>
                                        allFieldUsers {{ allFieldUsers }}-->
                                         <multiselect 
                                         v-model="form.selected_users" 
                                         :options="allFieldUsers"                                          
-                                        placeholder="Select one"
+                                        placeholder="Select users"
                                         :multiple="true"
                                        @tag="addTag2"
                                         label="name" 
@@ -93,33 +93,7 @@
                                   </div>  
                                 </div> 
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">  
-                            <div class="form-group"> 
-                                        <label>Users</label>
-
-                                       <!-- <multiselect 
-                                        v-model="form.value" 
-                                        deselect-label="Can't remove this value" 
-                                        track-by="name" 
-                                        label="name" 
-                                        placeholder="Select one" 
-                                        :options="options" 
-                                        :multiple="true" 
-                                        :searchable="true" 
-                                        :allow-empty="true"
-                                        :taggable="true" 
-                                        @tag="grantedUsers"
-                                        :class="{ 'is-invalid': errors.roles }"                          
-                                        >
-                                            <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong> </template>
-                                            <pre class="language-json"><code>{{ roles  }}</code></pre>
-                                            <pre class="language-json"><code>{{ allroles  }}</code></pre>
-                                        </multiselect> -->
-                                     <div class="alert alert-danger" v-if="errors.roles"> {{errors.roles[0]}}</div>  
-                                    </div>
-                             </div> 
-                            </div>              
+                               
 
                             <div class="row">
                                 <div class="col-md-12">                                   
@@ -128,6 +102,14 @@
                                         <textarea v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': errors.description }" >
                                         </textarea>    
                                          <div class="alert alert-danger" v-if="errors.description"> {{errors.description[0]}}</div>
+                                    </div>  
+                                </div> 
+                                 <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Comment</label>
+                                        <textarea v-model="form.comment" type="text" name="comment" class="form-control" :class="{ 'is-invalid': errors.comment }" >
+                                        </textarea>    
+                                         <div class="alert alert-danger" v-if="errors.comment"> {{errors.comment[0]}}</div>
                                     </div>  
                                 </div> 
                             </div>
@@ -166,11 +148,11 @@
                 // 
                 editMode: this.$route.meta.mode,
                 form: {
-                   
+                   locations:{}
                 },               
                 errors: {},               
                 //
-                photable_Type: "App\\User",
+                photable_Type: "App\\Task",
                 photable_Id: this.$route.params.id,
                 photos_List: [],
                 //
@@ -235,9 +217,9 @@
                 this.allFieldUsers =  res.data.fieldusers //all roles
                 //this.objectToArray(); 
             },
-            nameWithLang ({ name, language }) {
+           /* nameWithLang ({ name, language }) {
             return `${name} — [${language}]`
-            },
+            },*/
             objectToArray() {                
                 var user_array = [];               
                 this.allFieldUsers.forEach(element => {

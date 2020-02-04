@@ -17,7 +17,8 @@
                                             </div>
                                             <div class="card-body">
 
-                                             <input id="date" value="">
+                                             <input id="start" value="">
+                                             <input id="end" value="">
 
                                             </div>
 
@@ -34,7 +35,7 @@
 
                         </div>
 
-                    </div>
+      </div>
 
  </div>
 </template>

@@ -57,9 +57,17 @@
 
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
-                                        <label>Customer Name</label>
+                                        <label>Client Name</label>
                                         <input v-model="form.clients.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
                                          <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                    </div>  
+                                </div> 
+                                
+                                <div class="col-md-4">                                   
+                                    <div class="form-group">
+                                        <label>Client Id</label>
+                                        <input v-model="form.clients.id" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.id }" >
+                                         <div class="alert alert-danger" v-if="errors.id"> {{errors.id[0]}}</div>
                                     </div>  
                                 </div> 
 
@@ -187,7 +195,9 @@
                 form: {
                     address:[],
                     clients:[],
+                    
                 },
+                
                 errors: {},                         
                 ////////////////////////////////////////////////////////// 
                 dataURL: '/v1/api/clients/searchclients',              
@@ -222,8 +232,9 @@
             onClient(e) {
             const customer = e.target.value
             //console.log(e.target.value)
+               this.clients = {}
                 Vue.set(this.form.clients, 'name', customer.name)      
-               // Vue.set(this.form, 'last_name', customer.last_name)
+                Vue.set(this.form.clients, 'id', customer.id)
                 // Vue.set(this.form, 'customer_id', customer.id)
                 // Vue.set(this.form, 'phone', customer.phone)
                 // Vue.set(this.form, 'email', customer.email)

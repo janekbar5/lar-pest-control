@@ -56,6 +56,7 @@ import "jquery-ui-bundle"
 import $ from 'jquery'
 import Modal from './Modal.vue'    
 
+
 export default {
   name: "hello",
   components: { Modal },  
@@ -67,6 +68,7 @@ export default {
       events: [],  
       
       config: {
+          
         //defaultView: "agendaWeek",
         defaultView: "month",
         editable: true,
@@ -81,14 +83,22 @@ export default {
         allDayText: "All Day Events",
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
-        drop(calEvent, jsEvent, view) {
+        //drop(calEvent, jsEvent, view) {   
+        drop(info) {    
           // is the "remove after drop" checkbox checked?
           if ($("#drop-remove").is(":checked")) {
             // if so, remove the element from the "Draggable Events" list
             $(this).remove();
-            console.log(calEvent._d)
+            var now = info._d
+            //dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+            var start = moment(String(info._d)).format('YYYY-MM-DD hh:mm')
+            var end = moment(String(info._d)).format('YYYY-MM-DD hh:mm')
+            //console.log(now2)
             $("#addNew").modal("show")  
-            $('#date').val(calEvent._d);
+            $('#start').val(start);
+            $('#end').val(end);  
+            //console.log(app)
+              //app.callModal()
           }
         },
         //////////////////////////////////////////////////////////////////////
