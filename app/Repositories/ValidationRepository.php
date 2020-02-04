@@ -8,7 +8,15 @@ class ValidationRepository
 {
 
 
-    
+    /////////////////////////////////////////////////////////////////////////////////////////////////CLIENTS
+    public function clientUpdate()
+     {        
+         $rules = array(
+            'name' => 'required',
+            'email' => 'required',          
+         );        
+         return $rules;
+     }
     /////////////////////////////////////////////////////////////////////////////////////////////////TREATMENT
     public function treatmentUpdate()
      {        

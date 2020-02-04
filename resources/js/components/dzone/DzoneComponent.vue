@@ -30,9 +30,8 @@
 
 
                 <div class="card" v-if="editMode === 'edit'" >
-                    <!-- <div class="card-header">Example Component</div> -->
-                    <div class="card-body" >  {{ editMode }}                                   
-                        
+                  
+                    <div class="card-body" >  {{ editMode }}    
                         <vue-dropzone ref="myVueDropzone" id="dropzone"
                         @vdropzone-file-added="vfileAdded"
                         @vdropzone-success="vsuccess"

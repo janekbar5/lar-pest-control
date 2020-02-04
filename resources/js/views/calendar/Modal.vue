@@ -17,7 +17,7 @@
                                             </div>
                                             <div class="card-body">
 
-                                              nvnvbnbn mb 
+                                             <input id="date" value="">
 
                                             </div>
 

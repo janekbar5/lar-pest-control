@@ -1,15 +1,15 @@
 <template>
   <div>      
-       <Calendar3 />
+       <AdminCalendar v-if="$role('Admin')" />
   </div>
 
 </template>
 
 <script>
-import Calendar3 from './Calendar3.vue'
+import AdminCalendar from './AdminCalendar.vue'
 
 export default {
-  components: { Calendar3 },
+  components: { AdminCalendar },
   data: function () {
     return {
       

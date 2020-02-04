@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\{User,Task,Status,SubStatus,Location,Treatment,Address};
+use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client};
 use Spatie\Permission\Models\Role;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
 use DB;
@@ -10,8 +10,20 @@ use DB;
 class BackendRepository implements BackendRepositoryInterface
 {
 
-    
-    /////////////////////////////////////////////////////////////////////////////////TREATMENT    
+    /////////////////////////////////////////////////////////////////////////////////CLIENTS    
+	public function getClients(){
+        return Client::  
+                  orderBy('created_at', 'desc')
+                  //->with('locations')
+                  //->with('statuses')
+                  //->with('selectedUsers')    
+                  ->paginate(10); 
+    }
+	public function getClientById($id){
+        return Client::where('id', '=', $id)
+                   ->first(); 
+    } 
+    /////////////////////////////////////////////////////////////////////////////////TREATMENTS    
     public function getTreatmentById($id){
         return Treatment::where('id', '=', $id)
                    ->first(); 
@@ -23,7 +35,7 @@ class BackendRepository implements BackendRepositoryInterface
                   //->withTrashed()
                   ->paginate(10); 
     }
-    /////////////////////////////////////////////////////////////////////////////////ADMIN TASKS
+    /////////////////////////////////////////////////////////////////////////////////TASKS
     public function getAllTasks(){
         return Task::  
                   orderBy('created_at', 'desc')
@@ -57,13 +69,30 @@ class BackendRepository implements BackendRepositoryInterface
                    ->with('selectedUsers')
                    ->first(); 
     }
-    /////////////////////////////////////////////////////////////////////////////////Address    
+	public function getUsersTasks($id){
+        //return Task::where('user_id', '=', $id)                    
+                  //->with('locations')
+                  //->with('statuses')
+                  //->with('selectedUsers')
+				  //->orderBy('created_at', 'desc')
+                  //->get(); 
+				  
+		return	Task::with(['selectedUsers'])
+            //->where("status","=",1)            
+            ->whereHas('selectedUsers',function($query) use($id){                
+                 $query->where('user_id', '=', $id);
+                    
+            })            
+            ->get();
+    }
+	
+    /////////////////////////////////////////////////////////////////////////////////ADDRESSES    
     public function getUserAddressById($type,$id){         
         return Address::where('addressable_id', '=', $id) 
                     ->where('addressable_type', '=', $type)                  
                     ->first();
       }
-     /////////////////////////////////////////////////////////////////////////////////Locations
+     /////////////////////////////////////////////////////////////////////////////////LOCATIONS
      public function getLocations($user_id){
         return Location::where('user_id', '=', $user_id) 
                   ->with('address') 
@@ -74,7 +103,7 @@ class BackendRepository implements BackendRepositoryInterface
     public function getLocationsById($id){
         return Location::where('id', '=', $id) 
                    ->with('address')
-                   //->with('treatments')
+                   ->with('clients')
                    ->with(['treatments' => function ($q) {
                     $q->withTrashed();
                    }])

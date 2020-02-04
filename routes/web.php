@@ -49,7 +49,8 @@ Route::post('v1/api/treatments/update/{id}', 'TreatmentController@update'); //up
 Route::put('v1/api/treatments/update/{id}', 'TreatmentController@update'); //update  post 
 Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); //update  post  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
-Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list      
+Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list 
+Route::get('v1/api/tasks/usercalendar', 'TaskController@userCalendar'); //list
 Route::get('v1/api/tasks/index', 'TaskController@index'); //list    
 Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit
 Route::get('v1/api/tasks/create', 'TaskController@create'); //create     
@@ -65,7 +66,7 @@ Route::post('v1/api/locations/create', 'LocationController@store'); //create pos
 Route::post('v1/api/locations/update/{id}', 'LocationController@update'); //update  post
 Route::put('v1/api/locations/update/{id}', 'LocationController@update'); //update  post 
 Route::delete('v1/api/locations/delete/{id}', 'LocationController@destroy'); //update  post 
-///////////////////////////////////////////////////////////////////////////////////////////////////////Statuses
+///////////////////////////////////////////////////////////////////////////////////////////////////////STATUSES
 Route::get('v1/api/statuses/index', 'StatusController@index'); //list    
 Route::get('v1/api/statuses/{id}/edit', 'StatusController@edit'); //edit
 Route::get('v1/api/statuses/create', 'StatusController@create'); //create     
@@ -73,7 +74,7 @@ Route::post('v1/api/statuses/create', 'StatusController@store'); //create post
 Route::post('v1/api/statuses/update/{id}', 'StatusController@update'); //update  post
 Route::put('v1/api/statuses/update/{id}', 'StatusController@update'); //update  post 
 Route::delete('v1/api/statuses/delete/{id}', 'StatusController@destroy'); //update  post 
-///////////////////////////////////////////////////////////////////////////////////////////////////////SubStatuses
+///////////////////////////////////////////////////////////////////////////////////////////////////////SUB STATUSES
 Route::get('v1/api/substatuses/index', 'SubStatusController@index'); //list    
 Route::get('v1/api/substatuses/{id}/edit', 'SubStatusController@edit'); //edit
 Route::get('v1/api/substatuses/create', 'SubStatusController@create'); //create     
@@ -81,7 +82,15 @@ Route::post('v1/api/substatuses/create', 'SubStatusController@store'); //create 
 Route::post('v1/api/substatuses/update/{id}', 'SubStatusController@update'); //update  post
 Route::put('v1/api/substatuses/update/{id}', 'SubStatusController@update'); //update  post 
 Route::delete('v1/api/substatuses/delete/{id}', 'SubStatusController@destroy'); //update  post
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////CLIENTS
+Route::get('v1/api/clients/searchclients', 'ClientController@searchClients'); //list 
+Route::get('v1/api/clients/index', 'ClientController@index'); //list    
+Route::get('v1/api/clients/{id}/edit', 'ClientController@edit'); //edit
+Route::get('v1/api/clients/create', 'ClientController@create'); //create     
+Route::post('v1/api/clients/create', 'ClientController@store'); //create post
+Route::post('v1/api/clients/update/{id}', 'ClientController@update'); //update  post
+Route::put('v1/api/clients/update/{id}', 'ClientController@update'); //update  post 
+Route::delete('v1/api/clients/delete/{id}', 'ClientController@destroy'); //update  post 
 
 });    
     

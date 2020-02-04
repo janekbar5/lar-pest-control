@@ -18,25 +18,33 @@ class TaskController extends Controller
         $this->middleware('permission:task-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:task-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:task-delete', ['only' => ['destroy']]); 
+		//
+		//$this->middleware('permission:task-delete', ['only' => ['destroy']]);
+		
         $this->br = $br;
         $this->vr = $vr;
         $this->im = $im;
     }    
     /**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
-    public function calendar()    {       
-       /* $tasks = $this->br->getAllTasks();       
-        return response()->json(['results' => $tasks]);*/
-        
-        //$alltasks = $this->br->getAllTasks();
+    public function calendar()    { 
+	
         $unassignedtasks = $this->br->getUnassignedTasks(); 
         $assignedtasks = $this->br->getAssignedTasks(); 
-        //$assignedtasks->color = $assignedtasks->statuses()->color;
-        return response()->json([
-            //'alltasks' => $alltasks,
+        
+        return response()->json([            
             'unassignedtasks' => $unassignedtasks,
             'assignedtasks' => $assignedtasks,
         ]);
     }
+	public function userCalendar()    {
+        $userstasks = $this->br->getUsersTasks(\Auth::user()->id);
+		//dd($userstasks);
+        return response()->json([            
+            'userstasks' => $userstasks,
+           
+        ]);
+    }
+	
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()    {       
         $tasks = $this->br->getAllTasks();       

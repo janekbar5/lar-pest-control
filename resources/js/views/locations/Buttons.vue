@@ -34,7 +34,7 @@ module.exports = {
   data: function () {   
     return {         
       modelSettings: {
-        modelPlural: 'locations', modelSingular: 'location', 
+        modelPlural: 'locations', modelSingular: 'Location', 
         urlList:'/locations',
         urlCreate:'/locations/create',
         urlEdit:'/locations/',

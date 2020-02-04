@@ -15,6 +15,8 @@
   <script src="js/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
   -->
 </head>
+
+
 <!---vue permss-->
 <script>
   @auth

@@ -159,6 +159,7 @@
         components: { DzoneComponent, Buttons, Multiselect },
         data () {
             return {
+                modelSingular: '',
                 apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
                 //
                 urlList:'', urlCreate:'', urlEdit:'',              
@@ -166,15 +167,7 @@
                 editMode: this.$route.meta.mode,
                 form: {
                    
-                },
-                 //value: { name: 'Vue.js', language: 'JavaScript' },
-                //  options: [
-                //     { name: 'jan 1', language: 'JavaScript' },
-                //     { name: 'Rails', language: 'Ruby' },
-                //     { name: 'Sinatra', language: 'Ruby' },
-                //     { name: 'Laravel', language: 'PHP' },
-                //     { name: 'Phoenix', language: 'Elixir' }
-                // ],
+                },               
                 errors: {},               
                 //
                 photable_Type: "App\\User",
@@ -226,6 +219,8 @@
                 this.apiCreate = settings.apiCreate
                 this.apiEdit = settings.apiEdit
                 this.apiUpdate = settings.apiUpdate
+                //
+                this.modelSingular = settings.modelSingular
                 //console.log(settings)                
             },
             setData(res) { 
@@ -265,11 +260,11 @@
                     .then((res) => {
                         if(res.data && res.data.saved) {
                             this.success(res)
-                             this.loadToast('success','Updated successfully');  
+                            this.loadToast('success',''+this.modelSingular+' updated successfully');  
                         }
                         if(res.data && res.data.created) {
                             this.success(res)
-                             this.loadToast('success','Created successfully');  
+                            this.loadToast('success',''+this.modelSingular+' created successfully');    
                         }
                     })
                     .catch((error) => {
@@ -281,24 +276,12 @@
                     })
             },
             success(res) {
-                this.$router.push(this.urlList+'/'+res.data.id)
-                console.log(this.urlList+'/'+res.data.id)
-                //this.$router.push('/properties/1')
+                //this.$router.push(this.urlList+'/'+res.data.id)
+                //console.log(this.urlList+'/'+res.data.id)
+                this.$router.push(this.urlList)
                 
             },
-            // objectToArray() {
-            //     var invent_array = [];
-            //     var advant_array = [];
-            //     this.grantedInventories.forEach(element => {
-            //         invent_array.push(element.id);
-            //     });
-            //     this.grantedAdvantages.forEach(element => {
-            //         advant_array.push(element.id);
-            //     });
-
-            //     this.form.selectedInventories = invent_array;
-            //     this.form.selectedAdvantages = advant_array;
-            // },
+            
             loadToast(icon,text){
               toast.fire({icon: icon,title: text })
             }, 

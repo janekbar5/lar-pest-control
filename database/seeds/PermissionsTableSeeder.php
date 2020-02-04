@@ -17,8 +17,8 @@ class PermissionsTableSeeder extends Seeder
         DB::table('roles')->insert(['name' => 'Field User','guard_name' => 'web']);
 		/////////////////////////////
 		DB::table('model_has_roles')->insert(['role_id' => 1,'model_type' => 'App\User','model_id' => 1]);
-		DB::table('model_has_roles')->insert(['role_id' => 2,'model_type' => 'App\User','model_id' => 1]);
-		DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => 1]);
+		//DB::table('model_has_roles')->insert(['role_id' => 2,'model_type' => 'App\User','model_id' => 1]);
+		//DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => 1]);
         
         for($i=2; $i<=20; $i++):
         DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => $i]);
@@ -73,6 +73,11 @@ class PermissionsTableSeeder extends Seeder
 		DB::table('permissions')->insert(['name' => 'treatment-create','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'treatment-edit','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'treatment-delete','guard_name' => 'web']);
+		///////////41-44 Client
+        DB::table('permissions')->insert(['name' => 'client-list','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'client-create','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'client-edit','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'client-delete','guard_name' => 'web']);
 		
 		//////////////////////////////////Admin		
         DB::table('role_has_permissions')->insert(['permission_id' => 1,'role_id' => 1]);  		
@@ -124,7 +129,17 @@ class PermissionsTableSeeder extends Seeder
        DB::table('role_has_permissions')->insert(['permission_id' => 38,'role_id' => 1]);  
        DB::table('role_has_permissions')->insert(['permission_id' => 39,'role_id' => 1]);  
        DB::table('role_has_permissions')->insert(['permission_id' => 40,'role_id' => 1]);
-        
+       ///////////41-44 Clients
+       DB::table('role_has_permissions')->insert(['permission_id' => 41,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 42,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 43,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 44,'role_id' => 1]);
+		
+		
+		
+		
+		
+		
         /////////////////////////////////////Desk User
         DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 2]);
         DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 2]);

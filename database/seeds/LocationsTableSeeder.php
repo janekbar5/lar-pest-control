@@ -19,10 +19,6 @@ class LocationsTableSeeder extends Seeder
 					'client_id' => $i,
 					'title' => 'Location name '.$i,
                     'description' =>'jkbjkb kuguig',
-                    //'address'
-                    //'lat' => 51.483,
-                    //'lng' => -0.132,
-                    
 
                 ]);
         endfor;

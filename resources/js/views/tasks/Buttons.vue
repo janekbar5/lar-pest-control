@@ -34,7 +34,7 @@ module.exports = {
   data: function () {   
     return {         
       modelSettings: {
-        modelPlural: 'tasks', modelSingular: 'task', 
+        modelPlural: 'tasks', modelSingular: 'Task', 
         urlList:'/tasks',
         urlCreate:'/tasks/create',
         urlEdit:'/tasks/',

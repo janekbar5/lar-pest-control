@@ -40,15 +40,16 @@ class UsersTableSeeder extends Seeder
             $faker = Factory::create();    
             //$prices = [200,210,250,270,290,300,310];
              ////////////////////////////////////////////////////////////////////////////////////////user 1
-             for($i=0; $i<=12; $i++):
+             for($i=0; $i<=22; $i++):
              //$startDate = Carbon::createFromTimeStamp($faker->dateTimeBetween('-1 month', '+1 month')->getTimestamp());
+			 $email = $faker->unique()->email;
                  DB::table('users')
                      ->insert([
                          'status' => 1, 
                          'name' => $faker->firstName,
                          'last_name' => $faker->lastName,	
-                         'email' => $faker->unique()->email,
-                         'password' => bcrypt($faker->unique()->email),  
+                         'email' => $email,
+                         'password' => bcrypt($email),  
                          'email_verified_at'=>'2019-09-17 00:00:00',  
                          'work_phone'=> $faker->phoneNumber,    
                          'leaves_day'=>'5',   

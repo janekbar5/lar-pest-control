@@ -4,82 +4,81 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use App\Repositories\ValidationRepository;
+use App\Repositories\Interfaces\BackendRepositoryInterface;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    function __construct(ValidationRepository $vr, BackendRepositoryInterface $br, ImageController $im)
+    {       
+        $this->middleware('permission:client-list');
+        $this->middleware('permission:client-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:client-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:client-delete', ['only' => ['destroy']]); 
+        $this->br = $br;
+        $this->vr = $vr;
+        $this->im = $im;
+    }    
+    /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()
-    {
-        //
+    {       
+        $clients = $this->br->getClients();       
+        return response()->json(['results' => $clients]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
+     public function edit($id)
+     {        
+           
+         $client = $this->br->getClientById($id); 
+         return response()
+             ->json([ 'form' => $client]);   
+         
+     }
+     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
     public function create()
-    {
-        //
+    {       
+       
+       return response()->json([
+           'form' => '',                
+           ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST
+   public function store(Request $request)
     {
-        //
+        $fv = $this->validate($request, $this->vr->clientUpdate()); 
+        $client = Client::create($request->all());    
+        return ['saved' => 'Saved the client info','id' => $client->id];    
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Client $client)
-    {
-        //
+   /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
+    public function update(Request $request, $id){
+        $client = $this->br->getClientById($id);
+        $fv = $this->validate($request, $this->vr->clientUpdate());
+        $client->update($request->all());         
+        return ['saved' => 'Saved the client info','id' => $client->id];
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Client $client)
+   /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   
+   public function destroy($id)
+   {
+       $client = $this->br->getClientById($id);      
+       $client->delete();
+       return response()
+           ->json(['deleted' => true]);
+   }
+   /**/////////////////////////////////////////////////////////////////////////////////////////////
+    public function searchClients()
     {
-        //
-    }
+        $results = Client::orderBy('name')
+		    //->with('address')
+            ->when(request('q'), function($query) {
+                $query->where('name', 'like', '%'.request('q').'%')
+                    ->orWhere('last_name', 'like', '%'.request('q').'%')
+                    //->orWhere('email', 'like', '%'.request('q').'%')
+                    ;
+            })
+            //->limit(6)
+            ->get();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Client $client)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Client $client)
-    {
-        //
+        return response()
+            ->json(['results' => $results]);
     }
 }

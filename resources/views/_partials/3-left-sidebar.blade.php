@@ -31,12 +31,13 @@
                   <i class="nav-icon fas fa-tachometer-alt orange"></i> <p> Dashboard </p>
                 </router-link>
         </li>
-
+        @can('client-list')
         <li class="nav-item">
             <router-link to="/clients" class="nav-link">
               <i class="nav-icon fas fa-users orange"></i> <p>Clients </p>
             </router-link>
         </li>
+        @endcan
 
         @can('location-list') 
         <li class="nav-item">
@@ -73,20 +74,21 @@
            @endcan
 
       
-              
+        @can('calendar-list')      
         <li class="nav-item">
           <router-link to="/calendar" class="nav-link">
             <i class="nav-icon fas fa-calendar orange"></i>            
             <p>Calendar </p>
           </router-link>
         </li>
+        @endcan
 
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <router-link to="/leaflet" class="nav-link">
               <i class="nav-icon fas fa-cubes orange"></i> <p>leaflet </p>
             </router-link>
-          </li>
+          </li> -->
 
           @can('status-list') 
           <li class="nav-item">
@@ -105,17 +107,7 @@
           @endcan
 
          
-          
        
-
-       
-
-        <!-- <li class="nav-item">
-          <router-link to="/app" class="nav-link">
-            <i class="nav-icon fas fa-tachometer-alt orange"></i> <p>App </p>
-          </router-link>
-        </li> -->
-
 
         @can('user-list')
         <li class="nav-item has-treeview">

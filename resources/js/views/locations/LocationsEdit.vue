@@ -32,12 +32,41 @@
                                         <input v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': errors.description }" >
                                          <div class="alert alert-danger" v-if="errors.description"> {{errors.description[0]}}</div>
                                     </div>  
-                                </div> 
-                                
+                                </div>                                 
                                                                
                             </div>
 
-                        
+
+                            <div class="row"> 
+                                    <div class="col-md-3">
+                                       <div class="form-group">
+                                            <label>Find Existing Customer</label>
+                                                <typeahead :url="dataURL" :initialize="form.customer" @input="onClient" />
+                                                <small class="error-control" v-if="errors.customer_id">
+                                                    {{errors.customer_id[0]}}
+                                                </small>
+                                    </div>
+                                </div>
+                                 <!-- <div class="col-md-4">                                   
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
+                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                    </div>  
+                                </div>  -->
+
+                                <div class="col-md-4">                                   
+                                    <div class="form-group">
+                                        <label>Customer Name</label>
+                                        <input v-model="form.clients.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
+                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                    </div>  
+                                </div> 
+
+                            </div>      
+
+
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -53,6 +82,10 @@
                                 </div>
 
                             </div>
+                            </br>  </br>  </br>
+
+
+
 
                             <div class="row">
                                <div class="col-md-3">
@@ -134,27 +167,30 @@
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'
-    //import {Typeahead } from '../../components/typeahead'
+    import {Typeahead } from '../../components/typeahead'
     //import DzoneComponent from '../../components/dzone/DzoneComponent';
     import Buttons from './Buttons';
     import LocationPicker from '../../components/locationpicker/LocationPicker3'  
     
     export default {
-        components: {  Buttons, LocationPicker },
+        components: {  Buttons, LocationPicker,Typeahead },
         data () {
             return {
                 lat:'',lng:'',
                 isMounted: false,
+                modelSingular: '',
                 apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
                 //
                 urlList:'', urlCreate:'', urlEdit:'',              
                 ////////////////////////////////////////////////////////// 
                 editMode: this.$route.meta.mode,
                 form: {
-                    address:[]
+                    address:[],
+                    clients:[],
                 },
                 errors: {},                         
-                //////////////////////////////////////////////////////////               
+                ////////////////////////////////////////////////////////// 
+                dataURL: '/v1/api/clients/searchclients',              
                 //photable_Type: "App\\User",
                 //photable_Id: this.$route.params.id,
                 grantedTreatments:[], //dont need allPermissions in form only selected 
@@ -183,6 +219,19 @@
             this.$eventHub.$on('settings', this.modelSettings) 
         },
         methods: {
+            onClient(e) {
+            const customer = e.target.value
+            //console.log(e.target.value)
+                Vue.set(this.form.clients, 'name', customer.name)      
+               // Vue.set(this.form, 'last_name', customer.last_name)
+                // Vue.set(this.form, 'customer_id', customer.id)
+                // Vue.set(this.form, 'phone', customer.phone)
+                // Vue.set(this.form, 'email', customer.email)
+                // Vue.set(this.form, 'address_line1', customer.address.address_line1)
+                // Vue.set(this.form, 'address_line2', customer.address.address_line2)
+                // Vue.set(this.form, 'city', customer.address.city)
+                // Vue.set(this.form, 'post_code', customer.address.post_code)      
+            },
             updateLocation(itm) {             
                Vue.set(this.form.address, 'lat', itm.lat) 
                Vue.set(this.form.address, 'lng', itm.lng)               
@@ -206,11 +255,14 @@
                 this.apiCreate = settings.apiCreate
                 this.apiEdit = settings.apiEdit
                 this.apiUpdate = settings.apiUpdate
+                //
+                this.modelSingular = settings.modelSingular
                 //console.log(settings)                
             },
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
                     Vue.set(this.$data, 'form', res.data.form)
+                    //Vue.set(this.$data2, 'form.client', res.data.clients)
                     this.store = this.apiUpdate + this.$route.params.id
                     this.method = 'PUT'
                     this.title = 'Edit'
@@ -242,11 +294,11 @@
                     .then((res) => {
                         if(res.data && res.data.saved) {
                             this.success(res)
-                             this.loadToast('success','Updated successfully');  
+                             this.loadToast('success',''+this.modelSingular+' updated successfully');  
                         }
                         if(res.data && res.data.created) {
                             this.success(res)
-                             this.loadToast('success','Created successfully');  
+                             this.loadToast('success',''+this.modelSingular+' created successfully');  
                         }
                     })
                     .catch((error) => {
@@ -258,9 +310,9 @@
                     })
             },
             success(res) {
-                this.$router.push(this.urlList+'/'+res.data.id)
-                console.log(this.urlList+'/'+res.data.id)
-                //this.$router.push('/properties/1')
+                // this.$router.push(this.urlList+'/'+res.data.id)
+                // console.log(this.urlList+'/'+res.data.id)
+                this.$router.push(this.urlList)
                 
             },           
             loadToast(icon,text){

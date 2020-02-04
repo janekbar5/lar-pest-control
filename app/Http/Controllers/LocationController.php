@@ -60,7 +60,7 @@ class LocationController extends Controller
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
    public function update(Request $request, $id)
    {
-       dd($request->all());
+       //dd($request->all());
        //$property = Property::findOrFail($id);
        $location = $this->br->getLocationsById($id);
        $fv = $this->validate($request, $this->vr->locationUpdate());       

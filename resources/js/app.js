@@ -44,7 +44,6 @@ import Calendar from './views/calendar/Calendar'
 import Dashboard from './components/Dashboard.vue'
 
 import UsersIndex from './views/users/UsersIndex'
-import UsersShow from './views/users/UsersShow'
 import UsersEdit from './views/users/UsersEdit'
 
 import RolesIndex from './views/roles/RolesIndex'
@@ -70,6 +69,10 @@ import StatusesEdit from './views/statuses/StatusesEdit'
 import SubStatusesIndex from './views/substatuses/SubStatusesIndex'
 import SubStatusesShow from './views/substatuses/SubStatusesShow'
 import SubStatusesEdit from './views/substatuses/SubStatusesEdit'
+
+import ClientsIndex from './views/clients/ClientsIndex'
+import ClientsEdit from './views/clients/ClientsEdit'
+
 //////////////////////////////////////////////// 2 routers
 let routes = [
 
@@ -80,7 +83,7 @@ let routes = [
     { path: '/users', name: 'UsersIndex', component:UsersIndex, meta: {mode: 'list'} },
     { path: '/users/create', name: 'UsersEdit', component: UsersEdit, meta: {mode: 'create'} },
     { path: '/users/:id/edit', name: 'UsersEdit', component: UsersEdit, meta: {mode: 'edit'} },
-    { path: '/users/:id',  name: 'UsersShow', component: UsersShow, meta: {mode: 'view'} },
+    
     
     { path: '/roles', name: 'RolesIndex', component: RolesIndex, meta: {mode: 'list'} },
     { path: '/roles/create', name: 'RolesEdit', component: RolesEdit, meta: {mode: 'create'} },
@@ -111,6 +114,12 @@ let routes = [
     { path: '/substatuses/create', name: 'SubStatusesEdit', component: SubStatusesEdit, meta: {mode: 'create'} },
     { path: '/substatuses/:id/edit', name: 'SubStatusesEdit', component: SubStatusesEdit, meta: {mode: 'edit'} },
     { path: '/substatuses/:id',  name: 'SubStatusesShow', component: SubStatusesShow, meta: {mode: 'view'} },
+
+    { path: '/clients', name: 'ClientsIndex', component:ClientsIndex, meta: {mode: 'list'} },
+    { path: '/clients/create', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'create'} },
+    { path: '/clients/:id/edit', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'edit'} },
+  
+
 
 
     ]
