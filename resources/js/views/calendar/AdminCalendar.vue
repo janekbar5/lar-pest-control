@@ -33,7 +33,7 @@
                       <div class="card-body">                  
                       <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
 
-                    Location: {{ location }}
+                    Location: {{ location }}  location2 {{location2}}
 
                    <select @change="filterLocation()" v-model="location" class="form-control">
                         <option value="" selected>Select Location</option>
@@ -54,7 +54,7 @@
                    
         </div>
       
-                   <Modal />
+                   <Modal :vars="config"/>
    </div>     
  
 </template>
@@ -77,10 +77,11 @@ export default {
       value:'',
       events: [],
       location:'',
-      locations:{},  
+      location2:'',  
+      locations:{},
+      vars:123,
       
-      config: {
-          
+      config: {          
         //defaultView: "agendaWeek",
         defaultView: "month",
         editable: true,
@@ -93,27 +94,27 @@ export default {
         contentHeight: "auto",
         slotLabelFormat: "LT",
         allDayText: "All Day Events",
+        janek: 569,  
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
-        //drop(calEvent, jsEvent, view) { 
-            
+        //drop(calEvent, jsEvent, view) {
         drop(info) {    
           // is the "remove after drop" checkbox checked?
-          if ($("#drop-remove").is(":checked")) {
-            // if so, remove the element from the "Draggable Events" list
+          if ($("#drop-remove").is(":checked")) {            
             $(this).remove();
-            var now = info._d
-            //dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+            var now = info._d            
             var start = moment(String(info._d)).format('YYYY-MM-DD hh:mm')
             var end = moment(String(info._d)).format('YYYY-MM-DD hh:mm')
             //console.log(now2)
             $("#addNew").modal("show")  
             $('#start').val(start);
             $('#end').val(end);  
-            $('#location').val(app.location);
-            console.log(app)
+            //$('#location').val(this.location);            
+            var variable = 555
+            console.log(this.location2)
               //app.callModal()
           }
+           
         },
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
@@ -156,13 +157,13 @@ export default {
           alert('dayClick')
         }, 
 
-      }
+      },
+        
       //////////config
     };
   },
   //data
-  beforeCreate() { 
-  },
+ 
 
   created() { 
     axios.get('/v1/api/tasks/calendar').then((res) => {
@@ -195,12 +196,13 @@ export default {
             .get('/v1/api/tasks/calendar?'+'location='+this.location)
             .then((res) => {
             this.events = res.data.assignedtasks
-                   
+            this.location2 = 'Janek'       
+                 
             })
             .catch(error => {				
-						this.errored = true
-						})
-						.finally(() => this.loading = false)	
+			this.errored = true
+			})
+			.finally(() => this.loading = false)	
     }, 
 
       

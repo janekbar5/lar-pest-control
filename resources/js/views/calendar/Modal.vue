@@ -4,7 +4,7 @@
                         <div class="modal-content">
 
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addNewLabel">fgngfhngh</h5>
+                                <h5 class="modal-title" id="addNewLabel">vars:{{vars}}</h5>
                             </div>
 
                             
@@ -47,6 +47,9 @@
 
 export default {
   name: 'Modal',
+  props: {        
+        vars: { required: true },
+  },  
   data: function () {
     return {
       
