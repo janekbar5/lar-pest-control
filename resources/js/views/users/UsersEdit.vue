@@ -22,7 +22,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group ">
                                         <label for="inputSkills" class="col-sm-2 col-form-label">Photos</label>
-                                        <DzoneComponent :photableType="photable_Type" :photosList="photos_List" :photableId="photable_Id" :editMode="editMode"></DzoneComponent>
+                                        <DzoneComponent v-if="isMounted" :photableType="photable_Type" :photosList="photos_List" :photableId="photable_Id" :editMode="editMode"></DzoneComponent>
                                     </div>
                                 </div>
                             </div>
@@ -116,6 +116,7 @@
         components: { DzoneComponent, Buttons, Multiselect },
         data () {
             return {
+                isMounted: false,
                 apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
                 //
                 urlList:'', urlCreate:'', urlEdit:'',              
@@ -177,9 +178,13 @@
                     this.title = 'Edit'                    
                     this.roles =  res.data.form.roles //assigned roles                  
                     this.photos_List = res.data.form.photos;
+                    //console.log('setData-parent')
                 }
-                this.allroles =  res.data.allroles //all roles
                 
+                //    console.log(this.photos_List)
+
+                this.allroles =  res.data.allroles //all roles
+                this.isMounted = true 
             },
          
             addTag2 (newTag) {

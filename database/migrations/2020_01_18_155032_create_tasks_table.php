@@ -14,14 +14,14 @@ class CreateTasksTable extends Migration
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->increments('id');            
-            $table->integer('location_id')->unsigned(); //unsigned only positive val
-            //
-            //$table->integer('treatment_id')->unsigned(); //unsigned only positive val
-            $table->integer('status_id')->unsigned(); //unsigned only positive val
-            $table->integer('price_id')->unsigned(); //unsigned only positive val
-            //$table->integer('user_id')->unsigned(); //unsigned only positive val
-            //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->increments('id');   
+			$table->integer('user_id')->unsigned(); //unsigned only positive val
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+			
+            $table->integer('location_id')->unsigned(); //unsigned only positive val           
+            $table->integer('status_id')->unsigned(); //unsigned only positive val        
+        
+			$table->float('price');
             $table->string('title'); //varchar	
             $table->text('description')->nullable(); //TEXT equivalent to the table
             $table->text('comment')->nullable(); //TEXT equivalent to the table

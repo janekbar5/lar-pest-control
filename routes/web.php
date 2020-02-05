@@ -59,6 +59,7 @@ Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post
 Route::put('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post 
 Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  post 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////LOCATIONS
+Route::get('v1/api/locations/filter', 'LocationController@filter'); //list 
 Route::get('v1/api/locations/index', 'LocationController@index'); //list    
 Route::get('v1/api/locations/{id}/edit', 'LocationController@edit'); //edit
 Route::get('v1/api/locations/create', 'LocationController@create'); //create     

@@ -29,13 +29,16 @@ class Task extends Model
     
     protected $fillable = [
 	    'location_id',
-        //'treatment_id', 
+        'user_id', 
 		'status_id',
 		'price_id',
 		'title',
 		'description',
         'comment',		
         'deadline',
+		'price',
+		'start',
+		'end',
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
     // Location-->belongsToMany-->Treatment   <==>  Treatment-->belongsToMany-->Location

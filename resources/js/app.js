@@ -51,7 +51,6 @@ import RolesShow from './views/roles/RolesShow'
 import RolesEdit from './views/roles/RolesEdit'
 
 import TasksIndex from './views/tasks/TasksIndex'
-import TasksShow from './views/tasks/TasksShow'
 import TasksEdit from './views/tasks/TasksEdit'
 
 import TreatmentsIndex from './views/treatments/TreatmentsIndex'
@@ -93,7 +92,7 @@ let routes = [
     { path: '/tasks', name: 'TasksIndex', component:TasksIndex, meta: {mode: 'list'} },
     { path: '/tasks/create', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'create'} },
     { path: '/tasks/:id/edit', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'edit'} },
-    { path: '/tasks/:id',  name: 'TasksShow', component: TasksShow, meta: {mode: 'view'} },  
+ 
     
     { path: '/treatments', name: 'TreatmentsIndex', component:TreatmentsIndex, meta: {mode: 'list'} },
     { path: '/treatments/create', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'create'} },

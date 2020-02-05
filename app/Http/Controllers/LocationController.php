@@ -88,5 +88,28 @@ class LocationController extends Controller
            ->json(['deleted' => true]);
    }
     
-    /**/////////////////////////////////////////////////////////////////////////////////////////////
+   /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
+    public function filter(Request $request)
+    {      
+       //dd($request->all() );
+	   
+	   
+       //$locations_pre = Location::with('clients');
+	   $locations_pre = Location::
+								select('locations.*')
+								->orderBy('created_at', 'desc');
+								
+	    if ($request->input('loc'))
+        {
+            $locations_pre = $locations_pre->where('client_id', '=', $request->input('loc'));			
+        }
+		
+		
+		
+		$total = $locations_pre->get()->count();		
+		return $locations_pre->paginate($request->input('perpage'));
+		 
+		
+		
+    }
 }

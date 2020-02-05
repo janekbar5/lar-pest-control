@@ -26,16 +26,24 @@ class TaskController extends Controller
         $this->im = $im;
     }    
     /**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
-    public function calendar()    { 
+    public function calendar(Request $request)    { 
 	
         $unassignedtasks = $this->br->getUnassignedTasks(); 
-        $assignedtasks = $this->br->getAssignedTasks(); 
+		
+		if($request->input('location')){
+		  $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
+		}else{
+		  $assignedtasks = $this->br->getAssignedTasks();
+		}
         
+       
+		
         return response()->json([            
             'unassignedtasks' => $unassignedtasks,
             'assignedtasks' => $assignedtasks,
         ]);
     }
+	
 	public function userCalendar()    {
         $userstasks = $this->br->getUsersTasks(\Auth::user()->id);
 		//dd($userstasks);
@@ -70,17 +78,24 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
      public function create()
      {        
-        
+        $fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();  
         return response()->json([
-            'form' => '',           
+            'form' => '',  
+			'fieldusers' => $fieldusers->toArray(['name'])
             ]);
      }
     /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST
     public function store(Request $request)
     {        
-        //dd($request->all());
+        //dd(\Auth::user()->id);
         $fv = $this->validate($request, $this->vr->taskUpdate());        
-        $task = Task::create(array_merge($request->all(), ['user_id' => \Auth::user()->id]));        
+        $task = Task::create(array_merge($request->all(), [
+		'user_id' => \Auth::user()->id,
+		'location_id' => $request->input('location'),
+		'status_id' => 1,
+		'price' => 100,
+		]));    
+		
         return ['created' => 'true','id' => $task->id];
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST

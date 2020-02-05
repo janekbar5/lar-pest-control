@@ -1,190 +1,356 @@
 <template>
     <div class="panel">
-        <div class="panel-heading">
-            <div>             
-              
-                <Buttons :editMode="editMode" ></Buttons>
-            </div>
-        </div>
-       
-        <div class="panel-body">
-            <table class="table table-link">
-                <thead>
-                    <tr>
-                        <th style="width: 5%">ID</th>                       
-                        <th style="width: 20%">Client</th>
-                        <th style="width: 20%">City</th>
-                        <th style="width: 20%">Address</th>
-                        <th style="width: 10%">Actions</th>                       
-                       
-                    </tr>
-                </thead>
 
-                <tbody>
-                    <tr v-for="item in model.data" :key="item.data">
-                        <td>{{item.id}}</td> 
-                        <td>{{item.clients.name}}</td>
-                        <td>{{item.address.city}} </td>
-                        <td>{{item.address.address_line1}} </br>
-                            {{item.address.address_line2}}
-
-                        </td>
-                        
-                       
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success" @click="modelView(item)"> View</button>
-                                <button type="button" class="btn btn-info" @click="modelEdit(item)">Edit</button>
-                                <button type="button" class="btn btn-danger" @click="modelDelete(item)">Delete</button>
-                            </div>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="panel-footer flex-between">
+       <div class="panel-footer flex-between">
             <div>
-                <small>Showing {{model.from}} - {{model.to}} of {{model.total}}</small>
+                <small>Showing {{from}} - {{to}} of {{total}}</small>
             </div>
             <div>
-                <button class="btn btn-sm" :disabled="!model.prev_page_url" @click="prevPage">
+                <button class="btn btn-sm" :disabled="!prev_page_url" @click="prevPage">
                     Prev
                 </button>
-                <button class="btn btn-sm" :disabled="!model.next_page_url" @click="nextPage">
+                <button class="btn btn-sm" :disabled="!next_page_url" @click="nextPage">
                     Next
                 </button>
             </div>
         </div>
+
+
+    <table class="table">
+	  <thead>
+		<tr>
+		  <th scope="col">#</th>
+		  <th scope="col">First</th>
+		  <th scope="col">Last</th>
+		  <th scope="col">Handle</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<tr>
+		  <th scope="row">1</th>
+		  <td>
+		   <select @change="doFilter()" v-model="perpage" class="form-control">
+					<option value="" selected>Select per page</option>
+					<option value="10">10</option>
+					<option value="20">20</option>
+                    <option value="40">40</option>
+                    <option value="60">60</option>								
+			</select>
+		  </td>
+		  <td>
+									<!-- <select @change="doFilter()" v-model="location" class="form-control">
+										<option value="" selected>Select Location</option>
+										<option :value="location.locations.id" v-for="location in records" >{{ location.locations.title }}</option>
+										
+									  </select> -->
+		  
+		  </td>
+		  <td>					<div class="ct-form--item ct-u-marginBottom10">
+								
+								<label class="container_check">Reset
+								  <input type="radio" @change="changeColor(color,$event)" :value="0" name="radio">
+								  <span class="checkmark"></span>
+								</label>
+								<label class="container_check">Red
+								  <input type="radio" @change="changeColor(color,$event)" :value="1" name="radio">
+								  <span class="checkmark"></span>
+								</label>
+								<label class="container_check">Blue
+								  <input type="radio" @change="changeColor(color,$event)" :value="2" name="radio">
+								  <span class="checkmark"></span>
+								</label>
+								<label class="container_check">Green
+								  <input type="radio" @change="changeColor(color,$event)" :value="3" name="radio">
+								  <span class="checkmark"></span>
+								</label>
+								<label class="container_check">Yellow
+								  <input type="radio" @change="changeColor(color,$event)" :value="4" name="radio">
+								  <span class="checkmark"></span>
+								</label>
+								</div></td>
+		</tr>
+		<tr>
+		  <th scope="row"></th>
+		  <td>
+									<select @change="doFilter()" v-model="client" class="form-control">
+                                        <option value="" selected>Select Make</option>
+                                        <option :value="client.id" v-for="(client, index) in clients" :key="index">
+										{{ client.title }} 
+										</option>                                       
+                                    </select>
+		  </td>
+		  <td>
+		  <select @change="doFilter();" v-model="sort" class="form-control">
+                                        <option value="" selected>Sort By</option> 
+										<option value="price|asc" >Price (Lowest)</option>
+                                        <option value="price|desc" >Price (Highest)</option>
+                                        <!--<option value="age|desc" >Age (Newest)</option>
+                                        <option value="age|asc" >Age (Oldest)</option>-->
+                                        <option value="mileage|asc" >Mileage (Lowest)</option>
+                                        <option value="mileage|desc" >Mileage (Highest)</option>
+                                    </select>
+									</td>
+		  <td>c</td>
+		</tr>
+		<tr>
+		  <th scope="row">3</th>
+		  <td>
+									<select @change="doFilter()" v-model="model" class="form-control">
+                                        <option value="" selected>Select Model</option>
+                                        <option :value="model.id" v-for="(model, index) in models" :key="index">
+										{{ model.title }} ({{ model.count }})
+										</option> 
+                                    </select>
+		  </td>
+		  <td></td>
+		  <td></td>
+		</tr>
+	  </tbody>
+	</table>
+
+
+
+
+
+								
+								
+								
+								
+								
+		
+	<table class="table">
+	  <thead>
+		<tr>
+		  <th scope="col">#id</th>
+		  <th scope="col">title</th>
+		  <th scope="col">price</th>
+		  <th scope="col">mileage</th>
+		  <th scope="col">reg_year</th>
+		  <th scope="col">price</th>
+		  <th scope="col">location</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		
+		  <tr v-for="record in records">		  
+		  <td>{{ record.id }}</td>
+		  <td>{{ record.title }}</td>
+		  <td>{{ record.price }} </td>
+		  <td>{{ record.mileage }} </td>
+		  <td>{{ record.reg_year }} </td>
+		  <td>{{ record.price }} </td>
+		  <td>{{ record.location }} </td>
+		</tr>
+		
+	  </tbody>
+	</table>
     </div>
 </template>
 
 
-<script type="text/javascript">
-import Vue from 'vue'
-import { get, byMethod } from '../../lib/api'
-import {isEmpty} from "lodash"
-import Buttons from './Buttons'
-
+<script>
 export default {
-    components: { Buttons },
-data () {
-return {
-    url:'',
-    settings: {},
-    urlList: '',
-    urlEdit: '',
-    apiList: '',
-    //    
-    editMode: this.$route.meta.mode,
-    model: {
-        // urlList:'',
-        // data: []
+    data () {
+        return {
+            url:'',
+            settings: {},
+            urlList: '',
+            urlEdit: '',
+            apiList: '',
+            //    
+            editMode: this.$route.meta.mode,
+
+            records: {},
+            loading: true,
+            errored: false,
+            perpage:10,
+            clients: this.clients,
+            client: "",
+            models: "",
+            model: "",
+            location: "",
+            color: null,
+            col: "",
+            sort: "",
+            next_page_url:'',
+            prev_page_url:'',
+            page:'',
+            total:'',
+            from:'',
+            to:'',
+            }
+
     },
-    
-}
-},
-//
-beforeRouteEnter(to, from, next) {    
-    get('/v1/api'+to.path+'/index', to.query)
-        .then((res) => {
-            next(vm => vm.setData(res))
-        })
-},
-//
-beforeRouteUpdate(to, from, next) {
-    get('/v1/api'+to.path+'/index', to.query)
-        .then((res) => {
-            this.setData(res)
-            next()
-    })
-},
-//
-created() {
+
+  computed: {
+	  filteredBancodedaos () {
+		return this.bancodedados.filter(() => {
+		  // using this.mySearch
+		})
+	  },
+	  filteredRecords: function () {
+		var self = this
+		return self.records.filter(function (rec) {
+		  return rec.name.indexOf(self.searchQuery) !== -1
+		})
+	  },
+	   unique () {
+		  return function (arr, key) {
+			var output = []
+			var usedKeys = {}
+			for (var i = 0; i < arr.length; i++) {
+			  if (!usedKeys[arr[i][key]]) {
+				usedKeys[arr[i][key]] = true
+				output.push(arr[i])
+			  }
+			}
+			return output
+		  }
+		},
+	  
+	},
+  
+  filters: {
+    currencydecimal (value) {
+      return value.toFixed(2)
+    }
+  },
+  
+  mounted () {
+    this.doFilter()
+    //this.getClients()
+    this.clients = [
+                        {id: 1,title: 'Clent 1',age: 30 },
+                        {id: 2,title: 'Clent 2',age: 30 },
+                        {id: 3,title: 'Clent 3',age: 30 },
+                ]
+  },
+  created() {
     this.$eventHub.$on('settings', this.modelSettings) 
 },
-beforeDestroy(){
-    //this.$eventHub.$off('settings');
-},
-//
-methods: {
-    modelSettings(settings){
-        //return name
-        this.settings = settings;
-        this.urlList = settings.urlList
-        this.urlEdit = settings.urlEdit
-        //
-        this.apiList = settings.apiList
-        this.apiDelete = settings.apiDelete
-        //console.log(settings)  
-    },
-    modelView(item) {        
-        this.$router.push(this.urlList+'/'+item.id)
-    },
-    modelEdit(item) {
-        this.$router.push(this.urlList+'/'+item.id+'/edit')
-    },
-    setData(res) {
-        Vue.set(this.$data, 'model', res.data.results)
-        this.page = this.model.current_page
-        //this.$bar.finish()
-    },
-    nextPage() {
-        if(this.model.next_page_url) {
-            //console.log(this.model.next_page_url)
-            const query = Object.assign({}, this.$route.query)
-            query.page = query.page ? (Number(query.page) + 1) : 2
+  methods: {
+           modelSettings(settings){
+            //return name
+            this.settings = settings;
+            this.urlList = settings.urlList
+            this.urlEdit = settings.urlEdit
+            //
+            this.apiList = settings.apiList
+            this.apiDelete = settings.apiDelete
+            //console.log(settings)  
+        },
+           nextPage() {
+                if(this.next_page_url) {
+                    //console.log(this.model.next_page_url)
+                    const query = Object.assign({}, this.$route.query)
+                    query.page = query.page ? (Number(query.page) + 1) : 2
 
-            this.$router.push({
-                path: this.urlList,
-                query: query
+                    this.$router.push({
+                        path: this.urlList,
+                        query: query
+                    })
+                    this.page = query.page
+
+                    this.doFilter()
+                }
+            },
+            prevPage () {
+                if(this.prev_page_url) {
+                    const query = Object.assign({}, this.$route.query)
+                    query.page = query.page ? (Number(query.page) - 1) : 1
+
+                    this.$router.push({
+                        path: this.urlList,
+                        query: query
+                    })
+
+                    this.page = query.page
+
+                    this.doFilter()
+                }
+            },
+			doFilter: function() {
+            axios    
+            .get('v1/api/locations/filter?'+'perpage='+this.perpage+'&loc='+this.client+'&page='+this.page)
+                .then((response) => {
+                    this.setData(response)
+                   
             })
-        }
-    },
-    prevPage () {
-        if(this.model.prev_page_url) {
-            const query = Object.assign({}, this.$route.query)
-            query.page = query.page ? (Number(query.page) - 1) : 1
-
-            this.$router.push({
-                path: this.urlList,
-                query: query
-            })
-        }
-    },
-    checkThis(cos) {
-    return photo
-    },
-    getApi(url){
-        get(url)
-        .then((res) => {
-            this.setData(res)                   
-        })
-    },
-    modelDelete(item){
-        swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-        // Send request to the server
-        if (result.value) {
-            byMethod('delete',  this.apiDelete+item.id).then(()=>{
-            swal.fire('Deleted!','Your file has been deleted.','success')
-            this.getApi(this.apiList+'?page='+this.page)                                         
-        }).catch(()=> {
-            swal.fire("Failed!", "There was something wronge.", "warning");
-            });
-        }
-        })
-    },
+            .catch(error => {				
+						this.errored = true
+						})
+						.finally(() => this.loading = false)	
 
 
+			//  axios
+            //   .get('v1/api/locations/filter?'+'perpage='+this.perpage+'&loc='+this.client)
+            //   //.get('v1/api/locations/filter?&loc='+this.client)
+            //   //.get('/v1/locations/filter')
+			//   .then(response => {
+            //     this.records = response.data.data
+            //     this.next_page_url = response.data.next_page_url
+            //     this.prev_page_url = response.data.prev_page_url
+            //     console.log(this.prev_page_url)
+			//   })
+			//   .catch(error => {
+			// 	console.log(error)
+			// 	this.errored = true
+			//   })
+            //   .finally(() => this.loading = false)
+              
+              
+            },
+             setData(response) {
+                this.records = response.data.data
+                this.next_page_url = response.data.next_page_url
+                this.prev_page_url = response.data.prev_page_url
+                this.total = response.data.total
+                this.from = response.data.from
+                this.to = response.data.to
+                //console.log(response.data.prev_page_url)
+            },
+            
+			getClents() {
+                //alert('ffff')			
+				this.clients = [
+                        {id: 1,title: 'Clent 1',age: 30 },
+                        {id: 2,title: 'Clent 2',age: 30 },
+                        {id: 3,title: 'Clent 3',age: 30 },
+                ]  
+			},
+			getModels: function() {
 
-    }
+                this.models = [
+                        {id: 1,title: 'Model 1',age: 30 },
+                        {id: 2,title: 'Model 2',age: 30 },
+                        {id: 3,title: 'Model 3',age: 30 },
+                ]
+                //alert('ffff')			
+				// axios				  
+				//    .get("http://www.grand-cars.une/v1/getmodels/"+this.make)
+				//    .then(res => {
+				// 	this.models = res.data;
+				//   })
+				  //console.log(this.models);  
+			},
+			getLocations: function() {
+			  //return uniq(this.records.map(p => p.locations.title))
+			  //return this.records;
+			  //return 'ddddd'; 
+			  //this.records;
+			  let items = ['a', 'b', 'c']
+			   
+			},
+			changeColor: function(item, event){			  
+			  this.col = event.target.value;
+			  this.doFilter();
+			},
+  
+  }
+
 }
+  
+  
+  
+
 </script>

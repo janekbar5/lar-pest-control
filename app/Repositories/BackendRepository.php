@@ -63,6 +63,15 @@ class BackendRepository implements BackendRepositoryInterface
                   ->has('selectedUsers')    
                   ->get(); 
     }
+	public function getAssignedFilteredTasks($id){
+        return Task::where('location_id', '=', $id)
+                  ->with('locations')
+                  ->with('statuses')                 
+                  ->has('selectedUsers')    
+                  ->get(); 
+    }
+	
+	
     public function getTaskById($id){
         return Task::where('id', '=', $id) 
                    ->with('locations')

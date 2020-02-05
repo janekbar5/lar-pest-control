@@ -26,9 +26,9 @@ class TasksTableSeeder extends Seeder
             DB::table('tasks')
                 ->insert([
                     'location_id' => $faker->numberBetween($min = 1, $max = 4),
-                    //'treatment_id' => $faker->numberBetween($min = 1, $max = 4),
+                    'user_id' => 1,
 					'status_id' => $faker->numberBetween($min = 1, $max = 3),
-					'price_id' => $faker->numberBetween($min = 1, $max = 4),
+					'price' => $faker->numberBetween($min = 100, $max = 150),
 					'title' => "Task title ".$i,
 					'description' => $faker->text,	
                     'comment' => $faker->text,

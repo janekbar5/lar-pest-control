@@ -61,8 +61,8 @@
                                  <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Location</label>
-                                        <input v-model="form.locations.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
-                                         <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
+                                        <input v-model="form.location" type="text" name="location" class="form-control" :class="{ 'is-invalid': errors.location }" >
+                                         <div class="alert alert-danger" v-if="errors.location"> {{errors.location[0]}}</div>
                                     </div>  
                                 </div> 
 
@@ -141,6 +141,7 @@
         components: { DzoneComponent, Buttons, Multiselect },
         data () {
             return {
+               
                 modelSingular: '',
                 apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
                 //
@@ -214,8 +215,9 @@
                     this.roles =  res.data.form.roles //assigned roles                   
                     this.photos_List = res.data.form.photos;
                 }
+                this.photos_List = res.data.form.photos;
                 this.allFieldUsers =  res.data.fieldusers //all roles
-                //this.objectToArray(); 
+               
             },
            /* nameWithLang ({ name, language }) {
             return `${name} — [${language}]`

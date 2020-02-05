@@ -32,7 +32,17 @@
                       
                       <div class="card-body">                  
                       <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+
+                    Location: {{ location }}
+
+                   <select @change="filterLocation()" v-model="location" class="form-control">
+                        <option value="" selected>Select Location</option>
+                         <option :value="location.id" v-for="(location, index) in locations" :key="index">
+									        	{{ location.title }} 
+									     	</option>                                       
+                       </select>
                       </div>
+
                       
                         <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
                      
@@ -44,7 +54,7 @@
                    
         </div>
       
-      <Modal />
+                   <Modal />
    </div>     
  
 </template>
@@ -65,7 +75,9 @@ export default {
     return {
       unassignedtasks:[],
       value:'',
-      events: [],  
+      events: [],
+      location:'',
+      locations:{},  
       
       config: {
           
@@ -83,7 +95,8 @@ export default {
         allDayText: "All Day Events",
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
-        //drop(calEvent, jsEvent, view) {   
+        //drop(calEvent, jsEvent, view) { 
+            
         drop(info) {    
           // is the "remove after drop" checkbox checked?
           if ($("#drop-remove").is(":checked")) {
@@ -97,7 +110,8 @@ export default {
             $("#addNew").modal("show")  
             $('#start').val(start);
             $('#end').val(end);  
-            //console.log(app)
+            $('#location').val(app.location);
+            console.log(app)
               //app.callModal()
           }
         },
@@ -152,11 +166,10 @@ export default {
 
   created() { 
     axios.get('/v1/api/tasks/calendar').then((res) => {
-   if(res.data) {
+    if(res.data) {
      this.unassignedtasks = res.data.unassignedtasks
         this.events = res.data.assignedtasks
-    }
-    })
+    }})
     .catch((error) => {
       if(error.response.status === 422) {
         this.errors = error.response.data.errors
@@ -166,13 +179,30 @@ export default {
     
   },
   mounted() {
-    //this.getNotifications()
+    this.locations = [
+                        {id: 1,title: 'Location 1',age: 30 },
+                        {id: 2,title: 'Location 2',age: 30 },
+                        {id: 3,title: 'Location 3',age: 30 },
+                ]
   },
   //
   methods: {
     callModal() {        
       $("#addNew").modal("show")
     }, 
+    filterLocation() {        
+        axios    
+            .get('/v1/api/tasks/calendar?'+'location='+this.location)
+            .then((res) => {
+            this.events = res.data.assignedtasks
+                   
+            })
+            .catch(error => {				
+						this.errored = true
+						})
+						.finally(() => this.loading = false)	
+    }, 
+
       
     handleDateClick(arg) {
       alert(arg.date)

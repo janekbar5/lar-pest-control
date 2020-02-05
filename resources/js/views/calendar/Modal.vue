@@ -17,8 +17,11 @@
                                             </div>
                                             <div class="card-body">
 
-                                             <input id="start" value="">
-                                             <input id="end" value="">
+                                             Start<input id="start" value=""></br>
+
+                                             End<input id="end" value=""></br>
+
+                                             Location<input id="location" value=""></br>
 
                                             </div>
 

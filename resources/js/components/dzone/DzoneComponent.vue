@@ -12,7 +12,7 @@
                                 <div class="row">
                         
 
-                                <div class="col-sm-2" v-for="photo in photosList">
+                                <div class="col-sm-2" v-for="photo in updatedPhotosList">
                                     <a href="#" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
                                     <img v-bind:src="'/images/thumb_mini-'+ photo.path" class="img-fluid mb-2" alt="white sample" width=100>
                                         <span v-if="editMode === 'edit'" @click="deletePhoto(photo.id)">DELETE</span>
@@ -28,6 +28,7 @@
                 </div>
                     
 
+                updatedPhotosList  {{updatedPhotosList}} photosList {{photosList}}
 
                 <div class="card" v-if="editMode === 'edit'" >
                   
@@ -85,6 +86,7 @@ import {get, byMethod } from '../../lib/api'
       },
       data: function () {
         return {
+            updatedPhotosList:'',
             text:this.text,
             uploadMessage:'123',            
             dropzoneOptions: {
@@ -162,13 +164,15 @@ import {get, byMethod } from '../../lib/api'
          //console.log('', 'Event : vdropzone-queue-complete')
          this.photosUpdate()
         },
+
         photosUpdate() {            
             var params = {
                 photoable_type: this.photableType,
                 photoable_id: this.$route.params.id,
             }            
             axios.post('/v1/api/images/index',params).then(res => {
-              this.photosList = res.data;
+              //this.photosList = res.data;
+              this.updatedPhotosList = res.data;
             })  
         },
         deletePhoto(id){
@@ -186,7 +190,7 @@ import {get, byMethod } from '../../lib/api'
                 byMethod('delete', `/v1/api/images/delete/${id}`).then(()=>{
                 swal.fire('Deleted!','Your file has been deleted.','success')
                 //this.photosList.splice(id)    
-                this.photosList.splice(this.photosList.indexOf(id), 1);    
+                this.updatedPhotosList.splice(this.photosList.indexOf(id), 1);    
                 //this.getApi(this.apiList+'?page='+this.page)
                 //console.log(this.page)                                   
             }).catch(()=> {
@@ -226,12 +230,12 @@ import {get, byMethod } from '../../lib/api'
         },
         ///////////////////////////
         disableUpload() {
-          this.$refs.myVueDropzone.disable()         
-          //console.log(info)
+          //this.$refs.myVueDropzone.disable()         
+          console.log('disableUpload')
         },
         enableUpload() {
-          this.$refs.myVueDropzone.enable()          
-          //console.log(info)
+          //this.$refs.myVueDropzone.enable()          
+          console.log('enableUpload')
         },
         defaultUploadMessage(){   
             var message = ''
@@ -251,7 +255,9 @@ import {get, byMethod } from '../../lib/api'
                this.enableUpload()
             }else{
                this.disableUpload()
-            }         
+            }   
+            console.log('mounted-child')
+            this.updatedPhotosList = this.photosList      
       }
     }
 </script>
