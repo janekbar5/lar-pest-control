@@ -59,7 +59,7 @@
           @can('treatment-list') 
           <li class="nav-item">
              <router-link to="/treatments" class="nav-link">
-               <i class="nav-icon fas fa-cogs orange"></i> <p>Treatment </p>
+               <i class="nav-icon fas fa-wrench orange"></i> <p>Treatment </p>
              </router-link>
            </li>
            @endcan
@@ -159,6 +159,15 @@
           </ul>
         </li>
         @endcan
+
+
+       
+        <li class="nav-item">
+            <router-link to="/globalsettings" class="nav-link">
+              <i class="nav-icon fas fa-cog orange"></i> <p>Global settings </p>
+            </router-link>
+          </li>
+       
 
         
 

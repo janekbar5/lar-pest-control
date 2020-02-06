@@ -18,6 +18,7 @@
 
 
 <!---vue permss-->
+
 <script>
   @auth
     window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
@@ -25,18 +26,21 @@
     window.Permissions = [];
   @endauth
 </script>
+
 <script>
     @auth
       window.Roles = {!! json_encode(Auth::user()->allRoles, true) !!};
     @else
       window.Roles = [];
     @endauth
-  </script>
+</script>
 <!---vue permss-->
+
 
 
 <!-- <body class="hold-transition sidebar-mini layout-fixed"> -->
 <body class="hold-transition sidebar-mini sidebar-collapse">
+  
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -49,10 +53,9 @@
   <div class="content-wrapper">
     <div class="content">      
       <div class="container-fluid">           
-      <router-view></router-view> 
-      <!-- @yield('content') -->
-      <!-- <vue-progress-bar></vue-progress-bar>         -->
-      </div><!-- /.container-fluid -->
+      <router-view></router-view>      
+      <!-- <vue-progress-bar></vue-progress-bar>   -->
+      </div>
     </div>         
   </div>
 <!------------------------------------------------------ /.content-wrapper -->
@@ -79,44 +82,6 @@
 <script src="/js/app.js"></script> 
 
 <script src="https://adminlte.io/themes/dev/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-
-<!--
- <script src="https://adminlte.io/themes/dev/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
--->
-
-
-<!-- 
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/chart.js/Chart.min.js"></script>
--->
-
-
-<!-- 
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/sparklines/sparkline.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/jquery-knob/jquery.knob.min.js"></script>
--->
-
-<!--
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
--->
-
-
-<!--
-<script src="https://adminlte.io/themes/dev/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<script src="https://adminlte.io/themes/dev/AdminLTE/dist/js/adminlte.js"></script>
-
-
--->
-
-
-<!--
-<script src="https://adminlte.io/themes/dev/AdminLTE/dist/js/pages/dashboard.js"></script>	
-<script src="https://adminlte.io/themes/dev/AdminLTE/dist/js/demo.js"></script>
--->
 
 
 

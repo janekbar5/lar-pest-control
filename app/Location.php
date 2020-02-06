@@ -3,12 +3,34 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+//
 use OwenIt\Auditing\Contracts\Auditable;
+//
+use Illuminate\Database\Eloquent\SoftDeletes;
+//
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
-
-class Location extends Model implements Auditable 
+class Location extends Model implements Auditable, Searchable
 {
     use \OwenIt\Auditing\Auditable;
+	use SoftDeletes;
+	//////////////////////////////////////////
+	protected $dates = ['deleted_at'];
+	//////////////////////////////////////////////////////////////Multiple searches
+    public function getSearchResult(): SearchResult
+    {
+       $url = route('home.search', $this->id);         
+       return new SearchResult($this, $this->title, $url);
+    }
+    /////////////////////////////////////////////////////////////For typehead search
+    protected $appends = ['text'];
+    public function getTextAttribute()
+    {
+        return $this->attributes['title']. ' - '.$this->attributes['description'];
+    }
+	
+	
 
     protected $fillable = [  
                 'user_id',

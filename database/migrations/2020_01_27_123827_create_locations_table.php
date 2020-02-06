@@ -22,8 +22,7 @@ class CreateLocationsTable extends Migration
             //$table->integer('tratment');
             $table->string('title');          
             $table->text('description');                     
-            // $table->decimal('lat', 10, 7);
-            // $table->decimal('lng', 10, 7);
+            $table->softDeletes();  //add this line
             $table->timestamps();     
         });
     }

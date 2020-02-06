@@ -72,11 +72,15 @@ import SubStatusesEdit from './views/substatuses/SubStatusesEdit'
 import ClientsIndex from './views/clients/ClientsIndex'
 import ClientsEdit from './views/clients/ClientsEdit'
 
+import HistoryIndex from './views/history/HistoryIndex'
+import GlobalSettingsIndex from './views/globalsettings/GlobalSettingsIndex'
+
 //////////////////////////////////////////////// 2 routers
 let routes = [
 
     { path: '/dashboard', name: 'Dashboard', component: Dashboard },
     { path: '/calendar', name: 'Calendar', component: Calendar },
+    { path: '/globalsettings', name: 'GlobalSettingsIndex', component:GlobalSettingsIndex, meta: {mode: 'list'} },
 
     ////////////////    
     { path: '/users', name: 'UsersIndex', component:UsersIndex, meta: {mode: 'list'} },
@@ -92,8 +96,7 @@ let routes = [
     { path: '/tasks', name: 'TasksIndex', component:TasksIndex, meta: {mode: 'list'} },
     { path: '/tasks/create', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'create'} },
     { path: '/tasks/:id/edit', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'edit'} },
- 
-    
+     
     { path: '/treatments', name: 'TreatmentsIndex', component:TreatmentsIndex, meta: {mode: 'list'} },
     { path: '/treatments/create', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'create'} },
     { path: '/treatments/:id/edit', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'edit'} },
@@ -117,7 +120,10 @@ let routes = [
     { path: '/clients', name: 'ClientsIndex', component:ClientsIndex, meta: {mode: 'list'} },
     { path: '/clients/create', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'create'} },
     { path: '/clients/:id/edit', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'edit'} },
+
+    { path: '/history', name: 'HistoryIndex', component: HistoryIndex, meta: {mode: 'list'} },  
   
+    
 
 
 
@@ -131,8 +137,26 @@ const router = new VueRouter({
     mode: 'history',
     routes
 });
-
+import { Typeahead2 } from './components/typeahead'
 const app = new Vue({
+
     el: '#app',
+    components: { Typeahead2 },
+    data: function () {
+        return {        
+          form:'',
+          customerURL: '/v1/api/home/searchbox',         
+        }
+      }, 
+    ////
+    methods: {
+        onCustomer(e) { 
+            var id = e.target.value.searchable.id    
+            var model = e.target.value.type  
+           console.log(e.target.value)   
+          this.$router.push('/'+model+'/'+id+'/edit')    
+        },
+    },  
+    //
     router,
 });

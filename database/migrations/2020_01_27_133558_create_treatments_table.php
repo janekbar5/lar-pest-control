@@ -16,7 +16,7 @@ class CreateTreatmentsTable extends Migration
         Schema::create('treatments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned(); //unsigned only positive val
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  
+            //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  
             //$table->integer('tratment');
             $table->string('title');            
             $table->text('description'); 
@@ -30,7 +30,7 @@ class CreateTreatmentsTable extends Migration
 			//$table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
 			$table->primary(['location_id','treatment_id']); //prevent repeating (1,1  1,2  1,3  1,1)			
 			$table->integer('treatment_id')->unsigned();											
-            //$table->foreign('treatment_id')->references('id')->on('treatments')->onDelete('cascade');  
+            $table->softDeletes();  //add this line 
             $table->timestamps();
         });
         

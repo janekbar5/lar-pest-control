@@ -1,11 +1,19 @@
+/////////History Log////Soft Delete // Searchable
+---Users    ok              ok          ok             
+--Treatment ok              ok          ok 
+--Location
+
+
 //////////////////04-02-2020
 Locations add Client DD
 Calendar Popup
-
 //////////////////05-02-2020
-Sort Table
+Sort Table ok
 Calendar
 //////////////////06-02-2020
-History Log
+History Log ok
 Calendar
-
+//////////////////07-02-2020
+Free Field User
+Calendar Show Field Users in Tasks
+Calendar popup users assign & save

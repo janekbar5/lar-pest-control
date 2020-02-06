@@ -14,7 +14,8 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "owen-it/laravel-auditing": "^9.2",
-        "spatie/laravel-permission": "^2.38"
+        "spatie/laravel-permission": "^2.38",
+        "spatie/laravel-searchable": "^1.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

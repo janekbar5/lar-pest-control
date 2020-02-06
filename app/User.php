@@ -9,27 +9,56 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Auth;
+//
+use OwenIt\Auditing\Contracts\Auditable;
+//
+use Illuminate\Database\Eloquent\SoftDeletes;
+//
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable, Searchable
 {
     //use Notifiable;
     use HasRoles, Notifiable;
-    
+	use \OwenIt\Auditing\Auditable;  //Audit Log
+    use SoftDeletes;
+	
+	
+	protected $fillable = [
+        'name', 'email', 'password',
+    ];
+	
     ////////////////////////////////////////////first photo  Assesors setAttribute
     protected $appends = [
-        'firstPhoto',
+        'firstPhoto','text',
     ];
     function getfirstPhotoAttribute()
     {        
         return $this->photos->first();	  
     }
+	//////////////////////////////////////////Soft delete	
+    protected $dates = ['deleted_at'];
+	////////////////////////////////////////////Multiple search models
+    public function getSearchResult(): SearchResult
+    {
+       $url = route('home.search', $this->id);         
+       return new SearchResult($this, $this->name, $url);
+    }
+     /////////////////////////////////////////////////////////////For typehead search     
+     public function getTextAttribute()
+     {
+         return $this->attributes['name']. ' - '.$this->attributes['last_name'];
+     }
 
 
 
 
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    
+	
+	
+	
+	
 
     /**
      * The attributes that should be hidden for arrays.

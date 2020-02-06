@@ -19,8 +19,13 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
+	
+///////////////////////////////////////////////////////////////////////////////////////////////////////HISTORY  
+Route::get('v1/api/history/index', 'HistoryController@index');
+Route::get('/v1/api/home/searchbox', 'HomeController@searchBox')->name('home.search'); //list 
+Route::get('/v1/api/home/globalsettings', 'HomeController@globalsettings');
 ///////////////////////////////////////////////////////////////////////////////////////////////////////USERS
-         //Route::get('user/index', 'UserController@index');
+//Route::get('user/index', 'UserController@index');
 Route::get('v1/api/users/index', 'UserController@index');
 Route::get('v1/api/users/{id}/edit', 'UserController@edit'); //edit 
 Route::get('v1/api/users/create', 'UserController@create'); //create     

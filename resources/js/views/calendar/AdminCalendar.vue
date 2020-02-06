@@ -33,7 +33,7 @@
                       <div class="card-body">                  
                       <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
 
-                    Location: {{ location }}  location2 {{location2}}
+                    locationdata: {{ locationdata }}  
 
                    <select @change="filterLocation()" v-model="location" class="form-control">
                         <option value="" selected>Select Location</option>
@@ -54,7 +54,7 @@
                    
         </div>
       
-                   <Modal :vars="config"/>
+                   <Modal :locationdata="locationdata"/>
    </div>     
  
 </template>
@@ -77,9 +77,9 @@ export default {
       value:'',
       events: [],
       location:'',
-      location2:'',  
+      //location2:'',  
       locations:{},
-      vars:123,
+      locationdata:[],
       
       config: {          
         //defaultView: "agendaWeek",
@@ -196,7 +196,7 @@ export default {
             .get('/v1/api/tasks/calendar?'+'location='+this.location)
             .then((res) => {
             this.events = res.data.assignedtasks
-            this.location2 = 'Janek'       
+            this.locationdata = this.location       
                  
             })
             .catch(error => {				
