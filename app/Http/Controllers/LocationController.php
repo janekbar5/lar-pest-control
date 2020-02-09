@@ -21,11 +21,34 @@ class LocationController extends Controller
         $this->im = $im;
     }    
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    public function index()
-    {      
-        
-        $locations = $this->br->getLocations(\Auth::user()->id);  
-        return response()->json(['results' => $locations]);
+    public function index(Request $request)
+    {       
+		$filterAllClients = $this->br->getAllClients(); 
+		
+		$locations_pre = Location::select('locations.*')
+		          ->where('user_id', '=', \Auth::user()->id) 
+                  ->with('address') 
+                  ->with('clients') 
+                  ->orderBy('created_at', 'desc');                  
+                						
+								
+	    if ($request->input('loc'))
+        {
+            $locations_pre = $locations_pre->where('client_id', '=', $request->input('loc'));			
+        }		
+		
+		
+		$total = $locations_pre->get()->count();		
+		
+		$locations_ok = $locations_pre->paginate($request->input('perpage'));		
+		
+		return response()
+               ->json([ 
+			   'results' => $locations_ok,
+			   'filterAllClients'=> $filterAllClients,
+			   ]);
+				
+		
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)
@@ -34,7 +57,7 @@ class LocationController extends Controller
         $alltreatments = Treatment::withTrashed()->get();
 
         return response()
-            ->json([ 'form' => $location,'alltreatments' => $alltreatments ]);   
+               ->json([ 'form' => $location,'alltreatments' => $alltreatments ]);   
         
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
@@ -88,22 +111,17 @@ class LocationController extends Controller
            ->json(['deleted' => true]);
    }
     
-   /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
+   /**/////////////////////////////////////////////////////////////////////////////////////////////FILTER
     public function filter(Request $request)
     {      
-       //dd($request->all() );
-	   
-	   
-       //$locations_pre = Location::with('clients');
+       
 	   $locations_pre = Location::
 								select('locations.*')
-								->orderBy('created_at', 'desc');
-								
+								->orderBy('created_at', 'desc');								
 	    if ($request->input('loc'))
         {
             $locations_pre = $locations_pre->where('client_id', '=', $request->input('loc'));			
-        }
-		
+        }		
 		
 		
 		$total = $locations_pre->get()->count();		

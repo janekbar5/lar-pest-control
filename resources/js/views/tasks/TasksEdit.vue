@@ -79,21 +79,21 @@
                            <div class="row">
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
-                                        <label>Assigned Users</label>
-                                       <!--selected_users {{ form.selected_users }} </br>
-                                       allFieldUsers {{ allFieldUsers }}-->
+                                        <label>Assigned Users</label> 
+                                        <!-- @tag="addTag2" -->                                     
                                         <multiselect 
                                         v-model="form.selected_users" 
-                                        :options="allFieldUsers"                                          
+                                        :options="allFieldUsers"
+                                        :custom-label="nameWithSuename"                                          
                                         placeholder="Select users"
                                         :multiple="true"
-                                       @tag="addTag2"
+                                       
                                         label="name" 
                                         track-by="name"></multiselect>
                                   </div>  
                                 </div> 
                             </div>
-                               
+                                
 
                             <div class="row">
                                 <div class="col-md-12">                                   
@@ -217,26 +217,26 @@
                 }
                 this.photos_List = res.data.form.photos;
                 this.allFieldUsers =  res.data.fieldusers //all roles
-               
-            },
-           /* nameWithLang ({ name, language }) {
-            return `${name} — [${language}]`
-            },*/
+               //this.allFieldUsers = [{"id":1,"name":"ddddd"}]
+            },          
             objectToArray() {                
                 var user_array = [];               
                 this.allFieldUsers.forEach(element => {
                     user_array.push(element.id);
                 });
                 this.selected_users = user_array;
-            },   
-            addTag2 (newTag) {
-                const tag = {
-                    name: newTag,                   
-                }
-                this.selected_users.push(tag)
-                this.allFieldUsers.push(tag)
-                //console.log(options)
-            },
+            }, 
+            nameWithSuename ({ name, last_name }) {
+            return `${name} ${last_name}`
+            },  
+            // addTag2 (newTag) {
+            //     const tag = {
+            //         name: newTag,                   
+            //     }
+            //     this.selected_users.push(tag)
+            //     this.allFieldUsers.push(tag)
+            //     //console.log(options)
+            // },
             onSave() {
                 this.errors = {}
                 this.isProcessing = true                

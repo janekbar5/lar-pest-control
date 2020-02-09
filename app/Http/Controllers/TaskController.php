@@ -25,54 +25,58 @@ class TaskController extends Controller
         $this->vr = $vr;
         $this->im = $im;
     }    
-    /**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
-    public function calendar(Request $request)    { 
-	
-        $unassignedtasks = $this->br->getUnassignedTasks(); 
-		
-		if($request->input('location')){
-		  $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
-		}else{
-		  $assignedtasks = $this->br->getAssignedTasks();
-		}
-        
-       
-		
-        return response()->json([            
-            'unassignedtasks' => $unassignedtasks,
-            'assignedtasks' => $assignedtasks,
-        ]);
-    }
-	
-	public function userCalendar()    {
-        $userstasks = $this->br->getUsersTasks(\Auth::user()->id);
-		//dd($userstasks);
-        return response()->json([            
-            'userstasks' => $userstasks,
-           
-        ]);
-    }
-	
+    	
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    public function index()    {       
+    /* public function index()    {       
         $tasks = $this->br->getAllTasks();       
         return response()->json(['results' => $tasks]);
-        
-         /* $alltasks = $this->br->getAllTasks();
-        $unassignedtasks = $this->br->getUnassignedTasks();       
-        return response()->json([
-            'alltasks' => $alltasks,
-            'unassignedtasks' => $unassignedtasks,
-        ]);*/
+       
+    } */
+	public function index(Request $request)
+    {       
+		$filterAllLocations = $this->br->getAllLocations(); 
+		$filterAllStatuses = $this->br->getAllStatuses2(); 
+		
+		$tasks_pre = Task::select('tasks.*')
+		          ->where('user_id', '=', \Auth::user()->id) 
+                  ->with('locations')
+                  ->with('statuses')
+                  ->with('photos')    
+                  ->with('selectedUsers');   
+                  	
+								
+	    if ($request->input('loc'))
+        {
+            $tasks_pre = $tasks_pre->where('location_id', '=', $request->input('loc'));			
+        }		
+		if ($request->input('stat'))
+        {
+            $tasks_pre = $tasks_pre->where('status_id', '=', $request->input('stat'));			
+        }
+		
+		$total = $tasks_pre->get()->count();		
+		
+		$tasks_ok = $tasks_pre->paginate($request->input('perpage'));		
+		
+		return response()
+               ->json([ 
+			   'results' => $tasks_ok,
+			   'filterAllLocations'=> $filterAllLocations,
+			   'filterAllStatuses'=> $filterAllStatuses,
+			   ]);
+				
+		
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)
     {        
         $task = $this->br->getTaskById($id); 
-        $fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();          
+        $fieldusers = $this->br->getAllFieldUsers(); 
+		
         return response()->json([
             'form' => $task, 
-            'fieldusers' => $fieldusers->toArray(['name'])          
+            //'fieldusers' => $fieldusers->toArray(['name','last_name']) 
+			'fieldusers' => $fieldusers 
             ]);         
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
@@ -124,6 +128,51 @@ class TaskController extends Controller
         return response()
             ->json(['deleted' => true]);
     }
+	
+	/**/////////////////////////////////////////////////////////////////////////////////////////////6 getTasksByDate 
+    public function getTasksByDate(Request $request)
+    {
+        $date = $request->input('date');        
+        $tasksbydate = Task::
+							with('selectedUsers')
+							->where('start','LIKE', '%'.$date.'%')
+							->get();
+		$freefieldusers = $this->br->getFreeFieldUsersForDate($date);					
+							
+        return response()
+            ->json([
+			'tasksbydate' => $tasksbydate,	
+			'freefieldusers' => $freefieldusers,	
+			]);
+    }
+	/**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
+    public function calendar(Request $request)    { 
+	
+        $unassignedtasks = $this->br->getUnassignedTasks();
+		if($request->input('location')){
+		  $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
+		}else{
+		  $assignedtasks = $this->br->getAssignedTasks();
+		} 
+	    $alllocations = $this->br->getAllLocations(); 
+        return response()->json([            
+            'unassignedtasks' => $unassignedtasks,
+            'assignedtasks' => $assignedtasks,
+			'alllocations' => $alllocations,
+			
+        ]);
+    }
+	
+	public function userCalendar()    {
+        $userstasks = $this->br->getUsersTasks(\Auth::user()->id);
+		//dd($userstasks);
+        return response()->json([            
+            'userstasks' => $userstasks,
+           
+        ]);
+    }
+	
+	
 
   
 }

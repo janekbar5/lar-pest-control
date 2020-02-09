@@ -23,6 +23,10 @@ class BackendRepository implements BackendRepositoryInterface
         return Client::where('id', '=', $id)
                    ->first(); 
     } 
+	public function getAllClients(){
+        return Client::all(); 
+                
+    }
     /////////////////////////////////////////////////////////////////////////////////TREATMENTS    
     public function getTreatmentById($id){
         return Treatment::where('id', '=', $id)
@@ -30,11 +34,12 @@ class BackendRepository implements BackendRepositoryInterface
     }    
     public function getAllTreatments(){  //Admin only
         return Treatment::
-                   //where('user_id', '=', $user_id)  
+		//where('user_id', '=', $user_id)  
                   orderBy('created_at', 'desc')
                   //->withTrashed()
                   ->paginate(10); 
     }
+	
     /////////////////////////////////////////////////////////////////////////////////TASKS
     public function getAllTasks(){
         return Task::  
@@ -59,14 +64,16 @@ class BackendRepository implements BackendRepositoryInterface
                   //orderBy('created_at', 'desc')
                   with('locations')
                   ->with('statuses')
-                  //->with('selectedUsers') 
-                  ->has('selectedUsers')    
+                  ->with('selectedUsers')  //display users array
+                  ->has('selectedUsers')   //only act as filter   
                   ->get(); 
     }
+	
 	public function getAssignedFilteredTasks($id){
         return Task::where('location_id', '=', $id)
                   ->with('locations')
-                  ->with('statuses')                 
+                  ->with('statuses')  
+				  ->with('selectedUsers')  //display users array
                   ->has('selectedUsers')    
                   ->get(); 
     }
@@ -103,12 +110,12 @@ class BackendRepository implements BackendRepositoryInterface
                     ->first();
       }
      /////////////////////////////////////////////////////////////////////////////////LOCATIONS
-     public function getLocations($user_id){
+     public function getLocations($user_id,$perpage){
         return Location::where('user_id', '=', $user_id) 
                   ->with('address') 
                   ->with('clients') 
                   ->orderBy('created_at', 'desc')                  
-                  ->paginate(10); 
+                  ->paginate($perpage); 
     }
     public function getLocationsById($id){
         return Location::where('id', '=', $id) 
@@ -120,6 +127,9 @@ class BackendRepository implements BackendRepositoryInterface
                    //->withTrashed()
                    ->first(); 
     }
+	public function getAllLocations(){
+        return Location::all(); 
+    }
     /////////////////////////////////////////////////////////////////////////////////STATUSES
     public function getAllStatuses(){
         return Status::  
@@ -129,6 +139,9 @@ class BackendRepository implements BackendRepositoryInterface
     public function getStatusesById($id){
         return Status::where('id', '=', $id) 
                    ->first(); 
+    }
+	public function getAllStatuses2(){
+        return Status::all(); 
     }
     /////////////////////////////////////////////////////////////////////////////////SUBSTATUSES
     public function getAllSubStatuses(){
@@ -146,6 +159,18 @@ class BackendRepository implements BackendRepositoryInterface
                    ->first(); 
     }    
     /////////////////////////////////////////////////////////////////////////////////ADMIN USERS
+	public function getFreeFieldUsersForDate($date){  
+		 return	User::with('selectedTasks')
+		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
+				   ->wheredoesnthave('selectedTasks', function($q) use($date) {				   
+				     $q->where('start','LIKE', '%'.$date.'%'); 
+				   })				
+				  ->get(); 
+    }
+	public function getAllFieldUsers(){
+		return User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();
+	}
+	 
     public function getAdminUsers(){
         return User::
                   with('roles')

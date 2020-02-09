@@ -27,7 +27,7 @@ class ClientsTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
         $months = [01,02,03,04,05,06,07];
         $titles = ['Miss','Mr','Mrs'];
-		for($i=1; $i<=20; $i++):
+		for($i=1; $i<=100; $i++):
             DB::table('clients')
                 ->insert([ 
                     'name' => 'Client '.$i ,                     

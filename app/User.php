@@ -83,6 +83,12 @@ class User extends Authenticatable implements Auditable, Searchable
     {
         return $this->morphMany('App\Image', 'photoable');
     }
+	////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
+    // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User
+    public function selectedTasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
+    }
 
 	
 	

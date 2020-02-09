@@ -7,12 +7,10 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Responsive Hover Table</h3>
+                <h3 class="card-title"></h3>
 
                 <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
+                  <div class="input-group input-group-sm" style="width: 150px;">  
                     <div class="input-group-append">
                       <Buttons :editMode="editMode" ></Buttons>
                     </div>
@@ -41,8 +39,8 @@
                       <tr v-for="item in model.data" :key="item.data">
                         <td>{{item.id}}</td>
                         <td>
-                            <img v-if="item.firstPhoto == null" :src="'https://dummyimage.com/50x50/807c80/fff'" style="width:50px;height:50px">
-                            <img v-else :src="'images/thumb_medium-' + item.firstPhoto.path" style="width:50px;height:50px">
+                            <img v-if="item.firstPhoto == null" :src="'https://dummyimage.com/60x50/807c80/fff'" style="width:60px;height:50px">
+                            <img v-else :src="'images/thumb_medium-' + item.firstPhoto.path" style="width:60px;height:50px">
                         </td>
 
                         <td>{{item.name}}</td>
@@ -352,3 +350,12 @@ methods: {
     }
 }
 </script>
+<style>
+/* .fa-pen:hover {
+    color: red;
+} */
+.fa-trash:hover,.fa-pen:hover {
+    color: red;
+    cursor:pointer;
+}
+</style>

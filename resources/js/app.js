@@ -6,7 +6,7 @@
 
 require('./bootstrap');
 window.Vue = require('vue');
-
+import moment from 'moment';  //MOMENT JS   
 //////////////////////////////////////////////// 1 import router
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -129,7 +129,12 @@ let routes = [
 
     ]
 
-
+///////////////////////////////////////////////////////5 filters
+Vue.filter('formatDate', function(value) {
+    if (value) {
+      return moment(String(value)).format('hh:mm')
+    }
+});
 
 
 ////////////////////////////////////////////////3 define router
@@ -138,6 +143,7 @@ const router = new VueRouter({
     routes
 });
 import { Typeahead2 } from './components/typeahead'
+
 const app = new Vue({
 
     el: '#app',
@@ -145,7 +151,7 @@ const app = new Vue({
     data: function () {
         return {        
           form:'',
-          customerURL: '/v1/api/home/searchbox',         
+          customerURL: '/v1/api/home/searchbox',                
         }
       }, 
     ////

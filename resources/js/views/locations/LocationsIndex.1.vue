@@ -1,8 +1,7 @@
 <template>
     <div class="panel">
         <div class="panel-heading">
-            <div>             
-              
+            <div> 
                 <Buttons :editMode="editMode" ></Buttons>
             </div>
         </div>

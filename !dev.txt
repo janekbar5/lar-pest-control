@@ -1,9 +1,14 @@
-/////////History Log////Soft Delete // Searchable
----Users    ok              ok          ok             
---Treatment ok              ok          ok 
---Location
+///////////////History Log////Soft Delete // Searchable
+---Users         ok              ok          ok             
+--Treatment      ok              ok          ok 
+--Location       ok
+//////////////Crud Validation
 
-
+/////////////
+Task Statuses DD
+Auditing
+Admin Dash
+Field users tasks by date
 //////////////////04-02-2020
 Locations add Client DD
 Calendar Popup
@@ -17,3 +22,11 @@ Calendar
 Free Field User
 Calendar Show Field Users in Tasks
 Calendar popup users assign & save
+
+
+
+
+// https://github.com/Wanderxx/vue-fullcalendar/blob/master/demo/app.vue
+// https://fullcalendar.io/docs#toc
+GANTT
+https://jsbin.com/zocurejupa/1/edit?js,output

@@ -16,14 +16,25 @@ class Task extends Model
     protected $dates = ['deleted_at'];    
     //////////////////////////////////////////
     protected $appends = [
-        'color','firstPhoto',
+        'color','firstPhoto','extendedProps','textColor',
     ];
+	
     function getColorAttribute() {
         return $this->statuses->colour;   
     }
     function getfirstPhotoAttribute()
     {        
         return $this->photos->first();	  
+    }
+	function getextendedPropsAttribute()
+    {        
+        return [            
+            'department' => 'BioChemistry',            
+        ];	  
+    }
+	function gettextColorAttribute()
+    {        
+        return '#ffffff';	  
     }
 
     
@@ -41,7 +52,7 @@ class Task extends Model
 		'end',
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
-    // Location-->belongsToMany-->Treatment   <==>  Treatment-->belongsToMany-->Location
+    // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User
     public function selectedUsers()
     {
         return $this->belongsToMany(User::class, 'task_user', 'task_id', 'user_id');

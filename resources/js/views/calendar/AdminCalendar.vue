@@ -4,39 +4,84 @@
       <div class="row">
                 
                <div class="col-md-3">
+
                    <div id='external-events'>
                     <div id='external-events-listing' @mouseover="getNotifications">
-                        <h4> Tasks </h4> 
+                        <h4> Unassigned Tasks </h4> 
                        <!-- v-show="per.selected_users.length === 0"-->
-                          <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in unassignedtasks" v-bind:key="idx" v-bind:id="per.id">
-                          {{ per.title }}
-                          {{ per.locations.title }}
-                          {{ per.selected_users }}  
-                          </div>
+ <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in unassignedtasks" v-bind:key="idx" v-bind:id="per.id">{{ per.title }} {{ per.locations.title }} {{ per.selected_users }}</div>
                     </div>
                       
                       <p style="display:none">
                         <input type='checkbox' id='drop-remove' checked='checked' />
                         <label for='drop-remove'>remove after drop</label>
                       </p>
-                    </div>                                                                            
-               </div>    
+                    </div>
+<!------------------------------------DATTASKS--------------------------------------------->  
+                    <!-- DIRECT CHAT -->
+                    <div class="card direct-chat direct-chat-warning">
+                      <div class="card-header">
+                        <h3 class="card-title">Tasks for {{ tasksbydate_date }}</h3>
+                        <div class="card-tools">                     
+                        </div>
+                      </div>
+                    
+                      <div class="card-body">                
+                        <div class="direct-chat-messages">                      
+                          <div class="direct-chat-msg" v-for="(task, idx) in tasksbydate" v-bind:key="idx" v-bind:id="task.id">                  
+
+                          <div class="row">
+                            <div  class="col-md-12">
+                              <div class="direct-chat-text">
+                                  {{task.title}}                            
+                                </div>
+                                <span class="direct-chat-timestamp float-left">Start {{task.start | formatDate}} End {{task.end | formatDate }}</span>
+                            </div>          
+                              <div  class="col-md-4" v-for="(user, idx) in task.selected_users" v-bind:key="idx" v-bind:id="user.id">
+                                <div class="direct-chat-infos clearfix">
+                                  <span class="direct-chat-name float-left">{{user.name}} {{user.last_name}}</span>                          
+                                </div>                           
+                                <img v-if="user.firstPhoto == null" :src="'https://dummyimage.com/40x30/807c80/fff'" style="width:40px;height:30px">
+                                <img v-else :src="'images/thumb_medium-' + user.firstPhoto.path" style="width:40px;height:30px" class="direct-chat-img">
+                                
+                            </div>                    
+                          </div> 
+                          </div>
+                        </div>                    
+                      </div>
+                    
+                      <div class="card-footer">                   
+                      </div>                    
+                    </div>   
+                     <div class="direct-chat-msg" v-for="(user, idx) in freefieldusers" v-bind:key="idx" v-bind:id="user.id">
+                      {{user.name}}  {{user.last_name}}
+                    </div>            
+  <!------------------------------------DATTASKS--------------------------------------------->              
+               </div>  
+
+
+            
+                 
                
               <div class="col-md-9">
                  
                   <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Bordered Table</h3>
+                        <!-- <h3 class="card-title">Bordered Table</h3> -->
                       </div>
                       
                       <div class="card-body">                  
                       <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
-
-                    locationdata: {{ locationdata }}  
+                    <!-- tasksbydate {{ tasksbydate }}</br> -->
+                    <!-- <button class="btn btn-danger" @click="push">push</button> -->
+                      
+                    <!-- events {{ events }} -->
+                    <!-- <div v-for="(un, index) in unassignedtasks" :key="index">{{un.title}} </div> -->
+                    
 
                    <select @change="filterLocation()" v-model="location" class="form-control">
-                        <option value="" selected>Select Location</option>
+                        <option value="" selected>All Locations</option>
                          <option :value="location.id" v-for="(location, index) in locations" :key="index">
 									        	{{ location.title }} 
 									     	</option>                                       
@@ -44,7 +89,19 @@
                       </div>
 
                       
-                        <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
+                        <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
+                        <full-calendar id="calendar" 
+                        :config="config" 
+                        :events="events"                        
+                        @day-click="dayClick"                        
+                         /> 
+                        <!-- 
+                        @event-selected="eventClick"       
+                        @event-drop="eventDrop"
+                        @drop="eventDrop"
+                         -->
+
+
                      
                       <div class="card-footer clearfix">
                        sdvsdfv
@@ -54,7 +111,7 @@
                    
         </div>
       
-                   <Modal :locationdata="locationdata"/>
+                   <Modal :freefieldusers="freefieldusers" /> 
    </div>     
  
 </template>
@@ -79,8 +136,14 @@ export default {
       location:'',
       //location2:'',  
       locations:{},
-      locationdata:[],
-      
+      locationdata:{},
+      variableToPass:'',
+      //
+      tasksbydate:{}, 
+      tasksbydate_date:'',
+      freefieldusers:{},
+      //
+      //start:'',     
       config: {          
         //defaultView: "agendaWeek",
         defaultView: "month",
@@ -93,29 +156,71 @@ export default {
         height: "auto",
         contentHeight: "auto",
         slotLabelFormat: "LT",
-        allDayText: "All Day Events",
-        janek: 569,  
+        allDayText: "All Day Events",        
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
+        eventRender(event, element) {                 
+            //event.selected_users.forEach(function (item) {
+                      element.find('.fc-content').append(' <i class="delete fas fa-trash-alt"></i> <span class="description"></span>');                      
+            //});   
+            element.find(".delete").click(function() {
+            //console.log(event._id)                    
+            $('#calendar').fullCalendar('removeEvents', event._id);
+                        // swal.fire({
+                        //     title: 'Weet je het zeker?',
+                        //     text: "Je staat op het punt dit item te verwijderen",
+                        //     type: 'warning',
+                        //     showCancelButton: true,
+                        //     confirmButtonColor: '#3085d6',
+                        //     cancelButtonColor: '#d33',
+                        //     confirmButtonText: 'Ja, verwijderen'
+                        //     }).then((result) => {
+                        //         if (result.value) {
+                        //             console.log(event._id)
+                        //             $('#calendar').fullCalendar('removeEvents', event._id);
+
+                        //             axios.delete('/agenda_items/'+ event.id)
+                        //             swal.fire(
+                        //             'Verwijderd!',
+                        //             'De afspraak is verwijderd.',
+                        //             'success'
+                        //             )
+                        //         }
+                        //     })
+                    });
+         },
+        //////////////////////////////////////////////////////////////////////
         //drop(calEvent, jsEvent, view) {
-        drop(info) {    
+        //drop(date, jsEvent, view) {  
+        // drop22(info) {
+        //             // remove the element from the "Draggable Events" list
+        //             $(this).remove();
+        //             console.log($(this))
+        //             //this.collapse()
+        // },
+       // drop(date,jsEvent) {
+        drop(date, jsEvent, resource){   
           // is the "remove after drop" checkbox checked?
           if ($("#drop-remove").is(":checked")) {            
-            $(this).remove();
-            var now = info._d            
-            var start = moment(String(info._d)).format('YYYY-MM-DD hh:mm')
-            var end = moment(String(info._d)).format('YYYY-MM-DD hh:mm')
-            //console.log(now2)
+            $(this).remove();    
             $("#addNew").modal("show")  
-            $('#start').val(start);
-            $('#end').val(end);  
-            //$('#location').val(this.location);            
-            var variable = 555
-            console.log(this.location2)
-              //app.callModal()
-          }
-           
+            $('#start').val(date.format('YYYY-MM-DD hh:mm'));
+            $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
+            $('#itemid').val($(this).attr("id")); 
+            $('#title').val($(this).html()); 
+            this.start = date.format('YYYY-MM-DD hh:mm')           
+            //var itemid = $(this).attr("id")  
+              // console.log('Clicked on: ' + date.format());
+              // console.log('Coordinates: ' + jsEvent);
+              // console.log('Current text: ' + $(this).text());
+              // console.log('Current html: ' + $(this).html());         
+          }           
         },
+         eventDrop() {
+         alert('eventDrop')
+           console.log(event)
+        },
+       
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
         eventDragStop: function(event, jsEvent) {  
@@ -134,29 +239,6 @@ export default {
         },
         //////////////////////////////////////////////////////////////////////
         
-        eventClick(calEvent, jsEvent, view) {
-        var dt = calEvent.start;
-          alert('Event Clicked on : ' + calEvent.id);
-         // var r = confirm("Delete " + calEvent.title + "\n" + dt);
-          console.log(calEvent)
-          //alert('jan2') 
-            
-          // if (r === true) {
-          //   $('#calendar').fullCalendar('removeEvents', calEvent._id);
-          // }
-      },
-
-        eventDrop() {
-         alert('eventDrop')
-           console.log(event)
-        },
-        // dayClick: function(date, jsEvent, view) {
-        //     $("#myModal").modal("show");
-        // },
-        dayClick(){
-          alert('dayClick')
-        }, 
-
       },
         
       //////////config
@@ -166,28 +248,77 @@ export default {
  
 
   created() { 
-    axios.get('/v1/api/tasks/calendar').then((res) => {
-    if(res.data) {
-     this.unassignedtasks = res.data.unassignedtasks
-        this.events = res.data.assignedtasks
-    }})
-    .catch((error) => {
-      if(error.response.status === 422) {
-        this.errors = error.response.data.errors
-      }
-      this.isProcessing = false
-    })
+    this.loadCalendar()
     
+    //console.log(this.externalVar); 
   },
-  mounted() {
-    this.locations = [
-                        {id: 1,title: 'Location 1',age: 30 },
-                        {id: 2,title: 'Location 2',age: 30 },
-                        {id: 3,title: 'Location 3',age: 30 },
-                ]
+  mounted() {   
   },
   //
-  methods: {
+  methods: {    
+    hideModal(per){
+      $("#addNew").modal("hide")
+       $('#calendar').fullCalendar('removeEvents', per.itemid)     
+      this.unassignedtasks.push({
+        title: per.content,
+        start: '2015-11-20T08:30:00',
+        end: '2015-11-20T08:30:00',
+        statuses:'',
+        color: '#C2185B',
+        locations:'',
+      });
+    },
+    loadCalendar(){
+      axios.get('/v1/api/tasks/calendar').then((res) => {
+      if(res.data) {       
+          this.setData(res)
+      }})
+      .catch((error) => {
+        if(error.response.status === 422) {
+          this.errors = error.response.data.errors
+        }
+       this.isProcessing = false
+    })
+    },    
+    dayClick(date, jsEvent, view){ 
+        axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
+        if(res.data) {       
+            this.setTasksByDate(res,date)
+        }})
+        .catch((error) => {
+          if(error.response.status === 422) {
+            this.errors = error.response.data.errors
+          }
+        this.isProcessing = false
+      })   
+              //console.log('Day Clicked on : ' + calEvent.id);
+              // console.log('Clicked on: ' + date.format());
+              // console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+              // console.log('Current view: ' + view.name);
+    },
+    setData(res) { 
+      this.unassignedtasks = res.data.unassignedtasks
+      this.events = res.data.assignedtasks              
+      this.locations = res.data.alllocations
+    },
+    setTasksByDate(res,date) { 
+      this.tasksbydate = res.data.tasksbydate 
+      this.tasksbydate_date = date.format() 
+      this.freefieldusers = res.data.freefieldusers     
+    },      
+    
+    
+
+
+
+
+    eventClick(calEvent, jsEvent, view) {
+           var dt = calEvent.start;
+           alert('Event Clicked on : ' + calEvent.id);
+    },
+    eventDrop(drop){ 
+          console.log('eventDrop: ' + drop);
+    },   
     callModal() {        
       $("#addNew").modal("show")
     }, 
@@ -196,8 +327,7 @@ export default {
             .get('/v1/api/tasks/calendar?'+'location='+this.location)
             .then((res) => {
             this.events = res.data.assignedtasks
-            this.locationdata = this.location       
-                 
+            this.locationdata = this.location   
             })
             .catch(error => {				
 			this.errored = true

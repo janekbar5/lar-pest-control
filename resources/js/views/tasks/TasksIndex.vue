@@ -1,27 +1,31 @@
 <template>
     <div class="panel">
+
         <div class="panel-heading">
-            <div>             
-                <!-- <h1>Hello World, I'm {{ settings.modelPlural }}</h1> -->
+            <div> 
                 <Buttons :editMode="editMode" ></Buttons>
             </div>
         </div>
+        <Filters v-on:childToParent="onChildLoad" ></Filters>
        
         <div class="panel-body">
             <table class="table table-link">
                 <thead>
                     <tr>
-                        <th style="width: 10%">ID</th>                       
+                        <th style="width: 5%">ID</th>                       
                         <th style="width: 20%">Title</th>
-                        <th style="width: 20%">Location</th>
-                        <th style="width: 20%">Users</th>
-                        <th style="width: 10%">Actions</th>                       
+                        <th style="width: 10%">Location</th>
+                        <th style="width: 10%">Status</th>
+                        <th style="width: 20%">Start</th>
+                        <th style="width: 10%">End</th>
+                        <th style="width: 10%">Users</th>
+                        <th style="width: 5%">Actions</th>                       
                        
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr v-for="item in model.data" :key="item.data">
+                    <tr v-for="item in records" :key="item.data">
                         <td>{{item.id}}</td>
                        <td>
                             <img v-if="item.firstPhoto == null" :src="'https://dummyimage.com/50x50/807c80/fff'" style="width:50px;height:50px">
@@ -30,6 +34,9 @@
 
                         <td>{{item.title}}</td>
                         <td>{{item.locations.title}}</td>
+                        <td>{{item.statuses.title}}</td>
+                        <td>{{item.start}}</td>
+                        <td>{{item.end}}</td>
                         <td> <span class="badge bg-secondary" v-for="user in item.selected_users" style="font-size:10px">{{user.name}} {{user.last_name}}</span> </td>                   
                                              
                         <td>
@@ -66,9 +73,10 @@ import Vue from 'vue'
 import { get, byMethod } from '../../lib/api'
 import {isEmpty} from "lodash"
 import Buttons from './Buttons'
+import Filters from './Filters'
 
 export default {
-    components: { Buttons },
+    components: { Buttons, Filters },
 data () {
 return {
     url:'',
@@ -82,24 +90,25 @@ return {
         // urlList:'',
         // data: []
     },
+    records: {},
     
 }
 },
 //
-beforeRouteEnter(to, from, next) {    
-    get('/v1/api'+to.path+'/index', to.query)
-        .then((res) => {
-            next(vm => vm.setData(res))
-        })
-},
-//
-beforeRouteUpdate(to, from, next) {
-    get('/v1/api'+to.path+'/index', to.query)
-        .then((res) => {
-            this.setData(res)
-            next()
-    })
-},
+// beforeRouteEnter(to, from, next) {    
+//     get('/v1/api'+to.path+'/index', to.query)
+//         .then((res) => {
+//             next(vm => vm.setData(res))
+//         })
+// },
+// //
+// beforeRouteUpdate(to, from, next) {
+//     get('/v1/api'+to.path+'/index', to.query)
+//         .then((res) => {
+//             this.setData(res)
+//             next()
+//     })
+// },
 //
 created() {
     this.$eventHub.$on('settings', this.modelSettings) 
@@ -119,6 +128,9 @@ methods: {
         this.apiDelete = settings.apiDelete
         //console.log(settings)  
     },
+    onChildLoad (value) {
+			this.records = value						
+	},
     modelView(item) {        
         this.$router.push(this.urlList+'/'+item.id)
     },
