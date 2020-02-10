@@ -39,6 +39,15 @@ Vue.config.productionTip = false;
 ////////////////////////////////////////////////////////////fullcal
 
 
+////////////////////////////////////////////////////////////Datepicker
+// import { Datetime } from 'vue-datetime'
+// // You need a specific loader for CSS files
+// import 'vue-datetime/dist/vue-datetime.css' 
+// Vue.use(Datetime)
+
+
+
+
 ////////////////////////////////////////////////////
 import Calendar from './views/calendar/Calendar'
 import Dashboard from './components/Dashboard.vue'
@@ -159,8 +168,8 @@ const app = new Vue({
         onCustomer(e) { 
             var id = e.target.value.searchable.id    
             var model = e.target.value.type  
-           console.log(e.target.value)   
-          this.$router.push('/'+model+'/'+id+'/edit')    
+           // console.log(e.target.value)   
+           this.$router.push('/'+model+'/'+id+'/edit')    
         },
     },  
     //

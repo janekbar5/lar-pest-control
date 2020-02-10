@@ -25,8 +25,8 @@
                        <td>{{treat.title}}</td>
                      
                       <td><span class="badge ">
-                          <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(item)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                         <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(item)"></i> 
+                          <i aria-hidden="true" class="fa fa-pen" @click="showModal()"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
+                         <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(treat)"></i> 
                           </span>
                           </td>
                     </tr>
@@ -79,7 +79,7 @@
                       <td>{{status.title}}</td>
                      
                       <td><span class="badge ">
-                          <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(item)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
+                         <i aria-hidden="true" class="fa fa-pen" ></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
                          <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(item)"></i> 
                           </span>
                           </td>
@@ -110,7 +110,7 @@
         <!-- /.row -->
 
 
-        
+        <Modal  />
         
         
        
@@ -126,9 +126,10 @@ import Vue from 'vue'
 import { get, byMethod } from '../../lib/api'
 import {isEmpty} from "lodash"
 import Buttons from './Buttons'
+import Modal from './Modal.vue' 
 
 export default {
-    components: { Buttons },
+    components: { Buttons, Modal },
 data () {
 return {
     url:'',
@@ -180,12 +181,26 @@ methods: {
         this.apiDelete = settings.apiDelete
         //console.log(settings)  
     },
+    showModal() {
+         $("#tasksModal").modal("show")  
+        //this.$router.push(this.urlList+'/'+item.id+'/edit')
+    },
+    hideModal(per){
+      $("#tasksModal").modal("hide")
+    //    $('#calendar').fullCalendar('removeEvents', per.itemid)     
+    //   this.unassignedtasks.push({
+    //     title: per.content,
+    //     start: '2015-11-20T08:30:00',
+    //     end: '2015-11-20T08:30:00',
+    //     statuses:'',
+    //     color: '#C2185B',
+    //     locations:'',
+    //   });
+    },
     modelView(item) {        
         this.$router.push(this.urlList+'/'+item.id)
     },
-    modelEdit(item) {
-        this.$router.push(this.urlList+'/'+item.id+'/edit')
-    },
+   
     setData(res) {
         //Vue.set(this.$data, 'model', res.data)
         this.treatments = res.data.treatments.data

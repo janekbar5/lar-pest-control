@@ -64,16 +64,17 @@ class ClientController extends Controller
        return response()
            ->json(['deleted' => true]);
    }
-   /**/////////////////////////////////////////////////////////////////////////////////////////////
+   /**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH CLIENTS
     public function searchClients()
     {
-        $results = Client::orderBy('name')
+        $results = Client::orderBy('company_name')
 		    //->with('address')
             ->when(request('q'), function($query) {
-                $query->where('name', 'like', '%'.request('q').'%')
-                    ->orWhere('email', 'like', '%'.request('q').'%')
-                    //->orWhere('email', 'like', '%'.request('q').'%')
-                    ;
+                $query->where('company_name', 'like', '%'.request('q').'%')				        
+					  ->orWhere('person_name', 'like', '%'.request('q').'%')
+                      ->orWhere('email', 'like', '%'.request('q').'%');
+                      //->orWhere('email', 'like', '%'.request('q').'%')
+                    
             })
             //->limit(6)
             ->get();

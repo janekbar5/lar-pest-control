@@ -61,7 +61,7 @@ class RoleController extends Controller
     {        
         
         $fv = $this->validate($request, $this->vr->permissionUpdate());  
-        $role = Role::create(['name' => $request->input('name'),'guard_name' => $request->input('guard_name')]);
+        $role = Role::create(['name' => $request->input('name'),'guard_name' => 'web']);
         if($request->has('grantedPermissions')){            
             $role->syncPermissions($request->input('grantedPermissions'));
         }

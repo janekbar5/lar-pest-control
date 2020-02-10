@@ -12,8 +12,16 @@ class ValidationRepository
     public function clientUpdate()
      {        
          $rules = array(
-            'name' => 'required',
-            'email' => 'required',          
+            //'company_name' => 'required',
+            'email' => 'required',
+			//'email' => 'required|email|unique:clients,email',
+			'is_company' => 'required',
+			'contract_number' => 'required',
+			'vat_number' => 'required',
+			'contract_start' => 'required',
+			'contract_end' => 'required',
+			'person_name' => 'required',
+			
          );        
          return $rules;
      }
@@ -31,7 +39,12 @@ class ValidationRepository
      {        
          $rules = array(
             'title' => 'required',
-            //'description' => 'required',          
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',    
+			'start' => 'required',
+			'end' => 'required',
+			'location_id' => 'required',
+			'status_id' => 'required',
+			
          );        
          return $rules;
      }
@@ -62,7 +75,7 @@ class ValidationRepository
          return $rules;
      }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////ADMIN USERS   
+    /////////////////////////////////////////////////////////////////////////////////////////////////USERS   
     public function newAdminUsers()
      {        
          $rules = array(
@@ -73,12 +86,12 @@ class ValidationRepository
          );        
          return $rules;
      }
-     /////////////////////////////////////////////////////////////////////////////////////////////////ADMIN PERMISSIONS   
+     /////////////////////////////////////////////////////////////////////////////////////////////////PERMISSIONS   
     public function permissionUpdate()
     {        
         $rules = array(
            'name' => 'required',
-           'guard_name' => 'required',          
+           //'guard_name' => 'required',          
         );        
         return $rules;
     }    

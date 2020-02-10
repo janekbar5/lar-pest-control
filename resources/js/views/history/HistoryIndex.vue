@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <div>             
                 <!-- <h1>Hello World, I'm {{ settings.modelPlural }}</h1> -->
-                <Buttons :editMode="editMode" ></Buttons>
+                
             </div>
         </div>
        

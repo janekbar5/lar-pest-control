@@ -111,7 +111,8 @@
                    
         </div>
       
-                   <Modal :freefieldusers="freefieldusers" /> 
+        <Modal  /> 
+
    </div>     
  
 </template>
@@ -130,6 +131,7 @@ export default {
   data() {
     var $this = this;
     return {
+      //isModalMounted: false,
       unassignedtasks:[],
       value:'',
       events: [],
@@ -208,7 +210,8 @@ export default {
             $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
             $('#itemid').val($(this).attr("id")); 
             $('#title').val($(this).html()); 
-            this.start = date.format('YYYY-MM-DD hh:mm')           
+            this.start = date.format('YYYY-MM-DD hh:mm')  
+            
             //var itemid = $(this).attr("id")  
               // console.log('Clicked on: ' + date.format());
               // console.log('Coordinates: ' + jsEvent);
@@ -258,7 +261,7 @@ export default {
   methods: {    
     hideModal(per){
       $("#addNew").modal("hide")
-       $('#calendar').fullCalendar('removeEvents', per.itemid)     
+      $('#calendar').fullCalendar('removeEvents', per.itemid)     
       this.unassignedtasks.push({
         title: per.content,
         start: '2015-11-20T08:30:00',
@@ -327,7 +330,7 @@ export default {
             .get('/v1/api/tasks/calendar?'+'location='+this.location)
             .then((res) => {
             this.events = res.data.assignedtasks
-            this.locationdata = this.location   
+            //this.locationdata = this.location   
             })
             .catch(error => {				
 			this.errored = true

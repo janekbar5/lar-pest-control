@@ -1,7 +1,12 @@
-///////////////History Log////Soft Delete // Searchable
----Users         ok              ok          ok             
---Treatment      ok              ok          ok 
---Location       ok
+/////////////// History Log //// Soft Delete  // Searchable
+---Users          ok              ok          ok             
+---Treatment      ok              ok          ok 
+---Location       ok              ok          ok 
+---Clients        ok              ok          ok 
+---
+
+
+
 //////////////Crud Validation
 
 /////////////

@@ -28,7 +28,7 @@
                 </div>
                     
 
-                updatedPhotosList  {{updatedPhotosList}} photosList {{photosList}}
+                <!-- updatedPhotosList  {{updatedPhotosList}} photosList {{photosList}} -->
 
                 <div class="card" v-if="editMode === 'edit'" >
                   

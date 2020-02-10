@@ -31,6 +31,15 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <label>Location</label>
+                                        <typeahead :url="dataURL" :initialize="form.locations" @input="onLocation" />
+                                        <!-- <input v-model="form.location_id" type="text" name="location_id" class="form-control" :class="{ 'is-invalid': errors.location_id }" > -->
+                                         <div class="alert alert-danger" v-if="errors.location_id"> {{errors.location_id[0]}}</div>
+                                    </div>                                                                    
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
                                         <label>Title</label>
                                         <input v-model="form.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
                                          <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
@@ -39,8 +48,20 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <label>Price</label>
+                                        <input v-model="form.price" type="text" name="price" class="form-control" :class="{ 'is-invalid': errors.price }" >
+                                         <div class="alert alert-danger" v-if="errors.price"> {{errors.price[0]}}</div>
+                                    </div>                                                                    
+                                </div>
+
+                                
+                            </div>
+                            <div class="row">
+                               <div class="col-md-4">
+                                    <div class="form-group">
                                         <label>Start</label>
-                                        <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" >
+                                        <!-- <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" > -->
+                                        <Datepicker format="YYYY-MM-DD h:i" v-model="form.start" class="" :class="{ 'is-invalid': errors.start }"  />
                                          <div class="alert alert-danger" v-if="errors.start"> {{errors.start[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -48,50 +69,56 @@
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>End</label>
-                                        <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" >
+                                        <!-- <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" > -->
+                                         <Datepicker format="YYYY-MM-DD h:i" v-model="form.end" class=""  />
                                          <div class="alert alert-danger" v-if="errors.end"> {{errors.end[0]}}</div>
                                     </div>  
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    ddd
-                                 </div> 
 
-                                 <div class="col-md-4">                                   
+                                 <!-- <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Location</label>
                                         <input v-model="form.location" type="text" name="location" class="form-control" :class="{ 'is-invalid': errors.location }" >
                                          <div class="alert alert-danger" v-if="errors.location"> {{errors.location[0]}}</div>
                                     </div>  
-                                </div> 
-
-                                <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Confirm Password</label>
-                                        <input v-model="form.confirm_password" type="text" name="confirm_password" class="form-control" :class="{ 'is-invalid': errors.confirm_password }" >
-                                         <div class="alert alert-danger" v-if="errors.confirm_password"> {{errors.confirm_password[0]}}</div>
-                                    </div>  
-                                </div>   
-
-
+                                </div>  -->
+                               
                             </div>
+                            <div class="row"> </div>
                            <div class="row">
-                                <div class="col-md-12">                                   
+                                                                 
+                                 <div class="col-md-4">                                   
                                     <div class="form-group">
-                                        <label>Assigned Users</label> 
-                                        <!-- @tag="addTag2" -->                                     
+                                        <label>Status</label>
+                                        <input v-model="form.status_id" type="text" name="status_id" class="form-control" :class="{ 'is-invalid': errors.status_id }" >
+                                         <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
+                                    </div>  
+                                </div> 
+                                 <div class="col-md-4">                                   
+                                    <div class="form-group">
+                                        <label>Sub Status</label>
+                                        <input v-model="form.substatus_id" type="text" name="substatus_id" class="form-control" :class="{ 'is-invalid': errors.substatus_id }" >
+                                         <div class="alert alert-danger" v-if="errors.substatus_id"> {{errors.substatus_id[0]}}</div>
+                                    </div>  
+                                </div> 
+                               
+                            </div>
+
+
+                           <div class="row">
+                                <!-- <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Assigned Users</label>                                                                          
                                         <multiselect 
                                         v-model="form.selected_users" 
                                         :options="allFieldUsers"
                                         :custom-label="nameWithSuename"                                          
                                         placeholder="Select users"
-                                        :multiple="true"
-                                       
+                                        :multiple="true"                                       
                                         label="name" 
                                         track-by="name"></multiselect>
                                   </div>  
-                                </div> 
+                                </div>  -->
                             </div>
                                 
 
@@ -133,12 +160,14 @@
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'
-    //import {Typeahead } from '../../components/typeahead'
+    import {Typeahead } from '../../components/typeahead'
     import DzoneComponent from '../../components/dzone/DzoneComponent';
     import Buttons from './Buttons';
-    import Multiselect from 'vue-multiselect'  
+    import Multiselect from 'vue-multiselect' 
+    import Datepicker from 'vuejs-datetimepicker'
+
     export default {
-        components: { DzoneComponent, Buttons, Multiselect },
+        components: { DzoneComponent, Buttons, Multiselect, Datepicker, Typeahead },
         data () {
             return {
                
@@ -149,7 +178,7 @@
                 // 
                 editMode: this.$route.meta.mode,
                 form: {
-                   locations:{}
+                   //locations:{}
                 },               
                 errors: {},               
                 //
@@ -160,7 +189,7 @@
                 roles: null,
                 allroles: [],
                 //
-                
+                dataURL: '/v1/api/locations/searchlocations',
                 //fieldusers: [],
                 //options:[],
                 selected_users:[], //dont need allPermissions in form only selected 
@@ -190,6 +219,10 @@
             this.$eventHub.$on('settings', this.modelSettings) 
         },
         methods: {
+            onLocation(e) {
+                const locations = e.target.value
+                Vue.set(this.$data.form, 'locations', locations)                                          
+            },
             modelSettings(settings){                
                 //return name
                 this.settings = settings;

@@ -24,11 +24,11 @@
                                          <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label>Guard_name</label>
                                         <input v-model="form.guard_name" type="text" name="guard_name" class="form-control" :class="{ 'is-invalid': errors.guard_name }">
                                         <div class="alert alert-danger" v-if="errors.guard_name"> {{errors.guard_name[0]}}</div>
-                                    </div>
+                                    </div> -->
                                    
                                 </div>
                                                                              

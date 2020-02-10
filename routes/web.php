@@ -67,6 +67,7 @@ Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  p
 Route::get('/v1/api/tasks/gettasksbydate', 'TaskController@getTasksByDate'); //list 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////LOCATIONS
+Route::get('v1/api/locations/searchlocations', 'LocationController@searchLocations'); //list 
 Route::get('v1/api/locations/filter', 'LocationController@filter'); //list 
 Route::get('v1/api/locations/index', 'LocationController@index'); //list    
 Route::get('v1/api/locations/{id}/edit', 'LocationController@edit'); //edit

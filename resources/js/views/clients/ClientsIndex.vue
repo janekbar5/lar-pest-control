@@ -11,12 +11,14 @@
                 <thead>
                     <tr>
                         <th style="width: 2%">ID</th>                       
-                        <th style="width: 10%">Name</th>
-                        <th style="width: 30%">Location</th> 
+                        <th style="width: 20%">Company Name</th>
+                        <th style="width: 20%">Location</th> 
                         <th style="width: 10%">Contract</th>
                         <th style="width: 10%">Vat </th> 
                         <th style="width: 10%">Reccurence</th> 
-                        <th style="width: 10%">Active</th> 
+                        <th style="width: 10%">Active</th>
+                        <th style="width: 10%">Start</th>
+                        <th style="width: 10%">End</th> 
                         <th style="width: 10%">Email</th> 
                        
                       
@@ -29,12 +31,13 @@
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data">
                         <td>{{item.id}}</td> 
-                        <td>{{item.name}}</td>
-                        <td> <span class="badge bg-secondary" v-for="location in item.locations" style="font-size:10px">{{location.title}} </span> </td>                          
+                        <td>{{item.company_name}}</td>
+                        <td><span class="badge bg-secondary" v-for="location in item.locations" style="font-size:10px">{{location.title}} </span> </td>                          
                         <td>{{item.contract_number}}</td>                     
                         <td>{{item.vat_number}}</td>
                         <td>recuurence</td>
                         <td>active</td>
+                        <td>{{item.contract_start}}</td>
                         <td>{{item.contract_end}}</td>
                         
                         

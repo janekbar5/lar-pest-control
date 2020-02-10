@@ -20,6 +20,7 @@ class CreateTasksTable extends Migration
 			
             $table->integer('location_id')->unsigned(); //unsigned only positive val           
             $table->integer('status_id')->unsigned(); //unsigned only positive val        
+            $table->integer('substatus_id')->nullable(); //unsigned only positive val        
         
 			$table->float('price');
             $table->string('title'); //varchar	

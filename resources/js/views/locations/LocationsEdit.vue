@@ -38,30 +38,16 @@
 
 
                             <div class="row"> 
-                                    <div class="col-md-3">
+                                    <div class="col-md-12">
                                        <div class="form-group">
                                             <label>Find Existing Customer</label>
-                                                <typeahead :url="dataURL" :initialize="form.customer" @input="onClient" />
+                                                <typeahead :url="dataURL" :initialize="form.clients" @input="onClient" />                                                
                                                 <small class="error-control" v-if="errors.customer_id">
                                                     {{errors.customer_id[0]}}
                                                 </small>
                                     </div>
                                 </div>
-                                 <!-- <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
-                                    </div>  
-                                </div>  -->
-
-                                <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Client Name</label>
-                                        <input v-model="form.clients.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
-                                    </div>  
-                                </div> 
+                                                                
                                 
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
@@ -71,8 +57,18 @@
                                     </div>  
                                 </div> 
 
-                            </div>      
+                            </div>     
 
+
+                             <div class="row">
+                                <div class="col-md-4">                                   
+                                        <div class="form-group">
+                                            <label>Client Name</label>
+                                            <input v-model="form.clients.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
+                                            <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                        </div>  
+                                </div>  
+                            </div> 
 
 
                             <div class="row">
@@ -194,10 +190,8 @@
                 editMode: this.$route.meta.mode,
                 form: {
                     address:[],
-                    clients:[],
-                    
-                },
-                
+                    clients:[],                    
+                },                
                 errors: {},                         
                 ////////////////////////////////////////////////////////// 
                 dataURL: '/v1/api/clients/searchclients',              
@@ -230,18 +224,8 @@
         },
         methods: {
             onClient(e) {
-            const customer = e.target.value
-            //console.log(e.target.value)
-               this.clients = {}
-                Vue.set(this.form.clients, 'name', customer.name)      
-                Vue.set(this.form.clients, 'id', customer.id)
-                // Vue.set(this.form, 'customer_id', customer.id)
-                // Vue.set(this.form, 'phone', customer.phone)
-                // Vue.set(this.form, 'email', customer.email)
-                // Vue.set(this.form, 'address_line1', customer.address.address_line1)
-                // Vue.set(this.form, 'address_line2', customer.address.address_line2)
-                // Vue.set(this.form, 'city', customer.address.city)
-                // Vue.set(this.form, 'post_code', customer.address.post_code)      
+                const customer = e.target.value
+                Vue.set(this.$data.form, 'clients', customer)                          
             },
             updateLocation(itm) {             
                Vue.set(this.form.address, 'lat', itm.lat) 

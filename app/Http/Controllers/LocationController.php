@@ -122,12 +122,25 @@ class LocationController extends Controller
         {
             $locations_pre = $locations_pre->where('client_id', '=', $request->input('loc'));			
         }		
-		
-		
+				
 		$total = $locations_pre->get()->count();		
-		return $locations_pre->paginate($request->input('perpage'));
-		 
+		return $locations_pre->paginate($request->input('perpage'));		 	
 		
-		
+    }
+	/**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH LOCATIONS
+    public function searchLocations()
+    {
+        $results = Location::orderBy('title')		    
+            ->when(request('q'), function($query) {
+                $query->where('title', 'like', '%'.request('q').'%')				        
+					  //->orWhere('person_name', 'like', '%'.request('q').'%')
+                      //->orWhere('email', 'like', '%'.request('q').'%')
+					  ;                   
+                    
+        })            
+        ->get();
+
+        return response()
+            ->json(['results' => $results]);
     }
 }

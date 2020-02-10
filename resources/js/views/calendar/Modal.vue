@@ -7,7 +7,10 @@
                         <div class="modal-content">
 
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addNewLabel">locationdata:{{locationdata}}</h5>
+                                <h5 class="modal-title" id="addNewLabel">
+                                    freefieldusers:{{freefieldusers}} 
+                                    
+                                    </h5>
 
                             </div>
 
@@ -21,10 +24,10 @@
                                             </div>
                                             <div class="card-body">
                                              //start {{ start }}
-                                             Start<input id="start" value="" ref="start"></br>
-                                             End<input id="end" value="" ref="end"></br>
-                                             itemid<input  id="itemid" value="" ref="itemid"></br>
-                                             content<input  id="title" value="" ref="title"></br> 
+                                             <input type="hidden" id="start" value="" ref="start"></br>
+                                             <input type="hidden" id="end" value="" ref="end"></br>
+                                             <input type="hidden" id="itemid" value="" ref="itemid"></br>
+                                             <input type="hidden" id="title" value="" ref="title"></br> 
                                             </div>
 
                                         </div>
@@ -87,19 +90,19 @@ import Multiselect from 'vue-multiselect'
 
 export default {
   name: 'Modal',
-//   props: {        
-//         locationdata: { required: true },
-//         freefieldusers:{},
-//   }, 
-  props: {
-    locationdata: Object,
-    freefieldusers: Object,    
+  props: {        
+        //locationdata: {},
+        //freefieldusers:{},
   }, 
+//   props: {
+//     locationdata: Object,
+//     freefieldusers: Array,    
+//   }, 
   components: { Multiselect },
   data: function () {       
     return {
       item_id:'',
-      //freefieldusers:[], //dont need allPermissions in form only selected
+      freefieldusers:[], //dont need allPermissions in form only selected
       errors: {},
       start:'', end:'',
       form:{
@@ -109,6 +112,7 @@ export default {
   },
   mounted() { 
       //console.log(this.$refs.start)
+      this.freefieldusers = [ {"id":1,"name":"Jan","last_name": "Dan"},{"id":2,"name":"Jan 2","last_name": "Dan 2"} ]
       
   },
 
@@ -121,9 +125,9 @@ export default {
       console.log('getValues') 
     },  
     hideModal(){      
-      var person = {itemid:this.$refs.itemid.value, content:this.$refs.content.value};   
+      var person = {itemid:this.$refs.itemid.value, content:this.$refs.title.value};   
       this.$parent.hideModal(person);
-      console.log(person)
+      console.log()
     },
     setData(res) {                 
         //this.photos_List = res.data.form.photos;
@@ -137,17 +141,15 @@ export default {
         //this.isProcessing = true                
         axios.post('http://www.lar-pest-control.test/v1/api/tasks/update/'+this.item_id, this.form)
             .then((res) => {
-                 if(res.data && res.data.saved) {
+                 if(res.saved) {
                             this.success(res)
-                            this.loadToast('success',''+this.modelSingular+' updated successfully');  
+                            this.loadToast('success',''+this.modelSingular+' updated successfully'); 
+                            this.$parent.hideModal(person={}); 
                  }
-                 if(res.data && res.data.created) {
-                            this.success(res)
-                            this.loadToast('success',''+this.modelSingular+' created successfully');    
-                }
+                 
                 })
                 .catch((error) => {
-                        if(error.response.status === 422) {
+                        if(error.res.status === 422) {
                             this.errors = error.response.data.errors
                             this.loadToast('error','Check the forms'); 
                         }

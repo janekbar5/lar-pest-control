@@ -12,7 +12,7 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <h3 class="card-title">Quick Example {{ editMode }} </h3>
+                            <h3 class="card-title">Client {{ editMode }} </h3>
                         </div>
                         
                         <div class="card-body">
@@ -21,8 +21,15 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                         <div class="alert alert-danger" v-if="errors.title"> {{errors.name[0]}}</div>
+                                        <input v-model="form.company_name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
+                                         <div class="alert alert-danger" v-if="errors.company_name"> {{errors.company_name[0]}}</div>
+                                    </div>                                                                    
+                                </div>
+                                 <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Is Company</label>
+                                        <input v-model="form.is_company" type="text" name="is_company" class="form-control" :class="{ 'is-invalid': errors.is_company }" >
+                                         <div class="alert alert-danger" v-if="errors.is_company"> {{errors.is_company[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                                            
@@ -49,20 +56,7 @@
                                     </div>  
                                 </div>
 
-                                <div class="col-md-2">                                   
-                                    <div class="form-group">
-                                        <label>Contract Start</label>
-                                        <input v-model="form.contract_start" type="text" name="contract_start" class="form-control" :class="{ 'is-invalid': errors.contract_start }" >
-                                         <div class="alert alert-danger" v-if="errors.contract_start"> {{errors.contract_start[0]}}</div>
-                                    </div>  
-                                </div> 
-                                <div class="col-md-2">                                   
-                                    <div class="form-group">
-                                        <label>Contract End</label>
-                                        <input v-model="form.contract_end" type="text" name="contract_end" class="form-control" :class="{ 'is-invalid': errors.contract_end }" >
-                                         <div class="alert alert-danger" v-if="errors.contract_end"> {{errors.contract_end[0]}}</div>
-                                    </div>  
-                                </div>                                 
+                                                              
                             </div>
                             <div class="row">
                                <div class="col-md-2">                                   
@@ -78,7 +72,23 @@
                                         <input v-model="form.person_name" type="text" name="person_name" class="form-control" :class="{ 'is-invalid': errors.person_name }" >
                                          <div class="alert alert-danger" v-if="errors.person_name"> {{errors.person_name[0]}}</div>
                                     </div>  
-                                </div>                                 
+                                </div> 
+                                <div class="col-md-2">                                   
+                                    <div class="form-group">
+                                        <label>Contract Start</label>
+                                        <Datepicker format="YYYY-MM-DD" v-model="form.contract_start" class=""  />
+                                       
+                                         <div class="alert alert-danger" v-if="errors.contract_start"> {{errors.contract_start[0]}}</div>
+                                    </div>  
+                                </div> 
+                                <div class="col-md-2">                                   
+                                    <div class="form-group">
+                                        <label>Contract End</label>                                       
+                                        <!-- <input v-model="form.contract_end" type="text" name="contract_end" class="form-control" :class="{ 'is-invalid': errors.contract_end }" > -->
+                                        <Datepicker format="YYYY-MM-DD" v-model="form.contract_end" class=""  />
+                                        <div class="alert alert-danger" v-if="errors.contract_end"> {{errors.contract_end[0]}}</div>
+                                    </div>  
+                                </div>                                   
                             </div>
                             <div class="row">
                                
@@ -111,12 +121,15 @@
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'
+    //import { Datetime } from 'vue-datetime';
     //import {Typeahead } from '../../components/typeahead'
     //import DzoneComponent from '../../components/DzoneComponent';
     import Buttons from './Buttons';
-    
+    import Datepicker from 'vuejs-datetimepicker'
+
+        
     export default {
-        components: { Buttons },
+        components: { Buttons,Datepicker },
         data () {
             return {
                 modelSingular: '',
@@ -134,6 +147,8 @@
                 //
                 //roles: null,
                 //allroles: [],
+                datetime:'',
+                date:'',
             }
         },
         beforeRouteEnter(to, from, next) {            

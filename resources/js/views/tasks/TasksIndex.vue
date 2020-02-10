@@ -6,22 +6,26 @@
                 <Buttons :editMode="editMode" ></Buttons>
             </div>
         </div>
-        <Filters v-on:childToParent="onChildLoad" ></Filters>
+        <!-- <Filters v-on:childToParent="onChildLoad" ></Filters> -->
        
         <div class="panel-body">
             <table class="table table-link">
                 <thead>
                     <tr>
-                        <th style="width: 5%">ID</th>                       
-                        <th style="width: 20%">Title</th>
+                        <th style="width: 5%">ID</th>    
+                        <th style="width: 10%">Photo</th>                   
+                        <th style="width: 10%">Title</th>
                         <th style="width: 10%">Location</th>
                         <th style="width: 10%">Status</th>
-                        <th style="width: 20%">Start</th>
-                        <th style="width: 10%">End</th>
+                        <th style="width: 15%">Start</th>
+                        <th style="width: 15%">End</th>
                         <th style="width: 10%">Users</th>
                         <th style="width: 5%">Actions</th>                       
                        
                     </tr>
+                    
+                       <Filters v-on:childToParent="onChildLoad" ></Filters>
+                    
                 </thead>
 
                 <tbody>

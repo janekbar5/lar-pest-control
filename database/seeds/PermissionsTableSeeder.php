@@ -16,11 +16,15 @@ class PermissionsTableSeeder extends Seeder
         DB::table('roles')->insert(['name' => 'Desk User','guard_name' => 'web']);
         DB::table('roles')->insert(['name' => 'Field User','guard_name' => 'web']);
 		/////////////////////////////
+		//Admin
 		DB::table('model_has_roles')->insert(['role_id' => 1,'model_type' => 'App\User','model_id' => 1]);
-		//DB::table('model_has_roles')->insert(['role_id' => 2,'model_type' => 'App\User','model_id' => 1]);
-		//DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => 1]);
+		
+		//Desktop Users
+		DB::table('model_has_roles')->insert(['role_id' => 2,'model_type' => 'App\User','model_id' => 2]);
+		DB::table('model_has_roles')->insert(['role_id' => 2,'model_type' => 'App\User','model_id' => 3]);
         
-        for($i=2; $i<=20; $i++):
+		//Field Users
+        for($i=4; $i<=30; $i++):
         DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => $i]);
         endfor;
         ///////////////////////////1-4 Role

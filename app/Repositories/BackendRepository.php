@@ -86,19 +86,18 @@ class BackendRepository implements BackendRepositoryInterface
                    ->with('selectedUsers')
                    ->first(); 
     }
-	public function getUsersTasks($id){
-        //return Task::where('user_id', '=', $id)                    
-                  //->with('locations')
-                  //->with('statuses')
-                  //->with('selectedUsers')
-				  //->orderBy('created_at', 'desc')
-                  //->get(); 
-				  
-		return	Task::with(['selectedUsers'])
-            //->where("status","=",1)            
+	public function getAllUsersTasks(){ 
+		return	Task::with(['selectedUsers'])                        
+            ->whereHas('selectedUsers',function($query) {                
+                 $query->where('user_id', '=', \Auth::user()->id);                    
+            })            
+            ->get();
+    }
+	public function getAllUsersTasksByStatus($id){ 
+		return	Task::with(['selectedUsers'])                        
             ->whereHas('selectedUsers',function($query) use($id){                
-                 $query->where('user_id', '=', $id);
-                    
+                 $query->where('user_id', '=', \Auth::user()->id);
+				 $query->where('status_id', '=', $id);
             })            
             ->get();
     }
@@ -165,7 +164,7 @@ class BackendRepository implements BackendRepositoryInterface
 				   ->wheredoesnthave('selectedTasks', function($q) use($date) {				   
 				     $q->where('start','LIKE', '%'.$date.'%'); 
 				   })				
-				  ->get(); 
+				   ->get(); 
     }
 	public function getAllFieldUsers(){
 		return User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();

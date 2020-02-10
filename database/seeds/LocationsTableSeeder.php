@@ -12,29 +12,29 @@ class LocationsTableSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
-		
-		for($i=1; $i<=100; $i++):
+		//////////////////////////////////////First Client has 3 locations
+		/* for($i=1; $i<=3; $i++):
+            DB::table('locations')
+                ->insert([ 
+                    'user_id' => 1,                     
+					'client_id' => 1,
+					'title' => 'Location name '.$i,
+                    'description' =>'jkbjkb kuguig',
+
+                ]);
+        endfor; */
+		//////////////////////////////////////Second Client has 2 locations
+		/* for($i=1; $i<=2; $i++):
             DB::table('locations')
                 ->insert([ 
                     'user_id' => 1,                     
 					'client_id' => 2,
 					'title' => 'Location name '.$i,
                     'description' =>'jkbjkb kuguig',
-
+					
                 ]);
-        endfor;
-		
-		for($i=1; $i<=100; $i++):
-            DB::table('locations')
-                ->insert([ 
-                    'user_id' => 1,                     
-					'client_id' => 3,
-					'title' => 'Location name '.$i,
-                    'description' =>'jkbjkb kuguig',
-
-                ]);
-        endfor;
-		
+        endfor; */
+		//////////////////////////////////////Rest of the Clients has 1 locations
 		for($i=1; $i<=100; $i++):
             DB::table('locations')
                 ->insert([ 

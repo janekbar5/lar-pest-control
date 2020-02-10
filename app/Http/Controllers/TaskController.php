@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Task,User};
+use App\{Task,User,Status};
 
 use Illuminate\Http\Request;
 use App\Repositories\ValidationRepository;
@@ -32,11 +32,11 @@ class TaskController extends Controller
         return response()->json(['results' => $tasks]);
        
     } */
-	public function index(Request $request)
+	public function index()
     {       
 		$filterAllLocations = $this->br->getAllLocations(); 
 		$filterAllStatuses = $this->br->getAllStatuses2(); 
-		
+						
 		$tasks_pre = Task::select('tasks.*')
 		          ->where('user_id', '=', \Auth::user()->id) 
                   ->with('locations')
@@ -45,18 +45,18 @@ class TaskController extends Controller
                   ->with('selectedUsers');   
                   	
 								
-	    if ($request->input('loc'))
+	    if (request('loc'))
         {
-            $tasks_pre = $tasks_pre->where('location_id', '=', $request->input('loc'));			
+            $tasks_pre = $tasks_pre->where('location_id', '=', request('loc'));			
         }		
-		if ($request->input('stat'))
+		if (request('stat'))
         {
-            $tasks_pre = $tasks_pre->where('status_id', '=', $request->input('stat'));			
+            $tasks_pre = $tasks_pre->where('status_id', '=', request('stat'));			
         }
 		
 		$total = $tasks_pre->get()->count();		
 		
-		$tasks_ok = $tasks_pre->paginate($request->input('perpage'));		
+		$tasks_ok = $tasks_pre->paginate(request('perpage'));		
 		
 		return response()
                ->json([ 
@@ -91,13 +91,13 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST
     public function store(Request $request)
     {        
-        //dd(\Auth::user()->id);
+        //dd( $request->all() );
         $fv = $this->validate($request, $this->vr->taskUpdate());        
         $task = Task::create(array_merge($request->all(), [
 		'user_id' => \Auth::user()->id,
-		'location_id' => $request->input('location'),
-		'status_id' => 1,
-		'price' => 100,
+		//'location_id' => $request->input('location'),
+		//'status_id' => 1,
+		//'price' => 100,
 		]));    
 		
         return ['created' => 'true','id' => $task->id];
@@ -105,16 +105,16 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
     public function update(Request $request, $id)
     {
-        //dd($request->all());
+        dd($request->all());
         //$property = Property::findOrFail($id);
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdate());       
         $task->update($request->all());   
         $array_users = [];
-        foreach($request->input('selected_users') as $user){
-           
+        foreach($request->input('selected_users') as $user){           
             $array_users[] = $user['id'];
         }
+		
         $task->selectedUsers()->sync($array_users);
             
        
@@ -162,12 +162,17 @@ class TaskController extends Controller
 			
         ]);
     }
-	
+	/**///////////////////////////////////////////////////////////////////////////////////////////// USERCALENDAR
 	public function userCalendar()    {
-        $userstasks = $this->br->getUsersTasks(\Auth::user()->id);
+        $userstasks = $this->br->getAllUsersTasks();
+		$statuses = array();
+		foreach(Status::all() as $status){			
+			$statuses[] = array("title"=>$status->title,"count"=>$this->br->getAllUsersTasksByStatus($status->id)->count());			
+		}
 		//dd($userstasks);
         return response()->json([            
             'userstasks' => $userstasks,
+			'statuses' => $statuses,			
            
         ]);
     }

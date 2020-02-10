@@ -1,5 +1,37 @@
 <template>
-<div>
+<tr>
+                        <th>
+                            <select @change="doFilter()" v-model="perpage" class="form-control">
+                            <option value="" selected>Select per page</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="40">40</option>
+                                <option value="60">60</option>								
+                            </select>
+                        </th> 
+                        <th> </th>      
+                        <th> </th>  
+                        <th>
+                        <select @change="doFilter()" v-model="location" class="form-control">
+                            <option value="" selected>All Locations</option>
+                                <option :value="location.id" v-for="(location, index) in locations" :key="index">
+                                    {{ location.title }} 
+                            </option>                                       
+                        </select>
+                        </th>
+                        <th>
+                        <select @change="doFilter()" v-model="status" class="form-control">
+                            <option value="" selected>All Statuses</option>
+                                <option :value="status.id" v-for="(status, index) in statuses" :key="index">
+                                    {{ status.title }} 
+                            </option>                                       
+                        </select> 
+                        </th>
+
+                                             
+</tr>
+
+<!-- <div>
        <div class="row">
           <div class="col-md-2">
             <select @change="doFilter()" v-model="perpage" class="form-control">
@@ -55,14 +87,7 @@
                 </button>
             </div>
         </div>
-
-
-    <!-- 
-		 
-									</td>
-		  -->
-
-</div>
+</div> -->
 </template>
 
 <script>

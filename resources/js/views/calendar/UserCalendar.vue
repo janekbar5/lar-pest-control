@@ -1,27 +1,101 @@
 <template>
   <div>
-      
-      <div class="row">
-                
-               <!-- <div class="col-md-3">
-                   <div id='external-events'>
-                    <div id='external-events-listing' @mouseover="getNotifications">
-                        <h4> Tasks </h4> 
-                      
-                          <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in unassignedtasks" v-bind:key="idx" v-bind:id="per.id">
-                          {{ per.title }}
-                          {{ per.locations.title }}
-                          {{ per.selected_users }}  
+
+
+
+
+                 <div class="row">    
+                  <div class="container-fluid">
+                  
+                    <div class="row">
+
+                      <div class="col-lg-2 col-6" v-for="stat in statuses" :key="stat.data">                        
+                        <div class="small-box ">
+                          <div class="inner">
+                            <h3>{{stat.count}}</h3>
+                            <p>{{stat.title}}</p>
                           </div>
-                    </div>
+                          <div class="icon">
+                            <i class="ion ion-bag"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                      </div>
                       
-                      <p style="display:none">
-                        <input type='checkbox' id='drop-remove' checked='checked' />
-                        <label for='drop-remove'>remove after drop</label>
-                      </p>
-                    </div>                                                                            
-               </div>     -->
-               
+                      <!-- <div class="col-lg-2 col-6">                        
+                        <div class="small-box">
+                          <div class="inner">
+                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+                            <p>Done Dasks</p>
+                          </div>
+                          <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                      </div>
+                       <div class="col-lg-2 col-6">                        
+                        <div class="small-box">
+                          <div class="inner">
+                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+                            <p>Done Dasks</p>
+                          </div>
+                          <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                      </div> -->
+                    
+                    
+                      
+                      <div class="col-lg-6 col-6"> 
+                         <div class="small-box">
+                          <div class="inner">
+                            <h3>Todo </h3>
+                           
+                           
+                            <table class="table">
+                            <thead>
+                              <tr>
+                                <th style="width: 10%">#</th>
+                                <th style="width: 70%">Task</th>
+                                <th style="width: 10%">Label</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="todo in todos" :key="todo.data"> 
+                                <td>{{todo.id}}</td>
+                                <td>{{todo.title}}</td>
+                              
+                                <td><span class="badge ">
+                                    <i aria-hidden="true" class="fa fa-pen" @click="showModal()"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
+                                  <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(todo)"></i> 
+                                    </span>
+                                    </td>
+                              </tr>
+                            </tbody>
+                        </table>       
+
+                          </div>
+                          <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                          </div>
+                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+
+
+                                      
+                        
+                      </div>
+                    
+                    </div>
+                  
+                    
+                  </div>
+                </div>
+
+      <div class="row">      
               <div class="col-md-12">
                  
                   <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
@@ -43,7 +117,8 @@
                    
         </div>
       
-      <Modal />
+      <!-- <Modal /> -->
+
    </div>     
  
 </template>
@@ -53,18 +128,19 @@
 import moment from "moment"
 import "jquery-ui-bundle"
 import $ from 'jquery'
-import Modal from './Modal.vue'    
+//import Modal from './Modal.vue'    
 
 export default {
   name: "hello",
-  components: { Modal },  
+  //components: { Modal },  
   data() {
     var $this = this;
     return {
       unassignedtasks:[],
       value:'',
-      events: [],  
-      
+      events: {}, 
+      statuses:{},
+      todos:{},
       config: {
         defaultView: "agendaWeek",
         //defaultView: "month",
@@ -139,20 +215,27 @@ export default {
 
   created() { 
     axios.get('/v1/api/tasks/usercalendar').then((res) => {
-   if(res.data) {     
-     this.events = res.data.userstasks
-    }
-    })
-    .catch((error) => {
-      if(error.response.status === 422) {
-        this.errors = error.response.data.errors
-      }
-      this.isProcessing = false
-    })
+     if(res.data) {     
+      this.events = res.data.userstasks
+      this.statuses = res.data.statuses
+      }
+      })
+      .catch((error) => {
+        if(error.response.status === 422) {
+          this.errors = error.response.data.errors
+        }
+        this.isProcessing = false
+      })
     
   },
   mounted() {
     //this.getNotifications()
+    this.todos = [
+      {"id":1,"title":"Lorem ipsum dolor"},
+       {"id":2,"title":"Lorem ipsum dolor 2"},
+        {"id":3,"title":"Lorem ipsum dolor 3 "},
+         {"id":4,"title":"Lorem ipsum dolo  4"},
+    ]
   },
   //
   methods: {

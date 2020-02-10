@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //
 use Spatie\Searchable\Search;
-use App\{User,Treatment,Location};
+use App\{User,Treatment,Location,Client};
 
 use App\Repositories\ValidationRepository;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
@@ -44,11 +44,16 @@ class HomeController extends Controller
     public function searchBox()
     {
         $input = request('q');
-        $results = (new Search())
-        ->registerModel(User::class, ['name', 'email'])
-        ->registerModel(Treatment::class, ['title'])
-		->registerModel(Location::class, ['title'])		
-        ->search($input);        
-        return response()->json(['results' => $results]);
+		if($input != '' || $input != null){
+			$results = (new Search())
+			->registerModel(User::class, ['name', 'email'])
+			->registerModel(Treatment::class, ['title'])
+			->registerModel(Location::class, ['title'])	
+			->registerModel(Client::class, ['company_name','person_name','email','contract_number','vat_number',])	
+			->search($input);  
+		}	
+		
+		return response()->json(['results' => $results]);
+			
     }
 }

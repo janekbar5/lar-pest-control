@@ -3,21 +3,49 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+//
+use OwenIt\Auditing\Contracts\Auditable;
+//
+use Illuminate\Database\Eloquent\SoftDeletes;
+//
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
-class Client extends Model
+class Client extends Model implements Auditable, Searchable
+//class Client extends Authenticatable implements Auditable, Searchable
 {
-    protected $fillable = [  
-        'user_id',
-        'client_id',        
-        'title',
-        'description',        
+    use \OwenIt\Auditing\Auditable;  //Audit Log
+    use SoftDeletes;
+	/////////////////////////////////////////////////////////////
+	
+	protected $fillable = [  
+        //'user_id',
+        //'client_id',        
+        'company_name','email','is_company','contract_number','vat_number','person_name','contract_start','contract_end',
+		'description',
+		
+		
+		
     ];
     /////////////////////////////////////////////////////////////For typehead search
     protected $appends = ['text'];
     public function getTextAttribute()
     {
-        return $this->attributes['name']. ' - '.$this->attributes['person_name'];
+        return $this->attributes['company_name']. ' - '
+		.$this->attributes['person_name']. ' - '
+		.$this->attributes['email']. ' - '
+		.$this->attributes['contract_number']. ' - '
+		.$this->attributes['vat_number'];
     }
+	//////////////////////////////////////////Soft delete	
+    protected $dates = ['deleted_at'];
+	////////////////////////////////////////////Multiple search models
+    public function getSearchResult(): SearchResult
+    {
+       $url = route('home.search', $this->id);         
+       return new SearchResult($this, $this->company_name, $url);
+    }
+	
     
     ////////////////////////////////////////////////////////////////HASMANY
     // Location-->belongsTo-->Client   <==>  Client-->hasMany-->Location
