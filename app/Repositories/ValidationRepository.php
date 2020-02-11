@@ -30,7 +30,7 @@ class ValidationRepository
      {        
          $rules = array(
             'title' => 'required',
-            'description' => 'required',          
+            //'description' => 'required',          
          );        
          return $rules;
      }
@@ -44,6 +44,17 @@ class ValidationRepository
 			'end' => 'required',
 			'location_id' => 'required',
 			'status_id' => 'required',
+			
+         );        
+         return $rules;
+     }
+	 public function taskUpdateFromCalendar()
+     {        
+         $rules = array(
+			'start' => 'required',
+			'end' => 'required',
+			'location_id' => 'required',
+			'selected_users' => 'required',
 			
          );        
          return $rules;

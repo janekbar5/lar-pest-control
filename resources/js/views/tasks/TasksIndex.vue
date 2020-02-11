@@ -55,7 +55,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="panel-footer flex-between">
+        <!-- <div class="panel-footer flex-between">
             <div>
                 <small>Showing {{model.from}} - {{model.to}} of {{model.total}}</small>
             </div>
@@ -67,7 +67,7 @@
                     Next
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

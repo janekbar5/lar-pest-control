@@ -34,6 +34,7 @@
                                         <label>Location</label>
                                         <typeahead :url="dataURL" :initialize="form.locations" @input="onLocation" />
                                         <!-- <input v-model="form.location_id" type="text" name="location_id" class="form-control" :class="{ 'is-invalid': errors.location_id }" > -->
+                                        <input v-model="form.location_id" type="hidden" name="location" class="form-control" :class="{ 'is-invalid': errors.location_id }" >
                                          <div class="alert alert-danger" v-if="errors.location_id"> {{errors.location_id[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -75,25 +76,35 @@
                                     </div>  
                                 </div>
 
-                                 <!-- <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Location</label>
-                                        <input v-model="form.location" type="text" name="location" class="form-control" :class="{ 'is-invalid': errors.location }" >
-                                         <div class="alert alert-danger" v-if="errors.location"> {{errors.location[0]}}</div>
-                                    </div>  
-                                </div>  -->
+                                
                                
                             </div>
                             <div class="row"> </div>
                            <div class="row">
                                                                  
-                                 <div class="col-md-4">                                   
+                                 <!-- <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Status</label>
                                         <input v-model="form.status_id" type="text" name="status_id" class="form-control" :class="{ 'is-invalid': errors.status_id }" >
                                          <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
                                     </div>  
-                                </div> 
+                                </div> -->
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                    <label>Status</label>
+                                            <select v-model="form.status_id" class="form-control" :class="{ 'is-invalid': errors.status_id}">
+                                            <option value="">Select Status</option>
+                                            <option v-for="status in statuses" :value="status.id">
+                                                {{status.title}}
+                                            </option>
+                                            </select>                                        
+                                            <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
+                                    </div>
+                                  </div>   
+
+
+
                                  <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Sub Status</label>
@@ -106,7 +117,7 @@
 
 
                            <div class="row">
-                                <!-- <div class="col-md-12">                                   
+                                <div class="col-md-12">                                   
                                     <div class="form-group">
                                         <label>Assigned Users</label>                                                                          
                                         <multiselect 
@@ -116,9 +127,11 @@
                                         placeholder="Select users"
                                         :multiple="true"                                       
                                         label="name" 
-                                        track-by="name"></multiselect>
+                                        track-by="name"
+                                        disabled
+                                        ></multiselect>
                                   </div>  
-                                </div>  -->
+                                </div> 
                             </div>
                                 
 
@@ -159,6 +172,7 @@
 </template>
 <script type="text/javascript">
     import Vue from 'vue'
+    import moment from 'moment'
     import {get, byMethod } from '../../lib/api'
     import {Typeahead } from '../../components/typeahead'
     import DzoneComponent from '../../components/dzone/DzoneComponent';
@@ -179,6 +193,11 @@
                 editMode: this.$route.meta.mode,
                 form: {
                    //locations:{}
+                   status_id: this.$route.meta.mode==="edit" ? '' : 1,
+                   //start: this.$route.meta.mode==="edit" ? '' : moment().format('MMMM Do YYYY, h:mm'),
+                   start: this.$route.meta.mode==="edit" ? '' : '2020-02-02 07:30',
+                   end: this.$route.meta.mode==="edit" ? '' : '2020-02-02 08:30',
+                  
                 },               
                 errors: {},               
                 //
@@ -188,6 +207,7 @@
                 //
                 roles: null,
                 allroles: [],
+                statuses:{},
                 //
                 dataURL: '/v1/api/locations/searchlocations',
                 //fieldusers: [],
@@ -221,7 +241,9 @@
         methods: {
             onLocation(e) {
                 const locations = e.target.value
-                Vue.set(this.$data.form, 'locations', locations)                                          
+                Vue.set(this.$data.form, 'locations', locations) 
+                Vue.set(this.$data.form, 'location_id', locations.id) 
+                                                         
             },
             modelSettings(settings){                
                 //return name
@@ -250,6 +272,7 @@
                 }
                 this.photos_List = res.data.form.photos;
                 this.allFieldUsers =  res.data.fieldusers //all roles
+                this.statuses =  res.data.statuses //all roles
                //this.allFieldUsers = [{"id":1,"name":"ddddd"}]
             },          
             objectToArray() {                

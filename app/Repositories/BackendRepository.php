@@ -37,7 +37,8 @@ class BackendRepository implements BackendRepositoryInterface
 		//where('user_id', '=', $user_id)  
                   orderBy('created_at', 'desc')
                   //->withTrashed()
-                  ->paginate(10); 
+                  //->paginate(10);
+				  ->get();
     }
 	
     /////////////////////////////////////////////////////////////////////////////////TASKS

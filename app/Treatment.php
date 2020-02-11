@@ -31,7 +31,7 @@ class Treatment extends Model implements Auditable, Searchable
     protected $appends = ['text'];
     public function getTextAttribute()
     {
-        return $this->attributes['title']. ' - '.$this->attributes['description'];
+        return $this->attributes['title'];
     }
 	
 	
@@ -43,6 +43,6 @@ class Treatment extends Model implements Auditable, Searchable
     protected $fillable = [
 	    'user_id',        
 		'title',
-		'description',       
+		//'description',       
     ];
 }

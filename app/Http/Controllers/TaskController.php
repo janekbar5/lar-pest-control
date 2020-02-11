@@ -72,20 +72,23 @@ class TaskController extends Controller
     {        
         $task = $this->br->getTaskById($id); 
         $fieldusers = $this->br->getAllFieldUsers(); 
-		
+		$statuses = $this->br->getAllStatuses2();
         return response()->json([
             'form' => $task, 
             //'fieldusers' => $fieldusers->toArray(['name','last_name']) 
-			'fieldusers' => $fieldusers 
+			'fieldusers' => $fieldusers,
+			'statuses' => $statuses,
             ]);         
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
      public function create()
      {        
         $fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();  
+		$statuses = $this->br->getAllStatuses2();
         return response()->json([
             'form' => '',  
-			'fieldusers' => $fieldusers->toArray(['name'])
+			'fieldusers' => $fieldusers->toArray(['name']),
+			'statuses' => $statuses,
             ]);
      }
     /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST
@@ -105,21 +108,31 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
     public function update(Request $request, $id)
     {
-        dd($request->all());
-        //$property = Property::findOrFail($id);
+        //dd($request->all());       
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdate());       
         $task->update($request->all());   
         $array_users = [];
         foreach($request->input('selected_users') as $user){           
             $array_users[] = $user['id'];
-        }
-		
-        $task->selectedUsers()->sync($array_users);
-            
-       
+        }		
+        $task->selectedUsers()->sync($array_users);  
         return ['saved' => 'true','id' => $task->id];        
     }
+	public function updateFromCalendar(Request $request, $id)
+    {
+        //dd($request->all());       
+        $task = $this->br->getTaskById($id);
+        $fv = $this->validate($request, $this->vr->taskUpdateFromCalendar());       
+        $task->update($request->all());   
+        $array_users = [];
+        foreach($request->input('selected_users') as $user){           
+            $array_users[] = $user['id'];
+        }		
+        $task->selectedUsers()->sync($array_users);  
+        return ['saved' => 'true','id' => $task->id];        
+    }
+	
     /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY 
     public function destroy($id)
     {
@@ -149,6 +162,7 @@ class TaskController extends Controller
     public function calendar(Request $request)    { 
 	
         $unassignedtasks = $this->br->getUnassignedTasks();
+		
 		if($request->input('location')){
 		  $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
 		}else{

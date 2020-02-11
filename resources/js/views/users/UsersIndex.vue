@@ -10,11 +10,11 @@
                 <h3 class="card-title"></h3>
 
                 <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">  
+                  
                     <div class="input-group-append">
                       <Buttons :editMode="editMode" ></Buttons>
                     </div>
-                  </div>
+                
                 </div>
               </div>
              

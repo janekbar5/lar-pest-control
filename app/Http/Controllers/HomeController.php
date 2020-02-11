@@ -23,15 +23,17 @@ class HomeController extends Controller
         $this->vr = $vr;
         $this->im = $im;
     }   
+	/////////////////////////////////////////////////////////////////////////////////////////////////GLOBAL SETTINGS
 	public function globalsettings()
     {
         $treatments = $this->br->getAllTreatments();
-		$statuses = $this->br->getAllStatuses();   
+		$statuses = $this->br->getAllStatuses();  
+		$substatuses = $this->br->getAllSubStatuses(); 
 		
         return response()->json([
 		'treatments' => $treatments,
 		'statuses' => $statuses,
-		
+		'substatuses' => $substatuses,
 		]);
     }
    
@@ -40,7 +42,7 @@ class HomeController extends Controller
         return view('home');
     }
 	
-    
+    /////////////////////////////////////////////////////////////////////////////////////////////////MAIN SEARCH BOX
     public function searchBox()
     {
         $input = request('q');

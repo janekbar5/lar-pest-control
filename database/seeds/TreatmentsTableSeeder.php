@@ -27,7 +27,7 @@ class TreatmentsTableSeeder extends Seeder
                 ->insert([
                     'user_id' => 1, 
 					'title' => "Treatment title ".$i,
-					'description' => $faker->text,	
+					//'description' => $faker->text,	
                     //'deadline' => '2020-04-29 20:38:49',    
                 ]);
         endfor;     

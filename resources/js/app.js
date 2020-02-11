@@ -7,6 +7,11 @@
 require('./bootstrap');
 window.Vue = require('vue');
 import moment from 'moment';  //MOMENT JS   
+
+//import { Form, HasError, AlertError } from 'vform';
+
+
+
 //////////////////////////////////////////////// 1 import router
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -50,7 +55,7 @@ Vue.config.productionTip = false;
 
 ////////////////////////////////////////////////////
 import Calendar from './views/calendar/Calendar'
-import Dashboard from './components/Dashboard.vue'
+import Dashboard from './views/dashboard/Dashboard.vue'
 
 import UsersIndex from './views/users/UsersIndex'
 import UsersEdit from './views/users/UsersEdit'

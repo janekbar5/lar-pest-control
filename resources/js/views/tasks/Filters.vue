@@ -28,8 +28,21 @@
                         </select> 
                         </th>
 
-                                             
+<div class="panel-footer flex-between">
+            <div>
+                <small>Showing {{from}} - {{to}} of {{total}}</small>
+            </div>
+            <div>
+                <button class="btn btn-sm" :disabled="!prev_page_url" @click="prevPage">
+                    Prev
+                </button>
+                <button class="btn btn-sm" :disabled="!next_page_url" @click="nextPage">
+                    Next
+                </button>
+            </div>
+        </div>                                             
 </tr>
+
 
 <!-- <div>
        <div class="row">
@@ -74,19 +87,7 @@
         </div>
 
        
-       <div class="panel-footer flex-between">
-            <div>
-                <small>Showing {{from}} - {{to}} of {{total}}</small>
-            </div>
-            <div>
-                <button class="btn btn-sm" :disabled="!prev_page_url" @click="prevPage">
-                    Prev
-                </button>
-                <button class="btn btn-sm" :disabled="!next_page_url" @click="nextPage">
-                    Next
-                </button>
-            </div>
-        </div>
+       
 </div> -->
 </template>
 

@@ -9,7 +9,9 @@
                     <div id='external-events-listing' @mouseover="getNotifications">
                         <h4> Unassigned Tasks </h4> 
                        <!-- v-show="per.selected_users.length === 0"-->
- <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in unassignedtasks" v-bind:key="idx" v-bind:id="per.id">{{ per.title }} {{ per.locations.title }} {{ per.selected_users }}</div>
+                    <div  v-bind:style="{ 'background-color': per.statuses.colour }" class="fc-event" v-for="(per, idx) in unassignedtasks" v-bind:key="idx" v-bind:id="per.id">
+                    {{ per.title }} {{ per.locations.title }} {{ per.selected_users }}
+                    </div>
                     </div>
                       
                       <p style="display:none">
@@ -19,7 +21,7 @@
                     </div>
 <!------------------------------------DATTASKS--------------------------------------------->  
                     <!-- DIRECT CHAT -->
-                    <div class="card direct-chat direct-chat-warning">
+                    <div class="card direct-chat direct-chat-warning" v-show="tasksbydate.length > 0">
                       <div class="card-header">
                         <h3 class="card-title">Tasks for {{ tasksbydate_date }}</h3>
                         <div class="card-tools">                     
@@ -53,8 +55,13 @@
                       <div class="card-footer">                   
                       </div>                    
                     </div>   
+
+
+                    <div class="card direct-chat direct-chat-warning" v-show="freefieldusers.length > 0">
+                     <h3 class="card-title">Available users</h3></br>
                      <div class="direct-chat-msg" v-for="(user, idx) in freefieldusers" v-bind:key="idx" v-bind:id="user.id">
                       {{user.name}}  {{user.last_name}}
+                    </div>  
                     </div>            
   <!------------------------------------DATTASKS--------------------------------------------->              
                </div>  
@@ -111,7 +118,12 @@
                    
         </div>
       
-        <Modal  /> 
+
+
+
+        <Modal :freefieldusers="freefieldusers" /> 
+
+
 
    </div>     
  
@@ -137,13 +149,13 @@ export default {
       events: [],
       location:'',
       //location2:'',  
-      locations:{},
-      locationdata:{},
+      locations:[],
+      locationdata:[],
       variableToPass:'',
       //
-      tasksbydate:{}, 
+      tasksbydate:[], 
       tasksbydate_date:'',
-      freefieldusers:{},
+      freefieldusers:[],
       //
       //start:'',     
       config: {          
@@ -210,8 +222,7 @@ export default {
             $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
             $('#itemid').val($(this).attr("id")); 
             $('#title').val($(this).html()); 
-            this.start = date.format('YYYY-MM-DD hh:mm')  
-            
+            this.start = date.format('YYYY-MM-DD hh:mm') 
             //var itemid = $(this).attr("id")  
               // console.log('Clicked on: ' + date.format());
               // console.log('Coordinates: ' + jsEvent);
@@ -258,7 +269,32 @@ export default {
   mounted() {   
   },
   //
-  methods: {    
+  methods: { 
+    //     onSave() {
+    //     this.errors = {}                               
+    //     axios.post('/v1/api/tasks/updatefromcalendar/'+this.item_id, this.form)
+    //                 .then((res) => {
+    //                     if(res.data && res.saved) {
+    //                          this.$parent.hideModal(person);
+    //                          this.loadToast('success','updated successfully');  
+    //                     }
+    //                     if(res.data && res.created) {
+    //                         this.$parent.hideModal(person);
+    //                         this.loadToast('success', 'created successfully');  
+    //                     }
+    //                     if(response.data.saved) {
+    //                         this.$parent.hideModal(person);
+    //                         this.loadToast('success', 'saved successfully');  
+    //                     }
+    //                 })
+    //                 .catch((error) => {
+    //                     if(error.response.status === 422) {
+    //                         this.errors = error.response.data.errors
+    //                         this.loadToast('error','Check the forms'); 
+    //                     }
+    //                     //this.isProcessing = false
+    //                 })
+    // },    
     hideModal(per){
       $("#addNew").modal("hide")
       $('#calendar').fullCalendar('removeEvents', per.itemid)     
@@ -284,16 +320,17 @@ export default {
     })
     },    
     dayClick(date, jsEvent, view){ 
-        axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
-        if(res.data) {       
-            this.setTasksByDate(res,date)
-        }})
-        .catch((error) => {
-          if(error.response.status === 422) {
-            this.errors = error.response.data.errors
-          }
-        this.isProcessing = false
-      })   
+
+    //     axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
+    //     if(res.data) {       
+    //         this.setTasksByDate(res,date)
+    //     }})
+    //     .catch((error) => {
+    //       if(error.response.status === 422) {
+    //         this.errors = error.response.data.errors
+    //       }
+    //     this.isProcessing = false
+    //   })   
               //console.log('Day Clicked on : ' + calEvent.id);
               // console.log('Clicked on: ' + date.format());
               // console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);

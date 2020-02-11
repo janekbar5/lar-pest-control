@@ -61,7 +61,8 @@ Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit
 Route::get('v1/api/tasks/create', 'TaskController@create'); //create     
 Route::post('v1/api/tasks/create', 'TaskController@store'); //create post
 Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post
-Route::put('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post 
+Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post
+Route::post('v1/api/tasks/updatefromcalendar/{id}', 'TaskController@updateFromCalendar'); //update  post 
 Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  post
 
 Route::get('/v1/api/tasks/gettasksbydate', 'TaskController@getTasksByDate'); //list 

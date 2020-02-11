@@ -19,7 +19,7 @@ class CreateTreatmentsTable extends Migration
             //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  
             //$table->integer('tratment');
             $table->string('title');            
-            $table->text('description'); 
+            //$table->text('description'); 
             $table->softDeletes();  //add this line                
             $table->timestamps();
         });
