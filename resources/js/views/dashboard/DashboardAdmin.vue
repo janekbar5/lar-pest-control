@@ -87,15 +87,19 @@
                        <button @click="next" type="button" class="fc-next-button fc-button fc-button-primary" aria-label="next"><span class="fc-icon fc-icon-chevron-right"></span></button>
 
 
+
+
                       <!-- <button id="next" @click="next()">next</button> -->
 
                         <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
-                        <full-calendar id="calendar" 
+                        <full-calendar 
+                        id="calendar" 
                         :config="config" 
                         :events="events"                        
                         @day-click="dayClick" 
                         @scrollTime="scrollTime" 
-                        ref="calendar"                       
+                        ref="calendar"   
+                        @changeMonth="changeMonth"                    
                          /> 
                         <!-- 
                         @event-selected="eventClick"       
@@ -289,6 +293,9 @@ export default {
       // });
       //var fullcalendar = FullCalendar()
       //FullCalendar.next();
+    },
+    changeMonth(start, end, currentMonthStartDate) {
+      console.log(currentMonthStartDate); // the start date of the current month after changing month by clicking the '<'(previous) or '>'(next) button
     },
 
  

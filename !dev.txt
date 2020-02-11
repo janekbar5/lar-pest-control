@@ -35,3 +35,7 @@ Calendar popup users assign & save
 // https://fullcalendar.io/docs#toc
 GANTT
 https://jsbin.com/zocurejupa/1/edit?js,output
+
+
+https://github.com/CroudTech/vue-fullcalendar#methods
+https://stackoverflow.com/questions/50887335/vue-full-calendar-next-prev-buttons-trigger/51940299
