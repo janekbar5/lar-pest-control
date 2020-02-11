@@ -81,10 +81,16 @@
 									        	{{ location.title }} 
 									     	</option>                                       
                        </select> -->
+                          <button class="btn btn-danger" @click="prev">prev</button>
+                          <button class="btn btn-danger" @click="next">next</button>
+                          <button class="btn btn-danger" @click="today">today</button>
+                          
+                          <button class="btn btn-danger" @click="cal('month')">month</button>
+                          <button class="btn btn-danger" @click="cal('week')">week</button>
+                          <button class="btn btn-danger" @click="cal('day')">day</button>
                       </div>
 
-                      <button @click="prev" type="button" class="fc-prev-button fc-button fc-button-primary" aria-label="prev"><span class="fc-icon fc-icon-chevron-left"></span></button>
-                       <button @click="next" type="button" class="fc-next-button fc-button fc-button-primary" aria-label="next"><span class="fc-icon fc-icon-chevron-right"></span></button>
+                       
 
 
 
@@ -93,7 +99,7 @@
 
                         <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
                         <full-calendar 
-                        id="calendar" 
+                        
                         :config="config" 
                         :events="events"                        
                         @day-click="dayClick" 
@@ -106,6 +112,12 @@
                         @event-drop="eventDrop"
                         @drop="eventDrop"
                          -->
+                        
+                        <!--:header="{
+                            left:'',
+                            center: 'title',
+                            right: '',
+                          }"-->
 
 
                      
@@ -268,39 +280,42 @@ export default {
   mounted() {   
   },
   //
-  methods: { 
+  methods: {
+    today() {
+      this.$refs.calendar.fireMethod('today')
+      console.log('today'); 
+    },  
     next() {
-      this.$refs.calendar.fireMethod('next')
-      console.log('next'); 
+      this.$refs.calendar.fireMethod('next')      
+      //let calendarApi = this.$refs.calendar.getApi() 
+      //console.log(calendar)
+      //console.log(this.$refs.calendar.currentDate) 
+      //console.log(this.$refs.calendar.fireMethod('currentDate')) 
+      console.log(this.$refs.calendar.fireMethod('getView').start.format('YYYY-MM-DD'))
+      console.log(this.$refs.calendar.fireMethod('getView').end.format('YYYY-MM-DD')) 
+      //console.log(this.$refs.calendar.getView())   
+        
     },
+    prev() {
+      this.$refs.calendar.fireMethod('prev')
+      console.log('prev'); 
+    },   
     changeView(view) {
       this.$refs.calendar.fireMethod('changeView', view)
       console.log('next');
     },
+    cal(cos){
+      this.$refs.calendar.fireMethod(cos)
+      console.log('var');
+    },  
     scrollTime(){
       console.log('scrollTime');
-    },
-     next(){
-      //  document.getElementById('#next').addEventListener('click', function() {
-      //   calendar.next();
-      // });
-      //var fullcalendar = FullCalendar()
-      //FullCalendar.next();
-    },
-     prev(){
-      //  document.getElementById('#next').addEventListener('click', function() {
-      //   calendar.next();
-      // });
-      //var fullcalendar = FullCalendar()
-      //FullCalendar.next();
-    },
+    },     
     changeMonth(start, end, currentMonthStartDate) {
       console.log(currentMonthStartDate); // the start date of the current month after changing month by clicking the '<'(previous) or '>'(next) button
     },
 
  
-
-
     hideModal(per){
       $("#addNew").modal("hide")
       $('#calendar').fullCalendar('removeEvents', per.itemid)     
@@ -314,7 +329,7 @@ export default {
       });
     },
     loadCalendar(){
-      axios.get('/v1/api/tasks/calendar').then((res) => {
+      axios.get('/v1/api/tasks/admincalendar').then((res) => {
       if(res.data) {       
           this.setData(res)
       }})
@@ -368,7 +383,7 @@ export default {
     callModal() {        
       $("#addNew").modal("show")
     }, 
-    filterLocation() {        
+    /*filterLocation() {        
         axios    
             .get('/v1/api/tasks/calendar?'+'location='+this.location)
             .then((res) => {
@@ -380,7 +395,7 @@ export default {
 			})
 			.finally(() => this.loading = false)	
     }, 
-
+*/
       
     handleDateClick(arg) {
       alert(arg.date)

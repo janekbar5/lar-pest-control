@@ -39,3 +39,5 @@ https://jsbin.com/zocurejupa/1/edit?js,output
 
 https://github.com/CroudTech/vue-fullcalendar#methods
 https://stackoverflow.com/questions/50887335/vue-full-calendar-next-prev-buttons-trigger/51940299
+https://medium.com/swlh/how-to-make-a-calendar-app-with-vue-b6946df45791
+https://github.com/Wanderxx/vue-fullcalendar/blob/master/src/fullCalendar.vue

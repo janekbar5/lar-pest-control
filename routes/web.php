@@ -56,7 +56,9 @@ Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); /
 ///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
 Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list 
 Route::get('v1/api/tasks/usercalendar', 'TaskController@userCalendar'); //list
-Route::get('v1/api/tasks/index', 'TaskController@index'); //list    
+Route::get('v1/api/tasks/admincalendar', 'TaskController@adminCalendar'); //list
+Route::get('v1/api/tasks/index', 'TaskController@index'); //list  
+Route::get('v1/api/tasks/indexfielduser', 'TaskController@indexFieldUser'); //list    
 Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit
 Route::get('v1/api/tasks/create', 'TaskController@create'); //create     
 Route::post('v1/api/tasks/create', 'TaskController@store'); //create post

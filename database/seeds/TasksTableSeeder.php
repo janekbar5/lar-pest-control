@@ -18,11 +18,51 @@ class TasksTableSeeder extends Seeder
     
     public function run()
     {
+        
+
+        
+
+
+
+
         $faker = Factory::create();   
         $days = ['05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'];
-		////////////////////////////////////////////////////////////////////////////////////////user 1
-        for($i=0; $i<=25; $i++):
+        $months = ['01','01','03','04','05','06','07','08','09','10','11','12'];
+
+        for($i=0; $i<=20; $i++):
         $day = $faker->randomElement($days);
+        $month = $faker->randomElement($months);
+        $status_id = $faker->numberBetween($min = 1, $max = 3);
+            DB::table('tasks')
+                ->insert([
+                    'location_id' => $faker->numberBetween($min = 1, $max = 4),
+                    'user_id' => 4,
+                    'status_id' => $status_id,
+                    'substatus_id' => $status_id == 3 ? $faker->numberBetween($min = 3, $max = 5) : null,
+                    'price' => $faker->numberBetween($min = 100, $max = 150),
+                    'title' => "Task title ".$i,
+                    'description' => $faker->text,  
+                    'comment' => $faker->text,                    
+                    'start' => '2020-'.$month.'-'.$day.' 07:30',
+                    'end' => '2020-'.$month.'-'.$day.' 10:30',                  
+                    
+                ]);
+        endfor; 
+         for($i=1; $i<=100; $i++):           
+                DB::table('task_user')
+                    ->insert([
+                        'task_id' => $i,
+                        'user_id' => 4,
+                        /*'task_id' => $i,
+                        'user_id' => $i,*/
+                    ]);
+        endfor;        
+
+
+		////////////////////////////////////////////////////////////////////////////////////////user 1
+        for($i=0; $i<=100; $i++):
+        $day = $faker->randomElement($days);
+        $month = $faker->randomElement($months);
 		$status_id = $faker->numberBetween($min = 1, $max = 3);
             DB::table('tasks')
                 ->insert([
@@ -35,16 +75,16 @@ class TasksTableSeeder extends Seeder
 					'description' => $faker->text,	
                     'comment' => $faker->text,
                     
-                    'start' => '2020-02-'.$day.' 07:30',
-                    'end' => '2020-02-'.$day.' 10:30',                  
+                    'start' => '2020-'.$month.'-'.$day.' 07:30',
+                    'end' => '2020-'.$month.'-'.$day.' 10:30',                  
 					
                 ]);
         endfor;     
 
-        for($i=1; $i<=20; $i++):           
+        for($i=5; $i<=100; $i++):           
                 DB::table('task_user')
                     ->insert([
-                        //'task_id' => $faker->numberBetween($min = 1, $max = 20),
+                        //'task_id' => $faker->numberBetween($min = 1, $max = 100),
                         //'user_id' => $faker->numberBetween($min = 1, $max = 20),
 						'task_id' => $i,
                         'user_id' => $i,

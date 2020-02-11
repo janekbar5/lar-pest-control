@@ -67,6 +67,9 @@ import RolesEdit from './views/roles/RolesEdit'
 import TasksIndex from './views/tasks/TasksIndex'
 import TasksEdit from './views/tasks/TasksEdit'
 
+import UserTasksIndex from './views/usertasks/UserTasksIndex'
+import UserTasksEdit from './views/usertasks/UserTasksEdit'
+
 import TreatmentsIndex from './views/treatments/TreatmentsIndex'
 import TreatmentsShow from './views/treatments/TreatmentsShow'
 import TreatmentsEdit from './views/treatments/TreatmentsEdit'
@@ -111,6 +114,11 @@ let routes = [
     { path: '/tasks/create', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'create'} },
     { path: '/tasks/:id/edit', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'edit'} },
      
+    { path: '/usertasks', name: 'UserTasksIndex', component:UserTasksIndex, meta: {mode: 'list'} },
+    //{ path: '/usertasks/create', name: 'TasksEdit', component: UserTasksEdit, meta: {mode: 'create'} },
+    { path: '/usertasks/:id/edit', name: 'UserTasksEdit', component: UserTasksEdit, meta: {mode: 'edit'} },
+     
+    
     { path: '/treatments', name: 'TreatmentsIndex', component:TreatmentsIndex, meta: {mode: 'list'} },
     { path: '/treatments/create', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'create'} },
     { path: '/treatments/:id/edit', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'edit'} },

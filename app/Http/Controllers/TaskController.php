@@ -7,7 +7,7 @@ use App\{Task,User,Status};
 use Illuminate\Http\Request;
 use App\Repositories\ValidationRepository;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
-
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -189,6 +189,53 @@ class TaskController extends Controller
 			'statuses' => $statuses,			
            
         ]);
+    }
+    /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
+    public function adminCalendar()    {
+        //$unassignedtasks = $this->br->getUnassignedTasks();
+        
+        /*f($request->input('location')){
+          $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
+        }else{
+          $assignedtasks = $this->br->getAssignedTasks();
+        } 
+        $alllocations = $this->br->getAllLocations(); */
+        $assignedtasks = $this->br->getAssignedTasks();
+        return response()->json([            
+            //'unassignedtasks' => $unassignedtasks,
+            'assignedtasks' => $assignedtasks,
+            //'alllocations' => $alllocations,
+            
+        ]);
+    }
+    
+    public function indexFieldUser()
+    {       
+        /*
+        $days2 = Task::where('user_id', '=', \Auth::user()->id) 
+        ->orderBy('start')
+        ->get()
+        ->groupBy(function ($val) {
+            return Carbon::parse($val->start)->format('d-m');
+        });  */ 
+
+        $days = Task::whereBetween('start', [now(), now()->addDays(300)])
+        //$days = Task::where('user_id', '=', \Auth::user()->id)
+        ->where('user_id', '=', \Auth::user()->id) 
+        ->orderBy('start')
+        ->get()
+        ->groupBy(function ($val) {
+            return Carbon::parse($val->start)->format('d');
+        });
+        
+        return response()
+               ->json([ 
+               'results' => $days,
+               //'filterAllLocations'=> $filterAllLocations,
+               //'filterAllStatuses'=> $filterAllStatuses,
+               ]);
+                
+        
     }
 	
 	

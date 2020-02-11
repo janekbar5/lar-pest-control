@@ -32,8 +32,41 @@ class UsersTableSeeder extends Seeder
                 'email_verified_at'=>'2019-09-17 00:00:00',
                 'work_phone'=>'123456789',
                 'leaves_day'=>'5',
-                'personal_phone'=>'987654321',
-                 
+                'personal_phone'=>'987654321',                 
+                ]);
+            App\User::create([
+                'status' => 1,
+                'name' => 'jan',
+                'last_name' => 'gmx',
+                'email' => 'janekbar3@gmx.com',
+                'password' => bcrypt('janekbar3@gmx.com'),
+                'email_verified_at'=>'2019-09-17 00:00:00',
+                'work_phone'=>'123456789',
+                'leaves_day'=>'5',
+                'personal_phone'=>'987654321',                 
+                ]);
+            App\User::create([
+                'status' => 1,
+                'name' => 'jan',
+                'last_name' => 'gmx',
+                'email' => 'janekbar4@gmx.com',
+                'password' => bcrypt('janekbar4@gmx.com'),
+                'email_verified_at'=>'2019-09-17 00:00:00',
+                'work_phone'=>'123456789',
+                'leaves_day'=>'5',
+                'personal_phone'=>'987654321',                 
+                ]);
+
+            App\User::create([
+                'status' => 1,
+                'name' => 'jan',
+                'last_name' => 'gmx',
+                'email' => 'janekbar5@gmx.com',
+                'password' => bcrypt('janekbar5@gmx.com'),
+                'email_verified_at'=>'2019-09-17 00:00:00',
+                'work_phone'=>'123456789',
+                'leaves_day'=>'5',
+                'personal_phone'=>'987654321',                 
                 ]);
 
 

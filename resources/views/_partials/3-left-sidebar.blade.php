@@ -55,6 +55,13 @@
             </router-link>
           </li>
           @endcan
+          
+          <li class="nav-item">
+            <router-link to="/usertasks" class="nav-link">
+              <i class="nav-icon fas fa-cogs orange"></i> <p>User Task </p>
+            </router-link>
+          </li>
+          
 
           <!-- @can('treatment-list') 
           <li class="nav-item">
