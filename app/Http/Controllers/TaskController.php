@@ -14,10 +14,10 @@ class TaskController extends Controller
     
      function __construct(ValidationRepository $vr, BackendRepositoryInterface $br, ImageController $im)
     {       
-        $this->middleware('permission:task-list');
+       /*  $this->middleware('permission:task-list');
         $this->middleware('permission:task-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:task-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:task-delete', ['only' => ['destroy']]); 
+        $this->middleware('permission:task-delete', ['only' => ['destroy']]);  */
 		//
 		//$this->middleware('permission:task-delete', ['only' => ['destroy']]);
 		
@@ -176,7 +176,7 @@ class TaskController extends Controller
 			
         ]);
     }
-	/**///////////////////////////////////////////////////////////////////////////////////////////// USERCALENDAR
+	/**///////////////////////////////////////////////////////////////////////////////////////////// FIELD USER CALENDAR
 	public function userCalendar()    {
         $userstasks = $this->br->getAllUsersTasks();
 		$statuses = array();
@@ -219,15 +219,47 @@ class TaskController extends Controller
             return Carbon::parse($val->start)->format('d-m');
         });  */ 
 
-        $days = Task::whereBetween('start', [now(), now()->addDays(300)])
+        /* $days = Task::whereBetween('start', [now(), now()->addDays(300)])
         //$days = Task::where('user_id', '=', \Auth::user()->id)
-        ->where('user_id', '=', \Auth::user()->id) 
-        ->orderBy('start')
+        //->orwhere('user_id', '=', \Auth::user()->id) 
+        ->orderBy('start','asc')
         ->get()
         ->groupBy(function ($val) {
             return Carbon::parse($val->start)->format('d');
-        });
-        
+        }); */
+		
+		
+		 
+		/* $days = Task::
+		with(['selectedUsers'])                        
+            ->whereHas('selectedUsers',function($query) {                
+            $query->where('user_id', '=', \Auth::user()->id);                    
+        })
+		->whereBetween('start', [now(), now()->addDays(30)])
+		->orderBy('start','asc')		 
+		->get(['status_id','title','start','end'])
+		//->get()
+		->groupBy(function($date) {
+			return Carbon::parse($date->start)->format('d-m-y'); // grouping by years			
+		});  */
+		
+		
+		$days = Task::with('locations')                   
+         ->whereHas('selectedUsers',function($query) {                
+            $query->where('user_id', '=', \Auth::user()->id);                    
+         })
+		->whereBetween('start', [now(), now()->addDays(60)])
+		->orderBy('start','asc')		 
+		//->get(['status_id','title','start','end'])
+		->get()		
+		->groupBy(function($date) {
+			return Carbon::parse($date->start)->format('d-m-y'); // grouping by years			
+		});  
+		
+		
+		
+		
+			
         return response()
                ->json([ 
                'results' => $days,

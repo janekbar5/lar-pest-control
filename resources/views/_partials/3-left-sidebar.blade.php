@@ -15,7 +15,11 @@
           alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{ Auth::user()->name }}</a>       
+        <a href="#" class="d-block">
+          @auth
+          {{ Auth::user()->name }}
+          @endauth
+        </a>       
 			
          
       </div>
@@ -56,12 +60,7 @@
           </li>
           @endcan
           
-          <li class="nav-item">
-            <router-link to="/usertasks" class="nav-link">
-              <i class="nav-icon fas fa-cogs orange"></i> <p>User Task </p>
-            </router-link>
-          </li>
-          
+                  
 
           <!-- @can('treatment-list') 
           <li class="nav-item">
@@ -168,16 +167,24 @@
         @endcan
 
 
-       
+        @role('Admin')
         <li class="nav-item">
             <router-link to="/globalsettings" class="nav-link">
               <i class="nav-icon fas fa-cog orange"></i> <p>Global settings </p>
             </router-link>
-          </li>
-       
+        </li>
+        @endrole
 
-        
 
+        @role('Field User')
+        <li class="nav-item">
+          <router-link to="/usertasks" class="nav-link">
+            <i class="nav-icon fas fa-cogs orange"></i> <p>My Task List</p>
+          </router-link>
+        </li>
+        @endrole
+
+         
         <li class="nav-item">
           <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
             <i class="nav-icon fas fa-power-off"></i>

@@ -37,6 +37,8 @@ class User extends Authenticatable implements Auditable, Searchable
     {        
         return $this->photos->first();	  
     }
+	    
+	
 	//////////////////////////////////////////Soft delete	
     protected $dates = ['deleted_at'];
 	////////////////////////////////////////////Multiple search models

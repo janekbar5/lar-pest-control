@@ -69,18 +69,17 @@
     </div>
   </footer>
 
-  <!-- Control Sidebar -->
+ 
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
+    
   </aside>
-  <!-- /.control-sidebar -->
+  
 </div>
-<!-- ./wrapper -->
+
  
 
- <!---->
-<script src="/js/app.js"></script> 
 
+<script src="/js/app.js"></script> 
 <script src="https://adminlte.io/themes/dev/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 
 

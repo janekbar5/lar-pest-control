@@ -3,20 +3,34 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+//
+use OwenIt\Auditing\Contracts\Auditable;
+//
 use Illuminate\Database\Eloquent\SoftDeletes;
+//
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
 
-class Task extends Model
+class Task extends Model implements Auditable, Searchable
 {
-    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;  //Audit Log
+	use SoftDeletes;
     
    
     
-    //////////////////////////////////////////
-    protected $dates = ['deleted_at'];    
+    //////////////////////////////////////////Soft delete	
+    protected $dates = ['deleted_at'];
+	////////////////////////////////////////////Multiple search models
+    public function getSearchResult(): SearchResult
+    {
+       $url = route('home.search', $this->id);         
+       return new SearchResult($this, $this->company_name, $url);
+    }
     //////////////////////////////////////////
     protected $appends = [
-        'color','firstPhoto','extendedProps','textColor',
+        //'color','firstPhoto','extendedProps','textColor',
+		'color','firstPhoto',
     ];
 	
     function getColorAttribute() {
@@ -26,16 +40,22 @@ class Task extends Model
     {        
         return $this->photos->first();	  
     }
-	function getextendedPropsAttribute()
+	
+	
+	
+	
+	/* function getextendedPropsAttribute()
     {        
         return [            
             'department' => 'BioChemistry',            
         ];	  
-    }
-	function gettextColorAttribute()
+    } */
+	
+	
+	/* function gettextColorAttribute()
     {        
         return '#ffffff';	  
-    }
+    } */
 
     
     protected $fillable = [

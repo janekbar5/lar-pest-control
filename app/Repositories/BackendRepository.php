@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client};
+use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client,History};
 use Spatie\Permission\Models\Role;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
 use DB;
@@ -88,11 +88,13 @@ class BackendRepository implements BackendRepositoryInterface
                    ->first(); 
     }
 	public function getAllUsersTasks(){ 
-		return	Task::with(['selectedUsers'])                        
+		   return Task::with(['selectedUsers'])                        
             ->whereHas('selectedUsers',function($query) {                
                  $query->where('user_id', '=', \Auth::user()->id);                    
             })            
-            ->get();
+            ->get(); 
+			
+			
     }
 	public function getAllUsersTasksByStatus($id){ 
 		return	Task::with(['selectedUsers'])                        
@@ -196,9 +198,12 @@ class BackendRepository implements BackendRepositoryInterface
       }
     /////////////////////////////////////////////////////////////////////////////////HISTORY   
     public function getHistory(){
-        return DB::table('audits')  
+        /* return DB::table('audits')  
                   ->orderBy('created_at', 'desc')                  
-                  ->paginate(10); 
+                  ->paginate(10);  */
+		return History::with('users')  
+                  ->orderBy('created_at', 'desc')                  
+                  ->paginate(10); 		  
     }   
     
     

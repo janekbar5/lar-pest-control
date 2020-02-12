@@ -3,7 +3,7 @@
 
         <div class="panel-heading">
             <div> 
-                <Buttons :editMode="editMode" ></Buttons>
+               
             </div>
         </div>
         <!-- <Filters v-on:childToParent="onChildLoad" ></Filters> -->
@@ -12,15 +12,15 @@
             <table class="table table-link">
                 <thead>
                     <tr>
-                        <th style="width: 5%">ID</th>    
-                        <th style="width: 10%">Photo</th>                   
+                        <th style="width: 100%">ID</th>    
+                        <!-- <th style="width: 10%">Photo</th>                   
                         <th style="width: 10%">Title</th>
                         <th style="width: 10%">Location</th>
                         <th style="width: 10%">Status</th>
                         <th style="width: 15%">Start</th>
                         <th style="width: 15%">End</th>
                         <th style="width: 10%">Users</th>
-                        <th style="width: 5%">Actions</th>                       
+                        <th style="width: 5%">Actions</th>                        -->
                        
                     </tr>
                     
@@ -32,10 +32,11 @@
 
                 <tbody>
                     <tr v-for="(item, index) in records" :key="item.data">
-                        {{ index }}
-                        <p v-for="day in item" :key="day.data">{{day.start}} {{day.title}} </p>
+                       <b> {{ index }} </b>
+
+                        <div style="width: 100%" v-for="day in item" :key="day.data">{{day.start}} {{day.title}} </div>
                         
-                       <td>{{item.id}}</td>
+                       
                        
 
                        <!-- <td>{{item.title}}</td>

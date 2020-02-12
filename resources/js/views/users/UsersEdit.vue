@@ -58,8 +58,7 @@
                                         :multiple="true" 
                                         :searchable="true" 
                                         :allow-empty="true"
-                                        :taggable="true" 
-                                        @tag="addTag2"
+                                        :taggable="true"                                        
                                         :class="{ 'is-invalid': errors.roles }"                          
                                         >
                                             <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong> </template>
@@ -90,7 +89,7 @@
                             </div>
                                     
                        </div> 
-                        
+                        {{apiUpdate}}
                         <div class="card-footer">
                             <div>                               
                                 <Buttons :editMode="editMode" ></Buttons>
@@ -168,7 +167,7 @@
                 this.apiCreate = settings.apiCreate
                 this.apiEdit = settings.apiEdit
                 this.apiUpdate = settings.apiUpdate
-                //console.log(settings)                
+                console.log(settings)                
             },
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
@@ -187,18 +186,17 @@
                 this.isMounted = true 
             },
          
-            addTag2 (newTag) {
-                const tag = {
-                    name: newTag,
-                    code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-                }
-                this.allroles.push(tag)
-                this.roles.push(tag)               
-            },
+            // addTag2 (newTag) {
+            //     const tag = {
+            //         name: newTag,
+            //         code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+            //     }
+            //     this.allroles.push(tag)
+            //     this.roles.push(tag)               
+            // },
             onSave() {
                 this.errors = {}
-                this.isProcessing = true                
-                byMethod('POST',this.$route.meta.mode === 'edit' ? this.apiUpdate+this.form.id : this.apiCreate , this.form)
+                byMethod('POST',this.$route.meta.mode === 'edit' ? '/v1/api/users/update/'+this.form.id : '/v1/api/users/create' , this.form)
                     .then((res) => {
                         if(res.data && res.data.saved) {
                             this.success(res)
@@ -218,9 +216,7 @@
                     })
             },
             success(res) {
-                //this.$router.push(this.urlList+'/'+res.data.id)
-                //console.log(this.urlList+'/'+res.data.id)
-                this.$router.push(this.urlList)
+                this.$router.push('/users')
                 
             },
             

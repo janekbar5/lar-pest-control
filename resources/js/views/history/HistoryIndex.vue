@@ -12,17 +12,15 @@
                 <thead>
                     <tr>
                         <th style="width: 1%">ID</th>
-                        <th style="width: 5%">user_type</th>
-                        <th style="width: 5%">user_id</th>
-                        <th style="width: 5%">event</th>                       
-                        <th style="width: 5%">auditable_type</th>                       
-                        <th style="width: 5%">auditable_id</th>
-                        <th style="width: 30%">OLD Values</th>
-                        <th style="width: 30%">New Values</th>
+                        <th style="width: 10%">User</th>    
+                        <th style="width: 5%">Action </th>                       
+                        <th style="width: 5%">Model</th>
+                        <th style="width: 5%">Old Val.</th>
+                        <th style="width: 30%">New Val.</th>
                         <!-- <th style="width: 5%">ip_address</th>
                         <th style="width: 5%">user_agent</th>                        -->
                         <th style="width: 5%">tags</th>                       
-                        <th style="width: 5%">created_at</th>
+                        
                         <th style="width: 5%">updated_at</th>
                     </tr>
                 </thead>
@@ -30,11 +28,10 @@
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data">
                         <td>{{item.id}}</td>                       
-                        <td>{{item.user_type}}</td>
-                        <td>{{item.user_id}}</td>
+                        <td>{{item.users.name}} {{item.users.last_name}}</td>                     
                         <td>{{item.event}}</td>   
                         <td>{{item.auditable_type}}</td>
-                        <td>{{item.auditable_id}}</td> 
+                        <!-- <td>{{item.auditable_id}}</td>  -->
                         <td>{{item.old_values}}</td> 
                          <td>{{item.new_values}}</td>  
                         <!-- <td>{{item.url}}</td> -->

@@ -3,7 +3,7 @@
 ---Treatment      ok              ok          ok 
 ---Location       ok              ok          ok 
 ---Clients        ok              ok          ok 
----
+---Task
 
 
 
@@ -27,6 +27,15 @@ Calendar
 Free Field User
 Calendar Show Field Users in Tasks
 Calendar popup users assign & save
+
+FILTERS
+https://github.com/spatie/vue-table-component/blob/master/README.md#props          
+https://rubanraj54.gitbook.io/vue-bootstrap4-table/installation
+https://rubanraj54.gitbook.io/vue-bootstrap4-table/
+
+
+
+
 
 
 

@@ -94,7 +94,33 @@ class UserController extends Controller
    }
     
     /**/////////////////////////////////////////////////////////////////////////////////////////////
-    
+	/**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH Users
+    public function searchUsers()
+    {
+        $results = User::orderBy('name')		    
+            ->when(request('q'), function($query) {
+                $query->where('name', 'like', '%'.request('q').'%')				        
+					  ->orWhere('last_name', 'like', '%'.request('q').'%')
+                      //->orWhere('email', 'like', '%'.request('q').'%')			  
+
+					  ;                   
+                    
+        })            
+        ->get();
+
+        return response()
+            ->json(['results' => $results]);
+    }
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////Filter users
+    public function filterUsers()
+    {     		
+		$users = User::with('roles')->get();
+		return response()
+               ->json([ 
+			   'results' => $users,			   
+			   ]);
+    }
 
     
 

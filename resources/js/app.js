@@ -92,6 +92,8 @@ import ClientsEdit from './views/clients/ClientsEdit'
 import HistoryIndex from './views/history/HistoryIndex'
 import GlobalSettingsIndex from './views/globalsettings/GlobalSettingsIndex'
 
+import FiltersIndex from './views/filters/FiltersIndex'
+
 //////////////////////////////////////////////// 2 routers
 let routes = [
 
@@ -144,6 +146,8 @@ let routes = [
     { path: '/clients/:id/edit', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'edit'} },
 
     { path: '/history', name: 'HistoryIndex', component: HistoryIndex, meta: {mode: 'list'} },  
+
+    { path: '/filters', name: 'FiltersIndex', component: FiltersIndex, meta: {mode: 'list'} },  
   
     
 

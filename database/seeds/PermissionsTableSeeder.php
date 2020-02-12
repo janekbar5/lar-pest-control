@@ -145,11 +145,11 @@ class PermissionsTableSeeder extends Seeder
 		
 		
         /////////////////////////////////////Desk User
-        DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 2]);
+        //DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 2]);
         DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 2]);
         DB::table('role_has_permissions')->insert(['permission_id' => 15,'role_id' => 2]);
         /////////////////////////////////////Field User
-		DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 3]);
+		//DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 3]);
         DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 3]);
         DB::table('role_has_permissions')->insert(['permission_id' => 15,'role_id' => 3]);
     }

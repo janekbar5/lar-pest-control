@@ -256,7 +256,7 @@ import {get, byMethod } from '../../lib/api'
             }else{
                this.disableUpload()
             }   
-            console.log('mounted-child')
+            //console.log('mounted-child')
             this.updatedPhotosList = this.photosList      
       }
     }
