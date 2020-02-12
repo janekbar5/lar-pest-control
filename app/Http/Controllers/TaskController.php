@@ -190,24 +190,7 @@ class TaskController extends Controller
            
         ]);
     }
-    /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
-    public function adminCalendar()    {
-        //$unassignedtasks = $this->br->getUnassignedTasks();
-        
-        /*f($request->input('location')){
-          $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
-        }else{
-          $assignedtasks = $this->br->getAssignedTasks();
-        } 
-        $alllocations = $this->br->getAllLocations(); */
-        $assignedtasks = $this->br->getAssignedTasks();
-        return response()->json([            
-            //'unassignedtasks' => $unassignedtasks,
-            'assignedtasks' => $assignedtasks,
-            //'alllocations' => $alllocations,
-            
-        ]);
-    }
+    
     
     public function indexFieldUser()
     {       

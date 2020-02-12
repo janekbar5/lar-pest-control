@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth']], function() {
 Route::get('v1/api/history/index', 'HistoryController@index');
 Route::get('/v1/api/home/searchbox', 'HomeController@searchBox')->name('home.search'); //list 
 Route::get('/v1/api/home/globalsettings', 'HomeController@globalsettings');
+Route::get('/v1/api/home/loadstatistics', 'HomeController@loadStatistics');
+Route::get('v1/api/home/admincalendar', 'HomeController@adminCalendar'); //list
 ///////////////////////////////////////////////////////////////////////////////////////////////////////USERS
 //Route::get('user/index', 'UserController@index');
 Route::get('v1/api/users/filterusers', 'UserController@filterUsers');
@@ -58,7 +60,6 @@ Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); /
 ///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
 Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list 
 Route::get('v1/api/tasks/usercalendar', 'TaskController@userCalendar'); //list
-Route::get('v1/api/tasks/admincalendar', 'TaskController@adminCalendar'); //list
 Route::get('v1/api/tasks/index', 'TaskController@index'); //list  
 Route::get('v1/api/tasks/indexfielduser', 'TaskController@indexFieldUser'); //list    
 Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit

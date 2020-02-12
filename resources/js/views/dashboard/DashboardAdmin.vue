@@ -10,7 +10,7 @@
            
             <div class="small-box">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{dueTasksCount}}</h3>
                 <p>Unassigned Due Tasks</p>
               </div>
               <div class="icon">
@@ -23,7 +23,7 @@
           <div class="col-lg-3 col-6">         
             <div class="small-box">
               <div class="inner">
-                <h3>53</h3>
+                <h3>0</h3>
                 <p>Tasks assigned but not done</p>
               </div>
               <div class="icon">
@@ -37,7 +37,7 @@
            
             <div class="small-box">
               <div class="inner">
-                <h3>44</h3>
+                <h3>0</h3>
                 <p>Total charges for today</p>
               </div>
               <div class="icon">
@@ -51,9 +51,9 @@
            
             <div class="small-box ">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{charges}}</h3>
 
-                <p>Total charges for today</p>
+                <p>Total charges</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -81,13 +81,14 @@
 									        	{{ location.title }} 
 									     	</option>                                       
                        </select> -->
-                          <button class="btn btn-danger" @click="prev">prev</button>
-                          <button class="btn btn-danger" @click="next">next</button>
-                          <button class="btn btn-danger" @click="today">today</button>
+                          <button class="btn btn-secondary" @click="prev"><< Prev</button>
+                          <button class="btn btn-secondary" @click="next">Next >></button>
+                          <button class="btn btn-secondary" @click="today">Today</button>                         
+                        
+                          <button class="btn btn-secondary" @click="changeView('month')">Month</button>
+                          <button class="btn btn-secondary" @click="changeView('agendaWeek')">Week</button>
+                          <button class="btn btn-secondary" @click="changeView('agendaDay')">Day</button>
                           
-                          <button class="btn btn-danger" @click="cal('month')">month</button>
-                          <button class="btn btn-danger" @click="cal('week')">week</button>
-                          <button class="btn btn-danger" @click="cal('day')">day</button>
                       </div>
 
                        
@@ -99,7 +100,11 @@
 
                         <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
                         <full-calendar 
-                        
+                        :header="{
+                            left:'',
+                            center: 'title',
+                            right: '',
+                          }"
                         :config="config" 
                         :events="events"                        
                         @day-click="dayClick" 
@@ -184,100 +189,26 @@ export default {
         //allDayText: "All Day Events",        
         allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
-        eventRender(event, element) {                 
-            //event.selected_users.forEach(function (item) {
-                      element.find('.fc-content').append(' <i class="delete fas fa-trash-alt"></i> <span class="description"></span>');                      
-            //});   
-            element.find(".delete").click(function() {
-            //console.log(event._id)                    
-            $('#calendar').fullCalendar('removeEvents', event._id);
-                        // swal.fire({
-                        //     title: 'Weet je het zeker?',
-                        //     text: "Je staat op het punt dit item te verwijderen",
-                        //     type: 'warning',
-                        //     showCancelButton: true,
-                        //     confirmButtonColor: '#3085d6',
-                        //     cancelButtonColor: '#d33',
-                        //     confirmButtonText: 'Ja, verwijderen'
-                        //     }).then((result) => {
-                        //         if (result.value) {
-                        //             console.log(event._id)
-                        //             $('#calendar').fullCalendar('removeEvents', event._id);
-
-                        //             axios.delete('/agenda_items/'+ event.id)
-                        //             swal.fire(
-                        //             'Verwijderd!',
-                        //             'De afspraak is verwijderd.',
-                        //             'success'
-                        //             )
-                        //         }
-                        //     })
-                    });
-         },
-        //////////////////////////////////////////////////////////////////////
-        //drop(calEvent, jsEvent, view) {
-        //drop(date, jsEvent, view) {  
-        // drop22(info) {
-        //             // remove the element from the "Draggable Events" list
-        //             $(this).remove();
-        //             console.log($(this))
-        //             //this.collapse()
-        // },
-       // drop(date,jsEvent) {
-        drop(date, jsEvent, resource){   
-          // is the "remove after drop" checkbox checked?
-          if ($("#drop-remove").is(":checked")) {            
-            $(this).remove();    
-            $("#addNew").modal("show")  
-            $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-            $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
-            $('#itemid').val($(this).attr("id")); 
-            $('#title').val($(this).html()); 
-            this.start = date.format('YYYY-MM-DD hh:mm') 
-            //var itemid = $(this).attr("id")  
-              // console.log('Clicked on: ' + date.format());
-              // console.log('Coordinates: ' + jsEvent);
-              // console.log('Current text: ' + $(this).text());
-              // console.log('Current html: ' + $(this).html());         
-          }           
-        },
-         eventDrop() {
-         alert('eventDrop')
-           console.log(event)
-        },
-       
-        //////////////////////////////////////////////////////////////////////
-        //eventDragStop: function(event, jsEvent, ui, view) {
-        eventDragStop: function(event, jsEvent) {  
-          if ($this.isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-            $("#calendar").fullCalendar("removeEvents", event._id);
-            var el = $("<div class='fc-event'>")
-              .appendTo("#external-events-listing")
-              .text(event.title);
-            el.draggable({
-              zIndex: 999,
-              revert: true,
-              revertDuration: 0
-            });
-            el.data("event", { title: event.title, id: event.id, stick: true });
-          }
-        },
-        //////////////////////////////////////////////////////////////////////
-        
-      },
-        
+      },        
       //////////config
+        start:'',
+        end:'',
+        dueTasksCount:'',
+        charges:'',
     };
   },
   //data
  
 
   created() { 
-    this.loadCalendar()
+    //this.loadCalendar()
     
     //console.log(this.externalVar); 
   },
-  mounted() {   
+  mounted() { 
+      this.setStartEnd()
+      this.loadStatistics()
+      this.loadCalendar()
   },
   //
   methods: {
@@ -286,27 +217,27 @@ export default {
       console.log('today'); 
     },  
     next() {
-      this.$refs.calendar.fireMethod('next')      
-      //let calendarApi = this.$refs.calendar.getApi() 
-      //console.log(calendar)
-      //console.log(this.$refs.calendar.currentDate) 
-      //console.log(this.$refs.calendar.fireMethod('currentDate')) 
-      console.log(this.$refs.calendar.fireMethod('getView').start.format('YYYY-MM-DD'))
-      console.log(this.$refs.calendar.fireMethod('getView').end.format('YYYY-MM-DD')) 
-      //console.log(this.$refs.calendar.getView())   
-        
+      this.$refs.calendar.fireMethod('next') 
+      this.setStartEnd()
+      this.loadStatistics()
+      this.loadCalendar()  
     },
     prev() {
       this.$refs.calendar.fireMethod('prev')
-      console.log('prev'); 
+      this.setStartEnd()
+      this.loadStatistics()
+      this.loadCalendar()  
     },   
-    changeView(view) {
-      this.$refs.calendar.fireMethod('changeView', view)
-      console.log('next');
+    setStartEnd() {
+      this.start = this.$refs.calendar.fireMethod('getView').start.format('YYYY-MM-DD')
+      this.end = this.$refs.calendar.fireMethod('getView').end.add(-1, 'd').format('YYYY-MM-DD')
+        //moment().add(-1, 'd')
     },
-    cal(cos){
-      this.$refs.calendar.fireMethod(cos)
-      console.log('var');
+    changeView(view){
+      this.$refs.calendar.fireMethod('changeView', view)
+      this.setStartEnd() 
+      this.loadStatistics()
+      this.loadCalendar()  
     },  
     scrollTime(){
       console.log('scrollTime');
@@ -314,65 +245,39 @@ export default {
     changeMonth(start, end, currentMonthStartDate) {
       console.log(currentMonthStartDate); // the start date of the current month after changing month by clicking the '<'(previous) or '>'(next) button
     },
-
- 
-    hideModal(per){
-      $("#addNew").modal("hide")
-      $('#calendar').fullCalendar('removeEvents', per.itemid)     
-      this.unassignedtasks.push({
-        title: per.content,
-        start: '2015-11-20T08:30:00',
-        end: '2015-11-20T08:30:00',
-        statuses:'',
-        color: '#C2185B',
-        locations:'',
-      });
+    loadStatistics(){
+      axios.get('/v1/api/home/loadstatistics?start='+this.start+'&end='+this.end).then((res) => {
+      if(res.data) {       
+          this.setStats(res)
+      }})
+      .catch((error) => {
+        if(error.response.status === 422) {
+          this.errors = error.response.data.errors
+        }      
+    })
     },
     loadCalendar(){
-      axios.get('/v1/api/tasks/admincalendar').then((res) => {
+      axios.get('/v1/api/home/admincalendar?start='+this.start+'&end='+this.end).then((res) => {
       if(res.data) {       
           this.setData(res)
       }})
       .catch((error) => {
         if(error.response.status === 422) {
           this.errors = error.response.data.errors
-        }
-       this.isProcessing = false
+        }       
     })
     },    
     dayClick(date, jsEvent, view){ 
-
-    //     axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
-    //     if(res.data) {       
-    //         this.setTasksByDate(res,date)
-    //     }})
-    //     .catch((error) => {
-    //       if(error.response.status === 422) {
-    //         this.errors = error.response.data.errors
-    //       }
-    //     this.isProcessing = false
-    //   })   
-              //console.log('Day Clicked on : ' + calEvent.id);
-              // console.log('Clicked on: ' + date.format());
-              // console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-              // console.log('Current view: ' + view.name);
     },
     setData(res) { 
       this.unassignedtasks = res.data.unassignedtasks
       this.events = res.data.assignedtasks              
       this.locations = res.data.alllocations
     },
-    setTasksByDate(res,date) { 
-      this.tasksbydate = res.data.tasksbydate 
-      this.tasksbydate_date = date.format() 
-      this.freefieldusers = res.data.freefieldusers     
-    },      
-    
-    
-
-
-
-
+    setStats(res) { 
+      this.dueTasksCount = res.data.dueTasksCount 
+      this.charges = res.data.charges   
+    },  
     eventClick(calEvent, jsEvent, view) {
            var dt = calEvent.start;
            alert('Event Clicked on : ' + calEvent.id);
@@ -382,61 +287,10 @@ export default {
     },   
     callModal() {        
       $("#addNew").modal("show")
-    }, 
-    /*filterLocation() {        
-        axios    
-            .get('/v1/api/tasks/calendar?'+'location='+this.location)
-            .then((res) => {
-            this.events = res.data.assignedtasks
-            //this.locationdata = this.location   
-            })
-            .catch(error => {				
-			this.errored = true
-			})
-			.finally(() => this.loading = false)	
-    }, 
-*/
-      
+    },   
     handleDateClick(arg) {
       alert(arg.date)
-    },
-    isEventOverDiv(x, y) {
-      console.log(x, y)
-      // var external_events = $("#external-events");
-      // var offset = external_events.offset();
-      // offset.right = external_events.width() + offset.left;
-      // offset.bottom = external_events.height() + offset.top;
-
-      // // Compare
-      // if (
-      //   x >= offset.left &&
-      //   y >= offset.top &&
-      //   x <= offset.right &&
-      //   y <= offset.bottom
-      // ) {
-      //   return true;
-      // }
-      // return false;
-    },
-    getNotifications() {
-      //alert('fff')
-      $("#external-events-listing .fc-event").each(function() {
-        //console.log($(this).attr('id'))
-      // store data so the calendar knows to render an event upon drop
-      $(this).data("event", {
-        id:$(this).attr('id'),        
-        title: $.trim($(this).text()), // use the element's text as the event title
-        stick: true // maintain when user navigates (see docs on the renderEvent method)
-      });
-      // make the event draggable using jQuery UI
-      $(this).draggable({
-        zIndex: 999,
-        revert: true, // will cause the event to go back to its
-        revertDuration: 0 //  original position after the drag
-      });
-    });
-
-    },
+    },  
   },
 
   

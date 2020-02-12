@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //
 use Spatie\Searchable\Search;
-use App\{User,Treatment,Location,Client};
+use App\{User,Treatment,Location,Client,Task};
 
 use App\Repositories\ValidationRepository;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
-
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -54,8 +54,39 @@ class HomeController extends Controller
 			->registerModel(Client::class, ['company_name','person_name','email','contract_number','vat_number',])	
 			->search($input);  
 		}	
-		
 		return response()->json(['results' => $results]);
 			
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////////Load statistics
+    public function loadStatistics()
+    {        		
+		$dueTasks = Task::where('start', '>=', request('start'))
+                           ->where('end', '<', request('end'))
+                           ->get();	
+       /* $dueTasks = Task::
+        				whereDate('start', '>=', Carbon::parse(request('start'))->toDateString())
+        				->orwhereDate('end', '<=', Carbon::parse(request('end'))->toDateString())
+        				->get();*/
+
+		return response()->json([
+			'dueTasksCount' => $dueTasks->count(),
+			'dueTasks' => $dueTasks,
+			'charges' => $dueTasks->sum("price"),
+		]);			
+    }
+    /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
+    public function adminCalendar()    {       
+        //$assignedtasks = $this->br->getAssignedTasks();
+        $assignedtasks =  Task::where('start', '>=', request('start'))
+                  ->where('end', '<', request('end'))
+                  ->with('locations')
+                  ->with('statuses')
+                  //->with('selectedUsers')  //display users array
+                  //->has('selectedUsers')   //only act as filter   
+                  ->get(); 
+        return response()->json([  
+            'assignedtasks' => $assignedtasks, 
+        ]);
+    }
+    
 }
