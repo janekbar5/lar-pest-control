@@ -77,6 +77,8 @@ class Task extends Model implements Auditable, Searchable
     {
         return $this->belongsToMany(User::class, 'task_user', 'task_id', 'user_id');
     }
+	
+	
     ////////////////////////////////////////////////////////////////belongsTo
     // Task-->belongsTo-->Location   <==>  Location-->hasMany-->Task
     public function locations()

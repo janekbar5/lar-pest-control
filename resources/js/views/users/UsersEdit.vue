@@ -89,7 +89,8 @@
                             </div>
                                     
                        </div> 
-                        {{apiUpdate}}
+                        ...{{apiUpdate}}
+
                         <div class="card-footer">
                             <div>                               
                                 <Buttons :editMode="editMode" ></Buttons>

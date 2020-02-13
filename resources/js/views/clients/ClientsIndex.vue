@@ -1,71 +1,26 @@
 <template>
-    <div class="panel">
-        <div class="panel-heading">
-            <div>   
-                <Buttons :editMode="editMode" ></Buttons>
-            </div>
-        </div>
-       
-        <div class="panel-body">
-            <table class="table table-link">
-                <thead>
-                    <tr>
-                        <th style="width: 2%">ID</th>                       
-                        <th style="width: 20%">Company Name</th>
-                        <th style="width: 20%">Location</th> 
-                        <th style="width: 10%">Contract</th>
-                        <th style="width: 10%">Vat </th> 
-                        <th style="width: 10%">Reccurence</th> 
-                        <th style="width: 10%">Active</th>
-                        <th style="width: 10%">Start</th>
-                        <th style="width: 10%">End</th> 
-                        <th style="width: 10%">Email</th> 
-                       
-                      
+    <div>
+        <Buttons :editMode="editMode" style="display:none"></Buttons>
+  
+      <vue-bootstrap4-table 
+      :rows="rows"
+      :columns="columns"
+      :config="config"
+      :actions="actions"
+      @on-download="newRecord"                               
+      >
 
-                                       
-                       
-                    </tr>
-                </thead>
+        <template slot="photo" slot-scope="props">
+              <img v-if="(props.cell_value) == null" :src="'https://dummyimage.com/60x50/807c80/fff'" style="width:60px;height:50px">
+              <img v-else :src="'images/thumb_medium-' + props.cell_value" style="width:60px;height:50px">
+       </template>
 
-                <tbody>
-                    <tr v-for="item in model.data" :key="item.data">
-                        <td>{{item.id}}</td> 
-                        <td>{{item.company_name}}</td>
-                        <td><span class="badge bg-secondary" v-for="location in item.locations" style="font-size:10px">{{location.title}} </span> </td>                          
-                        <td>{{item.contract_number}}</td>                     
-                        <td>{{item.vat_number}}</td>
-                        <td>recuurence</td>
-                        <td>active</td>
-                        <td>{{item.contract_start}}</td>
-                        <td>{{item.contract_end}}</td>
-                        
-                        
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-success" @click="modelView(item)"> View</button>
-                                <button type="button" class="btn btn-info" @click="modelEdit(item)">Edit</button>
-                                <button type="button" class="btn btn-danger" @click="modelDelete(item)">Delete</button>
-                            </div>
+        <template slot="actions" slot-scope="props"> 
+            <i aria-hidden="true" class="fa fa-pen" @click="recordEdit(props.cell_value)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
+            <i aria-hidden="true" class="fa fa-trash" @click="recordDelete(props.cell_value)"></i>     
+       </template>
 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="panel-footer flex-between">
-            <div>
-                <small>Showing {{model.from}} - {{model.to}} of {{model.total}}</small>
-            </div>
-            <div>
-                <button class="btn btn-sm" :disabled="!model.prev_page_url" @click="prevPage">
-                    Prev
-                </button>
-                <button class="btn btn-sm" :disabled="!model.next_page_url" @click="nextPage">
-                    Next
-                </button>
-            </div>
-        </div>
+        </vue-bootstrap4-table>
     </div>
 </template>
 
@@ -73,17 +28,49 @@
 <script type="text/javascript">
 import Vue from 'vue'
 import { get, byMethod } from '../../lib/api'
-import {isEmpty} from "lodash"
+// import {isEmpty} from "lodash"
 import Buttons from './Buttons'
+// import {Typeahead } from '../../components/typeahead'
+import VueBootstrap4Table from 'vue-bootstrap4-table'
 
 export default {
-    components: { Buttons },
+    components: { VueBootstrap4Table, Buttons },
 data () {
 return {
-    url:'',
-    settings: {},
+    rows: [],
+                columns: [
+                        {label: "id", name: "id",},
+                        {label: "Photo",name: "photos[0].path",slot_name: "photo"},
+                        {label: "Company", name: "company_name",filter: {type: "simple",placeholder: "Company"},sort: true,},
+                        {label: "Location",name: "locations[0].title",filter: {type: "simple",placeholder: "Location"},sort: true,},
+                        {label: "Contract", name: "contract_number",filter: {type: "simple",placeholder: "Contract"},sort: true,},
+                        {label: "VAT", name: "vat_number",filter: {type: "simple",placeholder: "VAT"},sort: true,},
+                        {label: "Start", name: "contract_start",filter: {type: "simple",placeholder: "Start"},sort: true,},
+                        {label: "End", name: "contract_end",filter: {type: "simple",placeholder: "End"},sort: true,},
+                                                
+                        {label: "Actions",name: "id",slot_name: "actions"}, 
+                   ],
+                   actions: [
+                    {
+                        btn_text: "New Client",
+                        event_name: "on-download",
+                        class: "btn btn-secondary",
+                        event_payload: {
+                            msg: "my custom msg"
+                        }
+                    }
+                   ],                    
+                    config: {
+                        checkbox_rows: false,
+                        rows_selectable: true,
+                        card_title: "Clients"
+                    },
+    ////
+    // url:'',
+    // settings: {},
     urlList: '',
     urlEdit: '',
+    urlCreate:'',
     apiList: '',
     //    
     editMode: this.$route.meta.mode,
@@ -91,87 +78,59 @@ return {
         // urlList:'',
         // data: []
     },
+    dataUser:'/v1/api/users/searchusers',
+    perpage:10,
+    //
+
     
 }
 },
-//
-beforeRouteEnter(to, from, next) {    
-    get('/v1/api'+to.path+'/index', to.query)
-        .then((res) => {
-            next(vm => vm.setData(res))
-        })
-},
-//
-beforeRouteUpdate(to, from, next) {
-    get('/v1/api'+to.path+'/index', to.query)
-        .then((res) => {
-            this.setData(res)
-            next()
-    })
-},
-//
 created() {
     this.$eventHub.$on('settings', this.modelSettings) 
 },
 beforeDestroy(){
-    //this.$eventHub.$off('settings');
+    this.$eventHub.$off('settings');
 },
 //
+mounted() {   
+    this.onFilter() 
+},          
 methods: {
     modelSettings(settings){
         //return name
         this.settings = settings;
         this.urlList = settings.urlList
         this.urlEdit = settings.urlEdit
+        this.urlCreate = settings.urlCreate
         //
         this.apiList = settings.apiList
         this.apiDelete = settings.apiDelete
         //console.log(settings)  
     },
-    modelView(item) {        
-        this.$router.push(this.urlList+'/'+item.id)
+    newRecord(){
+       this.$router.push(this.urlCreate) 
     },
-    modelEdit(item) {
-        this.$router.push(this.urlList+'/'+item.id+'/edit')
-    },
-    setData(res) {
-        Vue.set(this.$data, 'model', res.data.results)
-        this.page = this.model.current_page
-        //this.$bar.finish()
-    },
-    nextPage() {
-        if(this.model.next_page_url) {
-            //console.log(this.model.next_page_url)
-            const query = Object.assign({}, this.$route.query)
-            query.page = query.page ? (Number(query.page) + 1) : 2
-
-            this.$router.push({
-                path: this.urlList,
-                query: query
+   
+    recordEdit(item) {        
+        this.$router.push(this.urlList+'/'+item+'/edit')
+    },   
+    onFilter() {      
+         axios    
+            .get(this.apiList)
+                .then((res) => {
+                    this.setData(res)                   
             })
-        }
-    },
-    prevPage () {
-        if(this.model.prev_page_url) {
-            const query = Object.assign({}, this.$route.query)
-            query.page = query.page ? (Number(query.page) - 1) : 1
-
-            this.$router.push({
-                path: this.urlList,
-                query: query
-            })
-        }
-    },
-    checkThis(cos) {
-    return photo
-    },
-    getApi(url){
-        get(url)
-        .then((res) => {
-            this.setData(res)                   
-        })
-    },
-    modelDelete(item){
+            .catch(error => {				
+					this.errored = true
+					})
+			.finally(() => this.loading = false)                   
+        },
+        setData(res) {            
+            this.rows = res.data.results
+            //this.$bar.finish()
+        },
+    
+    recordDelete(item){
         swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -183,13 +142,19 @@ methods: {
         }).then((result) => {
         // Send request to the server
         if (result.value) {
-            byMethod('delete',  this.apiDelete+item.id).then(()=>{
+            byMethod('delete',  this.apiDelete+item).then(()=>{
             swal.fire('Deleted!','Your file has been deleted.','success')
-            this.getApi(this.apiList+'?page='+this.page)                                         
+            this.getApi(this.apiList)     //refresh list after delete                                    
         }).catch(()=> {
             swal.fire("Failed!", "There was something wronge.", "warning");
             });
         }
+        })
+    },
+    getApi(url){
+        get(url)
+        .then((res) => {
+            this.setData(res)                   
         })
     },
 
@@ -198,3 +163,23 @@ methods: {
     }
 }
 </script>
+<style>
+/* .fa-pen:hover {
+    color: red;
+} */
+.fa-trash:hover,.fa-pen:hover {
+    color: red;
+    cursor:pointer;
+}
+.table-active {
+    background-color:white;    
+}
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
+color: #fff;
+background-color:grey;
+border-color:grey;
+}
+.page-item.active .page-link {
+    background-color:grey; 
+}   
+</style>

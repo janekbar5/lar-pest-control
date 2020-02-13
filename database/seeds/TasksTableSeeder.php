@@ -48,15 +48,15 @@ class TasksTableSeeder extends Seeder
                     
                 ]);
         endfor; 
-         for($i=1; $i<=100; $i++):           
+		
+         /* for($i=1; $i<=100; $i++):           
                 DB::table('task_user')
                     ->insert([
                         'task_id' => $i,
                         'user_id' => 4,
-                        /*'task_id' => $i,
-                        'user_id' => $i,*/
+                       
                     ]);
-        endfor;        
+        endfor;    */     
 
 
 		////////////////////////////////////////////////////////////////////////////////////////user 1
@@ -81,15 +81,13 @@ class TasksTableSeeder extends Seeder
                 ]);
         endfor;     
 
-        for($i=5; $i<=100; $i++):           
+        /* for($i=5; $i<=100; $i++):           
                 DB::table('task_user')
-                    ->insert([
-                        //'task_id' => $faker->numberBetween($min = 1, $max = 100),
-                        //'user_id' => $faker->numberBetween($min = 1, $max = 20),
+                    ->insert([                        
 						'task_id' => $i,
                         'user_id' => $i,
                     ]);
-        endfor;     
+        endfor;   */   
             
 
            

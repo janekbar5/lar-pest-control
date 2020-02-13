@@ -6,8 +6,7 @@
 </template>
 
 <script>
-import AdminCalendar from './AdminCalendar.vue'
-//import AdminCalendar from './FullCalendar2.vue'
+import AdminCalendar from './AdminCalendarDD.vue'
 
 export default {
   components: { AdminCalendar },

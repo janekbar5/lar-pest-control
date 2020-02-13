@@ -39,11 +39,13 @@ class CreateTasksTable extends Migration
         Schema::create('task_user', function (Blueprint $table) {			
             //$table->increments('id');	if on error	Multiple primary key defined
             $table->integer('task_id')->unsigned(); //unsigned only positive val
-            //$table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
             $table->primary(['task_id','user_id']); //prevent repeating (1,1  1,2  1,3  1,1)			
             $table->integer('user_id')->unsigned();											
-            //$table->foreign('treatment_id')->references('id')->on('treatments')->onDelete('cascade');  
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  
             $table->timestamps();
+			
+
         });
         
     }

@@ -64,7 +64,9 @@ class ValidationRepository
      {        
          $rules = array(
             'title' => 'required',
-            'description' => 'required',          
+            'description' => 'required',
+			'surface' => 'required|numeric',
+			'client_id' => 'required',
          );        
          return $rules;
      }

@@ -1,0 +1,593 @@
+<template>
+  <div>
+      
+      <div class="row">
+                
+               <div class="col-md-3">
+
+                   <div id='external-events'>
+                    <div id='external-events-listing' @mouseover="getNotifications">
+                        <h4> Unassigned Tasks </h4> 
+                       <!-- v-show="per.selected_users.length === 0"-->
+                    <div 
+                    :data-title="per.title"
+                    :data-price="per.price" 
+                    :data-status_id="per.status_id"  
+                    v-bind:style="{ 'background-color': per.statuses.colour }" 
+                    class="fc-event" v-for="(per, idx) in unassignedtasks" 
+                    v-bind:key="idx" v-bind:id="per.id">
+
+                    {{ per.title }} 
+                    <!-- {{ per.locations.title }} {{ per.selected_users }} -->
+                    </div>
+                    </div>
+                      
+                      <p style="display:none">
+                        <input type='checkbox' id='drop-remove' checked='checked' />
+                        <label for='drop-remove'>remove after drop</label>
+                      </p>
+                    </div>
+<!------------------------------------DATTASKS--------------------------------------------->  
+                    <!-- DIRECT CHAT -->
+                    <div class="card direct-chat direct-chat-warning" v-show="tasksbydate.length > 0">
+                      <div class="card-header">
+                        <h3 class="card-title">Tasks for {{ tasksbydate_date }}</h3>
+                        <div class="card-tools">                     
+                        </div>
+                      </div>
+                    
+                      <div class="card-body">                
+                        <div class="direct-chat-messages">                      
+                          <div class="direct-chat-msg" v-for="(task, idx) in tasksbydate" v-bind:key="idx" v-bind:id="task.id">                  
+
+                          <div class="row">
+                            <div  class="col-md-12">
+                              <div class="direct-chat-text">
+                                  {{task.title}}                            
+                                </div>
+                                <span class="direct-chat-timestamp float-left">Start {{task.start | formatDate}} End {{task.end | formatDate }}</span>
+                            </div>          
+                              <div  class="col-md-4" v-for="(user, idx) in task.selected_users" v-bind:key="idx" v-bind:id="user.id">
+                                <div class="direct-chat-infos clearfix">
+                                  <span class="direct-chat-name float-left">{{user.name}} {{user.last_name}}</span>                          
+                                </div>                           
+                                <img v-if="user.firstPhoto == null" :src="'https://dummyimage.com/40x30/807c80/fff'" style="width:40px;height:30px">
+                                <img v-else :src="'images/thumb_medium-' + user.firstPhoto.path" style="width:40px;height:30px" class="direct-chat-img">
+                                
+                            </div>                    
+                          </div> 
+                          </div>
+                        </div>                    
+                      </div>
+                    
+                      <div class="card-footer">                   
+                      </div>                    
+                    </div>   
+
+
+                    <div class="card direct-chat direct-chat-warning" v-show="freefieldusers.length > 0">
+                     <h3 class="card-title">Available users</h3></br>
+                     <div class="direct-chat-msg" v-for="(user, idx) in freefieldusers" v-bind:key="idx" v-bind:id="user.id">
+                      {{user.name}}  {{user.last_name}}
+                    </div>  
+                    </div>            
+  <!------------------------------------DATTASKS--------------------------------------------->              
+               </div>  
+
+
+            
+                 
+               
+              <div class="col-md-9">                 
+                
+                    <div class="card">
+                      <div class="card-header">
+                        <!-- <h3 class="card-title">Bordered Table</h3> -->
+                      </div>
+                      
+                      <div class="card-body">                  
+                      <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                    <!-- tasksbydate {{ tasksbydate }}</br> -->
+                    <!-- <button class="btn btn-danger" @click="push">push</button> -->
+                      
+                    <!-- events {{ events }} -->
+                    <!-- <div v-for="(un, index) in unassignedtasks" :key="index">{{un.title}} </div> -->
+                    
+
+                      <select @change="filterLocation()" v-model="location" class="form-control">
+                        <option value="" selected>All Locations</option>
+                         <option :value="location.id" v-for="(location, index) in locations" :key="index">
+									        	{{ location.title }} 
+									     	</option>                                       
+                       </select>
+                      </div>
+
+                      
+                        <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
+                        <full-calendar id="calendar" 
+                        :config="config" 
+                        :events="events"                        
+                        @day-click="dayClick"                        
+                         /> 
+                        <!-- 
+                        @event-selected="eventClick"       
+                        @event-drop="eventDrop"
+                        @drop="eventDrop"
+                         -->                     
+                      <div class="card-footer clearfix">
+                     
+                      </div>
+                    </div>
+              </div>   
+                   
+        </div>
+      
+
+
+
+        <!-- <Modal :freefieldusers="freefieldusers" />  -->
+        <!----------------------- Modal statusesModal------------------------------------>
+            <div class="modal fade" id="assignTaskToUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true" @mouseover="getValues">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <h5 class="modal-title"  id="addNewLabel">Update Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form @submit.prevent="updateAssignment()">
+                <div class="modal-body">
+                     
+                    <div class="form-group">
+                        <input v-model="form.start" type="text" name="start" id="start" ref="start"
+                            placeholder="start"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('start') }">
+                        <has-error :form="form" field="start"></has-error>
+                    </div>
+                    <div class="form-group">
+                        <input v-model="form.end" type="text" name="end" id="end" ref="end"
+                            placeholder="end"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('end') }">
+                        <has-error :form="form" field="end"></has-error>
+                    </div>
+
+                     <div class="form-group">
+                        <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
+                            placeholder="itemid"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('itemid') }">
+                        <has-error :form="form" field="itemid"></has-error>
+                    </div>
+
+                    <div class="form-group">
+                        <input v-model="form.title" type="text" name="title" id="title" ref="title"
+                            placeholder="title"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }">
+                        <has-error :form="form" field="title"></has-error>
+                    </div>
+                    <div class="form-group">
+                        <input v-model="form.price" type="text" name="price" id="price" ref="price"
+                            placeholder="price"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('price') }">
+                        <has-error :form="form" field="price"></has-error>
+                    </div>
+                    <div class="form-group">
+                        <input v-model="form.status_id" type="text" name="status_id" id="status_id" ref="status_id"
+                            placeholder="status_id"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('status_id') }">
+                        <has-error :form="form" field="status_id"></has-error>
+                    </div>
+
+
+                      <multiselect 
+                    v-model="form.selected_users" 
+                    :options="freefieldusers"
+                    :custom-label="nameWithNameLastName"                                                                                         
+                    placeholder="Select users"
+                    :multiple="true"                                            
+                    label="name" 
+                    track-by="name">
+                    </multiselect>
+
+                    <!-- <input type="text" id="start" value="" ref="start"></br>
+                                             <input type="text" id="end" value="" ref="end"></br>
+                                             <input type="text" id="itemid" value="" ref="itemid"></br>
+                                             <input type="text" id="title" value="" ref="title"></br> 
+
+                                              <input type="text" id="price" value="" ref="price"></br> 
+                                              <input type="text" id="location_id" value="" ref="location_id"></br> 
+                                              <input type="text" id="status_id" value="" ref="status_id"></br>  -->
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button  type="submit" class="btn btn-success">Update</button>
+                    
+                </div>
+
+                </form>
+
+                </div>
+            </div>
+            </div> 
+              <!----------------------- Modal end statusesModal------------------------------------>
+
+
+
+   </div>     
+ 
+</template>
+
+<script>
+
+import moment from "moment"
+import "jquery-ui-bundle"
+import $ from 'jquery'
+// import Modal from './Modal.vue'    
+import Multiselect from 'vue-multiselect'
+
+export default {
+  name: "hello",
+  components: { Multiselect },  
+  data() {
+    var $this = this;
+    return {
+      //isModalMounted: false,
+      unassignedtasks:[],
+      value:'',
+      events: [],
+      location:'',
+      //location2:'',  
+      locations:[],
+      locationdata:[],
+      variableToPass:'',
+      //
+      tasksbydate:[], 
+      tasksbydate_date:'',
+      freefieldusers:[],
+      //
+      //start:'',     
+      config: {          
+        //defaultView: "agendaWeek",
+        defaultView: "month",
+        editable: true,
+        droppable: true,
+        eventLimit: true,
+        nowIndicator: true,
+        slotDuration: "01:00:00",
+        slotLabelInterval: "01:00:00",
+        height: "auto",
+        contentHeight: "auto",
+        slotLabelFormat: "LT",
+        allDayText: "All Day Events",        
+        //allDaySlot: false,
+        //////////////////////////////////////////////////////////////////////
+        eventRender(event, element) {                 
+            //event.selected_users.forEach(function (item) {
+                      element.find('.fc-content').append(' <i class="delete fas fa-trash-alt"></i> <span class="description"></span>');                      
+            //});   
+            element.find(".delete").click(function() {
+            //console.log(event._id)                    
+            $('#calendar').fullCalendar('removeEvents', event._id);
+                        // swal.fire({
+                        //     title: 'Weet je het zeker?',
+                        //     text: "Je staat op het punt dit item te verwijderen",
+                        //     type: 'warning',
+                        //     showCancelButton: true,
+                        //     confirmButtonColor: '#3085d6',
+                        //     cancelButtonColor: '#d33',
+                        //     confirmButtonText: 'Ja, verwijderen'
+                        //     }).then((result) => {
+                        //         if (result.value) {
+                        //             console.log(event._id)
+                        //             $('#calendar').fullCalendar('removeEvents', event._id);
+
+                        //             axios.delete('/agenda_items/'+ event.id)
+                        //             swal.fire(
+                        //             'Verwijderd!',
+                        //             'De afspraak is verwijderd.',
+                        //             'success'
+                        //             )
+                        //         }
+                        //     })
+                    });
+         },
+        //////////////////////////////////////////////////////////////////////
+        //drop(calEvent, jsEvent, view) {
+        //drop(date, jsEvent, view) {  
+        // drop22(info) {
+        //             // remove the element from the "Draggable Events" list
+        //             $(this).remove();
+        //             console.log($(this))
+        //             //this.collapse()
+        // },
+       // drop(date,jsEvent) {
+        drop(date, jsEvent, resource){   
+          // is the "remove after drop" checkbox checked?
+          if ($("#drop-remove").is(":checked")) {            
+            $(this).remove();    
+            $("#assignTaskToUserModal").modal("show")  
+            $('#start').val(date.format('YYYY-MM-DD hh:mm'));
+            $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
+            $('#itemid').val($(this).attr("id")); 
+            //$('#title').val($(this).html());
+            $('#title').val($(this).data("title"));
+            $('#price').val($(this).data("price"));
+            $('#status_id').val($(this).data("status_id"));
+           
+
+            this.start = date.format('YYYY-MM-DD hh:mm') 
+            //var itemid = $(this).attr("id")  
+              // console.log('Clicked on: ' + date.format());
+              // console.log('Coordinates: ' + jsEvent);
+              // console.log('Current text: ' + $(this).text());
+              // console.log('Current html: ' + $(this).html());         
+          }           
+        },
+         eventDrop() {
+         alert('eventDrop')
+           console.log(event)
+        },
+       
+        //////////////////////////////////////////////////////////////////////
+        //eventDragStop: function(event, jsEvent, ui, view) {
+        eventDragStop: function(event, jsEvent) {  
+          if ($this.isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+            $("#calendar").fullCalendar("removeEvents", event._id);
+            var el = $("<div class='fc-event'>")
+              .appendTo("#external-events-listing")
+              .text(event.title);
+            el.draggable({
+              zIndex: 999,
+              revert: true,
+              revertDuration: 0
+            });
+            el.data("event", { title: event.title, id: event.id, stick: true });
+          }
+        },
+        //////////////////////////////////////////////////////////////////////
+        
+      },
+        
+      //////////config
+      form: new Form({                   
+        title : '',
+        start: '',
+        end: '',
+        title: '',
+        price: '',
+        status_id: '',
+        selected_users: [],
+      }),
+      //
+      counter: 0,
+      freefieldusers:[], //dont need allPermissions in form only selected
+
+    };
+  },
+  //data
+ 
+
+  created() { 
+    this.loadCalendar()
+    
+    //console.log(this.externalVar); 
+  },
+  mounted() {   
+  },
+  //
+  methods: { 
+    nameWithNameLastName ({ name, last_name }) {
+        return `${name} ${last_name}`
+    },   
+    getValues(){ 
+      this.counter++  
+      if(this.counter == 1){
+      this.form.start = this.$refs.start.value
+      this.form.end = this.$refs.end.value 
+      this.form.itemid = this.$refs.itemid.value
+      this.form.title = this.$refs.title.value
+      this.form.price = this.$refs.price.value
+      this.form.status_id = this.$refs.status_id.value
+      
+      this.form.location_id = this.$refs.itemid.value
+      this.day = moment(String(this.$refs.start.value)).format('YYYY-MM-DD')    
+
+      console.log('getValues') 
+      // axios.get('/v1/api/tasks/gettasksbydate?date='+this.day).then((res) => {              
+      //       this.setTasksByDate(res) 
+      //       console.log(res)        
+      // })
+        axios.get('/v1/api/tasks/gettasksbydate?date='+this.day)
+        .then((res) => {
+            this.setTasksByDate(res)
+             console.log(res)    
+        })
+     }  
+    },
+     setTasksByDate(res) {       
+      this.freefieldusers = res.data.freefieldusers    
+      //console.log( this.freefieldusers) 
+    }, 
+    ///////////////UPDATE
+    updateAssignment(){
+                this.$Progress.start();
+                this.form.post('/v1/api/tasks/update/'+this.form.location_id)
+                .then(()=>{
+                    Fire.$emit('AfterCreate');
+                    $('#assignTaskToUserModal').modal('hide')
+                     this.loadData()
+                    toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                        })
+                    this.$Progress.finish();
+                })
+                .catch(()=>{
+
+                })
+    },
+    ////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+    hideModal(per){
+      $("#addNew").modal("hide")
+      $('#calendar').fullCalendar('removeEvents', per.itemid)     
+      this.unassignedtasks.push({
+        title: per.content,
+        start: '2015-11-20T08:30:00',
+        end: '2015-11-20T08:30:00',
+        statuses:'',
+        color: '#C2185B',
+        locations:'',
+      });
+    },
+    loadCalendar(){
+      axios.get('/v1/api/tasks/calendar').then((res) => {
+      if(res.data) {       
+          this.setData(res)
+      }})
+      .catch((error) => {
+        if(error.response.status === 422) {
+          this.errors = error.response.data.errors
+        }
+       this.isProcessing = false
+    })
+    },    
+    dayClick(date, jsEvent, view){ 
+        axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
+        if(res.data) {       
+            this.setTasksByDate(res,date)
+        }})
+        .catch((error) => {
+          if(error.response.status === 422) {
+            this.errors = error.response.data.errors
+          }
+        this.isProcessing = false
+      })   
+              //console.log('Day Clicked on : ' + calEvent.id);
+              // console.log('Clicked on: ' + date.format());
+              // console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+              // console.log('Current view: ' + view.name);
+    },
+    setData(res) { 
+      this.unassignedtasks = res.data.unassignedtasks
+      this.events = res.data.assignedtasks              
+      this.locations = res.data.alllocations
+    },
+         
+    
+    
+
+
+
+
+    eventClick(calEvent, jsEvent, view) {
+           var dt = calEvent.start;
+           alert('Event Clicked on : ' + calEvent.id);
+    },
+    eventDrop(drop){ 
+          console.log('eventDrop: ' + drop);
+    },   
+    callModal() {        
+      $("#addNew").modal("show")
+    }, 
+    filterLocation() {        
+        axios    
+            .get('/v1/api/tasks/calendar?'+'location='+this.location)
+            .then((res) => {
+            this.events = res.data.assignedtasks
+            //this.locationdata = this.location   
+            })
+            .catch(error => {				
+			this.errored = true
+			})
+			.finally(() => this.loading = false)	
+    }, 
+
+      
+    handleDateClick(arg) {
+      alert(arg.date)
+    },
+    isEventOverDiv(x, y) {
+      var external_events = $("#external-events");
+      var offset = external_events.offset();
+      offset.right = external_events.width() + offset.left;
+      offset.bottom = external_events.height() + offset.top;
+
+      // Compare
+      if (
+        x >= offset.left &&
+        y >= offset.top &&
+        x <= offset.right &&
+        y <= offset.bottom
+      ) {
+        return true;
+      }
+      return false;
+    },
+    getNotifications() {
+      //alert('fff')
+      $("#external-events-listing .fc-event").each(function() {
+        //console.log($(this).attr('id'))
+      // store data so the calendar knows to render an event upon drop
+      $(this).data("event", {
+        id:$(this).attr('id'),        
+        title: $.trim($(this).text()), // use the element's text as the event title
+        stick: true // maintain when user navigates (see docs on the renderEvent method)
+      });
+      // make the event draggable using jQuery UI
+      $(this).draggable({
+        zIndex: 999,
+        revert: true, // will cause the event to go back to its
+        revertDuration: 0 //  original position after the drag
+      });
+    });
+
+    },
+  },
+
+  
+
+  
+};
+</script>
+
+<style>
+#external-events { 
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  background: #eee;
+  text-align: left;
+}
+
+#external-events h4 {
+  font-size: 16px;
+  margin-top: 0;
+  padding-top: 1em;
+}
+
+#external-events .fc-event {
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+#external-events p {
+  margin: 1.5em 0;
+  font-size: 11px;
+  color: #666;
+}
+
+#external-events p input {
+  margin: 0;
+  vertical-align: middle;
+}
+</style>

@@ -38,6 +38,7 @@ public function run()
 					'person_name' => $faker->name,  
                     'company_name' => $faker->company,                     
 					'email' => $faker->email,
+					'phone' => $faker->phoneNumber, 
 					'is_company' => $faker->numberBetween($min = 0, $max = 1),
                     'contract_number' => '751651'.$i,                    
                     'contract_start' => '2020-'.$faker->randomElement($months).'-01',

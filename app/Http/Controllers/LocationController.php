@@ -23,7 +23,7 @@ class LocationController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index(Request $request)
     {       
-		$filterAllClients = $this->br->getAllClients(); 
+		/* $filterAllClients = $this->br->getAllClients(); 
 		
 		$locations_pre = Location::select('locations.*')
 		          ->where('user_id', '=', \Auth::user()->id) 
@@ -46,7 +46,12 @@ class LocationController extends Controller
                ->json([ 
 			   'results' => $locations_ok,
 			   'filterAllClients'=> $filterAllClients,
-			   ]);
+			   ]); */
+	   $locations = Location::with(['address','clients'])->get();
+		return response()
+               ->json([ 
+			   'results' => $locations,			   
+			   ]);	   
 				
 		
     }

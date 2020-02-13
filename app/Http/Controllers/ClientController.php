@@ -22,8 +22,14 @@ class ClientController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()
     {       
-        $clients = $this->br->getClients();       
-        return response()->json(['results' => $clients]);
+        /* $clients = $this->br->getClients();       
+        return response()->json(['results' => $clients]); */
+		
+		$clients = Client::with('locations')->get();
+		return response()
+               ->json([ 
+			   'results' => $clients,			   
+			   ]);
     }
      /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
      public function edit($id)

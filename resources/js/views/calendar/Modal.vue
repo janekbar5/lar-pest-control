@@ -222,30 +222,6 @@ export default {
           }
           //this.isProcessing = false
         }) 
-  
-
-        // axios.post('/v1/api/tasks/updatefromcalendar/'+this.item_id, this.form)
-        //             .then((res) => {
-        //                 if(res.data && res.saved) {
-        //                      this.$parent.hideModal(person);
-        //                      this.loadToast('success','updated successfully');  
-        //                 }
-        //                 if(res.data && res.created) {
-        //                     this.$parent.hideModal(person);
-        //                     this.loadToast('success', 'created successfully');  
-        //                 }
-        //                 if(response.data.saved) {
-        //                     this.$parent.hideModal(person);
-        //                     this.loadToast('success', 'saved successfully');  
-        //                 }
-        //             })
-        //             .catch((error) => {
-        //                 if(error.response.status === 422) {
-        //                     this.errors = error.response.data.errors
-        //                     this.loadToast('error','Check the forms'); 
-        //                 }
-        //                 //this.isProcessing = false
-        //             })
     }, 
     loadToast(icon,text){
        toast.fire({icon: icon,title: text })

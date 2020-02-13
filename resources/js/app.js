@@ -49,8 +49,18 @@ Vue.config.productionTip = false;
 // // You need a specific loader for CSS files
 // import 'vue-datetime/dist/vue-datetime.css' 
 // Vue.use(Datetime)
-
-
+////////////////////////////////////////////////////////////From hello and welcome
+import { Form, HasError, AlertError } from 'vform';
+window.Form = Form;
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+///////////////////////////////////////////////////////////VueProgressBar hello and welcome
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '3px'
+  })
 
 
 ////////////////////////////////////////////////////
@@ -75,7 +85,6 @@ import TreatmentsShow from './views/treatments/TreatmentsShow'
 import TreatmentsEdit from './views/treatments/TreatmentsEdit'
 
 import LocationsIndex from './views/locations/LocationsIndex'
-import LocationsShow from './views/locations/LocationsShow'
 import LocationsEdit from './views/locations/LocationsEdit'
 
 import StatusesIndex from './views/statuses/StatusesIndex'
@@ -129,7 +138,7 @@ let routes = [
     { path: '/locations', name: 'LocationsIndex', component:LocationsIndex, meta: {mode: 'list'} },
     { path: '/locations/create', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'create'} },
     { path: '/locations/:id/edit', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'edit'} },
-    { path: '/locations/:id',  name: 'LocationsShow', component: LocationsShow, meta: {mode: 'view'} },
+    //{ path: '/locations/:id',  name: 'LocationsShow', component: LocationsShow, meta: {mode: 'view'} },
 
     { path: '/statuses', name: 'StatusesIndex', component:StatusesIndex, meta: {mode: 'list'} },
     { path: '/statuses/create', name: 'StatusesEdit', component: StatusesEdit, meta: {mode: 'create'} },

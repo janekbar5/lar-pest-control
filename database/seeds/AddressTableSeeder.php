@@ -12,7 +12,7 @@ class AddressesTableSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
-		for($i=1; $i<=20; $i++):
+		for($i=1; $i<=100; $i++):
             DB::table('addresses')
                 ->insert([                    
 					'addressable_type' => 'App\Location',
@@ -23,8 +23,7 @@ class AddressesTableSeeder extends Seeder
                     'city' => $faker->city,
                     'post_code'=> $faker->postcode,
                     'lat'=> 50.8224867,
-                    'lng'=> 16.2737286,
-                    
+                    'lng'=> 16.2737286,                    
 
                 ]);
         endfor;

@@ -96,7 +96,7 @@
             </router-link>
           </li> -->
 
-          @can('status-list') 
+          <!-- @can('status-list') 
           <li class="nav-item">
               <router-link to="/statuses" class="nav-link">
                 <i class="nav-icon fas fa-cubes orange"></i> <p>Statuses </p>
@@ -110,7 +110,7 @@
                 <i class="nav-icon fas fa-bars orange"></i> <p>Substatuses </p>
               </router-link>
             </li>
-          @endcan
+          @endcan -->
 
          
        

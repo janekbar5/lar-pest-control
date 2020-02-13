@@ -18,6 +18,7 @@ class CreateSubStatusesTable extends Migration
             $table->integer('status_id');
             $table->string('title');            
             $table->text('description');
+			$table->string('colour'); 
             $table->timestamps();           
         });
     }

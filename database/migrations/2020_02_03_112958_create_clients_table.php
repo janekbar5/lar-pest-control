@@ -19,7 +19,8 @@ class CreateClientsTable extends Migration
 			$table->string('person_name');
 			$table->string('company_name');
 			 
-            $table->string('email');  
+            $table->string('email'); 
+			$table->string('phone');
             $table->boolean('is_company');  
             $table->string('contract_number');              
             $table->string('vat_number');

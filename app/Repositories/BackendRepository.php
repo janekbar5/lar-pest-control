@@ -168,6 +168,7 @@ class BackendRepository implements BackendRepositoryInterface
 				     $q->where('start','LIKE', '%'.$date.'%'); 
 				   })				
 				   ->get(); 
+
     }
 	public function getAllFieldUsers(){
 		return User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();

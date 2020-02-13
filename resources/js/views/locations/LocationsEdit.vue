@@ -26,49 +26,58 @@
                                     </div>                                                                    
                                 </div>
                                                            
+                              
                                 <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <input v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': errors.description }" >
-                                         <div class="alert alert-danger" v-if="errors.description"> {{errors.description[0]}}</div>
-                                    </div>  
-                                </div>                                 
+                                        <div class="form-group">
+                                            <label>Surface Area</label>
+                                            <input v-model="form.surface" type="text" name="surface" class="form-control" :class="{ 'is-invalid': errors.surface }" >
+                                            <div class="alert alert-danger" v-if="errors.surface"> {{errors.surface[0]}}</div>
+                                        </div>  
+                                </div>  
+                                                             
                                                                
                             </div>
+
+                            <div class="row"> 
+                            <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea v-model="form.description" type="text" name="description" class="form-control" :class="{ 'is-invalid': errors.description }" >
+                                        </textarea>
+                                         <div class="alert alert-danger" v-if="errors.description"> {{errors.description[0]}}</div>
+                                    </div>  
+                                </div> 
+                            </div>    
+
+
+
+                            
 
 
                             <div class="row"> 
                                     <div class="col-md-12">
                                        <div class="form-group">
-                                            <label>Find Existing Customer</label>
+                                            <label> Client </label>
                                                 <typeahead :url="dataURL" :initialize="form.clients" @input="onClient" />                                                
-                                                <small class="error-control" v-if="errors.customer_id">
+                                                <!-- <small class="error-control" v-if="errors.customer_id">
                                                     {{errors.customer_id[0]}}
-                                                </small>
+                                                </small> -->
+                                                <div class="alert alert-danger" v-if="errors.client_id"> {{errors.client_id[0]}}</div>
                                     </div>
-                                </div>
+
+                                    <input v-model="form.client_id" type="hidden" name="name" class="form-control" :class="{ 'is-invalid': errors.client_id }" >
+                                     
+                                   </div>
+                                
+                                   
                                                                 
                                 
-                                <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Client Id</label>
-                                        <input v-model="form.clients.id" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.id }" >
-                                         <div class="alert alert-danger" v-if="errors.id"> {{errors.id[0]}}</div>
-                                    </div>  
-                                </div> 
+                               
 
                             </div>     
 
 
-                             <div class="row">
-                                <div class="col-md-4">                                   
-                                        <div class="form-group">
-                                            <label>Client Name</label>
-                                            <input v-model="form.clients.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                            <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
-                                        </div>  
-                                </div>  
-                            </div> 
+                             
 
 
                             <div class="row">
@@ -153,7 +162,7 @@
                             <LocationPicker ref="LocationPicker" v-if="isMounted" :lat="lat" :lng="lng" @update-location="updateLocation"> </LocationPicker>
                                     
                        </div> 
-                        
+                        {{ apiUpdate }}
                         <div class="card-footer">
                             <div>                               
                                 <Buttons :editMode="editMode" ></Buttons>
@@ -177,15 +186,24 @@
     import LocationPicker from '../../components/locationpicker/LocationPicker3'  
     
     export default {
-        components: {  Buttons, LocationPicker,Typeahead },
+        components: {  Buttons, LocationPicker, Typeahead },
         data () {
             return {
                 lat:'',lng:'',
                 isMounted: false,
                 modelSingular: '',
-                apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
+                //apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
                 //
-                urlList:'', urlCreate:'', urlEdit:'',              
+                //urlList:'', urlCreate:'', urlEdit:'', 
+                modelPlural: 'locations', modelSingular: 'Location', 
+                urlList:'/locations',
+                urlCreate:'/locations/create',
+                urlEdit:'/locations/',
+                apiList:'/v1/api/locations/index',
+                apiCreate:'/v1/api/locations/create',
+                apiEdit:'/v1/api/locations/edit/',       
+                apiUpdate:'/v1/api/locations/update/',     
+                apiDelete:'/v1/api/locations/delete/',             
                 ////////////////////////////////////////////////////////// 
                 editMode: this.$route.meta.mode,
                 form: {
@@ -216,16 +234,21 @@
                     next()
                 })
         },
-        computed: {
-          
+        computed: {          
         },
         created() {
-            this.$eventHub.$on('settings', this.modelSettings) 
+            //this.$eventHub.$on('settings', this.modelSettings) 
+            //console.log(this.apiUpdate)
+        },
+        mounted(){
+            console.log(this.apiUpdate)
         },
         methods: {
             onClient(e) {
                 const customer = e.target.value
-                Vue.set(this.$data.form, 'clients', customer)                          
+                Vue.set(this.$data.form, 'clients', customer)
+                Vue.set(this.$data.form, 'client_id', customer.id) 
+                                         
             },
             updateLocation(itm) {             
                Vue.set(this.form.address, 'lat', itm.lat) 
@@ -238,22 +261,22 @@
               //var text = string.concat(city)
               this.$refs.LocationPicker.searchLocation2(city);
             },
-            modelSettings(settings){                
-                //return name
-                this.settings = settings;
-                this.urlList = settings.urlList
-                this.urlEdit = settings.urlEdit
-                this.urlCreate = settings.urlCreate
-                //         
-                this.apiList = settings.apiList
-                this.apiDelete = settings.apiDelete
-                this.apiCreate = settings.apiCreate
-                this.apiEdit = settings.apiEdit
-                this.apiUpdate = settings.apiUpdate
-                //
-                this.modelSingular = settings.modelSingular
-                //console.log(settings)                
-            },
+            // modelSettings(settings){                
+            //     //return name
+            //     this.settings = settings;
+            //     this.urlList = settings.urlList
+            //     this.urlEdit = settings.urlEdit
+            //     this.urlCreate = settings.urlCreate
+            //     //         
+            //     this.apiList = settings.apiList
+            //     this.apiDelete = settings.apiDelete
+            //     this.apiCreate = settings.apiCreate
+            //     this.apiEdit = settings.apiEdit
+            //     this.apiUpdate = settings.apiUpdate
+            //     //
+            //     this.modelSingular = settings.modelSingular
+            //     console.log(settings)                
+            // },
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
                     Vue.set(this.$data, 'form', res.data.form)
@@ -263,14 +286,12 @@
                     this.title = 'Edit'
                     this.grantedTreatments = res.data.form.treatments 
                     this.lat = res.data.form.address.lat
-                    this.lng = res.data.form.address.lng
-              
+                    this.lng = res.data.form.address.lng              
                     this.isMounted = true
                 } 
                 this.isMounted = true
                 var itm;
                 this.updateLocation(itm = {lat:40.446947, lng:13.004})
-
                 this.allTreatments = res.data.alltreatments      
                 this.objectToArray();            
             }, 
@@ -283,8 +304,7 @@
             },         
            
             onSave() {
-                this.errors = {}
-                this.isProcessing = true                
+                this.errors = {}                           
                 byMethod('POST',this.$route.meta.mode === 'edit' ? this.apiUpdate+this.form.id : this.apiCreate , this.form)
                     .then((res) => {
                         if(res.data && res.data.saved) {
@@ -301,7 +321,7 @@
                             this.errors = error.response.data.errors
                             this.loadToast('error','Check the forms'); 
                         }
-                        this.isProcessing = false
+                        
                     })
             },
             success(res) {

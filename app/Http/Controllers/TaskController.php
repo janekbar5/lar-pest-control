@@ -111,17 +111,20 @@ class TaskController extends Controller
         //dd($request->all());       
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdate());       
-        $task->update($request->all());   
+        //$task->update($request->all());
+		$task->update(array_merge($request->all(), ['user_id' => \Auth::user()->id ]));
+		
         $array_users = [];
         foreach($request->input('selected_users') as $user){           
             $array_users[] = $user['id'];
         }		
-        $task->selectedUsers()->sync($array_users);  
-        return ['saved' => 'true','id' => $task->id];        
+        $task->selectedUsers()->sync($array_users); 
+		
+        return ['saved' => 'true','id' => $task->id,'array_users' =>$array_users];        
     }
 	public function updateFromCalendar(Request $request, $id)
     {
-        //dd($request->all());       
+        dd($request->all());       
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdateFromCalendar());       
         $task->update($request->all());   
@@ -143,19 +146,37 @@ class TaskController extends Controller
     }
 	
 	/**/////////////////////////////////////////////////////////////////////////////////////////////6 getTasksByDate 
-    public function getTasksByDate(Request $request)
+    public function getTasksByDate()
     {
-        $date = $request->input('date');        
+        $date = request('date');  
+		
         $tasksbydate = Task::
 							with('selectedUsers')
 							->where('start','LIKE', '%'.$date.'%')
 							->get();
-		$freefieldusers = $this->br->getFreeFieldUsersForDate($date);					
 							
+		//$freefieldusers = $this->br->getFreeFieldUsersForDate($date);
+		//$workingfieldusers = $this->br->getWorkingFieldUsersForDate($date);
+		
+ 		/* $workingfieldusers = User::whereHas('selectedTasks', function($q) use($date) {	
+								 $q->whereDate('start','=',$date);
+							   })				
+							   ->get();  */
+							   
+		$freefieldusers = User::with('selectedTasks')->whereDoesntHave('selectedTasks', function ($query) use ($date) {
+			//$query->whereDate('start','=',$date);
+			$query->where('start','LIKE', '%'.$date.'%'); 
+		})->get();	 				   
+												
         return response()
             ->json([
+			//'workingfieldusersCount' => $workingfieldusers->count(),
+			'freefieldusersCount' => $freefieldusers->count(),
+			'tasksbydateCount' => $tasksbydate->count(),
 			'tasksbydate' => $tasksbydate,	
-			'freefieldusers' => $freefieldusers,	
+			'freefieldusers' => $freefieldusers,
+			//'workingfieldusers' => $workingfieldusers,		
+			
 			]);
     }
 	/**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR

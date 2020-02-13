@@ -4,29 +4,24 @@
 ---Location       ok              ok          ok 
 ---Clients        ok              ok          ok 
 ---Task
-
-
+/////////Crud   AddNew     Validation     Edit     Delete  
+---Users        ok            ok          ok        ok
+---Clients      
 
 //////////////Crud Validation
 
+
+
+//////////////////////////
+Drag Drop Assign
+Global Settings Modals
+Field User Tasks complete
+Location address validation !!!
+Users on map
+Popup Locations number
+
 /////////////
-Task Statuses DD
-Auditing
-Admin Dash
-Field users tasks by date
-//////////////////04-02-2020
-Locations add Client DD
-Calendar Popup
-//////////////////05-02-2020
-Sort Table ok
-Calendar
-//////////////////06-02-2020
-History Log ok
-Calendar
-//////////////////07-02-2020
-Free Field User
-Calendar Show Field Users in Tasks
-Calendar popup users assign & save
+
 
 FILTERS
 https://github.com/spatie/vue-table-component/blob/master/README.md#props          
