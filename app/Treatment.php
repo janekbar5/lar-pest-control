@@ -45,4 +45,12 @@ class Treatment extends Model implements Auditable, Searchable
 		'title',
 		//'description',       
     ];
+
+    ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
+    // Location-->belongsToMany-->Treatment   <==>  Treatment-->belongsToMany-->Location
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class, 'location_treatment', 'location_id', 'treatment_id');
+        //return $this->belongsToMany(Location::class);
+    }
 }

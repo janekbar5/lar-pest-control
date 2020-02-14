@@ -128,7 +128,7 @@
                                         :multiple="true"                                       
                                         label="name" 
                                         track-by="name"
-                                        disabled
+                                        
                                         ></multiselect>
                                   </div>  
                                 </div> 

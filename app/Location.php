@@ -44,6 +44,7 @@ class Location extends Model implements Auditable, Searchable
     public function treatments()
     {
         return $this->belongsToMany(Treatment::class, 'location_treatment', 'location_id', 'treatment_id');
+        //return $this->belongsToMany(Treatment::class);
     }
  
     ////////////////////////////////////////////////////////////////HASMANY

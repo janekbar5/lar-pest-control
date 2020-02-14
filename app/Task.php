@@ -30,7 +30,7 @@ class Task extends Model implements Auditable, Searchable
     //////////////////////////////////////////
     protected $appends = [
         //'color','firstPhoto','extendedProps','textColor',
-		'color','firstPhoto',
+		//'color','firstPhoto',
     ];
 	
     function getColorAttribute() {
@@ -73,9 +73,10 @@ class Task extends Model implements Auditable, Searchable
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
     // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User
-    public function selectedUsers()
+    public function users()
     {
-        return $this->belongsToMany(User::class, 'task_user', 'task_id', 'user_id');
+        //return $this->belongsToMany(User::class, 'task_user', 'task_id', 'user_id');
+        return $this->belongsToMany(User::class);
     }
 	
 	

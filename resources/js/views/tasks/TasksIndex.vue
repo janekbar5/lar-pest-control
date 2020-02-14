@@ -41,7 +41,7 @@
                         <td>{{item.statuses.title}}</td>
                         <td>{{item.start}}</td>
                         <td>{{item.end}}</td>
-                        <td> <span class="badge bg-secondary" v-for="user in item.selected_users" style="font-size:10px">{{user.name}} {{user.last_name}}</span> </td>                   
+                        <td> <span class="badge bg-secondary" v-for="user in item.users" style="font-size:10px">{{user.name}} {{user.last_name}}</span> </td>                   
                                              
                         <td>
                             <div class="btn-group">

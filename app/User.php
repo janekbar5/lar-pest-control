@@ -87,9 +87,10 @@ class User extends Authenticatable implements Auditable, Searchable
     }
 	////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
     // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User
-    public function selectedTasks()
+    public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
+        //return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
+        return $this->belongsToMany(Task::class);
     }
 
 	

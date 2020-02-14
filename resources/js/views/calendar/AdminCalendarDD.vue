@@ -181,7 +181,7 @@
 
 
                       <multiselect 
-                    v-model="form.selected_users" 
+                    v-model="form.users" 
                     :options="freefieldusers"
                     :custom-label="nameWithNameLastName"                                                                                         
                     placeholder="Select users"
@@ -203,7 +203,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     <button  type="submit" class="btn btn-success">Update</button>
-                    
+                    <button type="button" class="btn btn-danger" @click="clear()">Close</button>
                 </div>
 
                 </form>
@@ -358,7 +358,7 @@ export default {
         title: '',
         price: '',
         status_id: '',
-        selected_users: [],
+        users: [],
       }),
       //
       counter: 0,
@@ -380,10 +380,14 @@ export default {
   methods: { 
     nameWithNameLastName ({ name, last_name }) {
         return `${name} ${last_name}`
-    },   
+    },
+    clear(){
+      this.form.users = ''  
+    },  
     getValues(){ 
       this.counter++  
       if(this.counter == 1){
+           
       this.form.start = this.$refs.start.value
       this.form.end = this.$refs.end.value 
       this.form.itemid = this.$refs.itemid.value
@@ -392,7 +396,8 @@ export default {
       this.form.status_id = this.$refs.status_id.value
       
       this.form.location_id = this.$refs.itemid.value
-      this.day = moment(String(this.$refs.start.value)).format('YYYY-MM-DD')    
+      this.day = moment(String(this.$refs.start.value)).format('YYYY-MM-DD') 
+         
 
       console.log('getValues') 
       // axios.get('/v1/api/tasks/gettasksbydate?date='+this.day).then((res) => {              
@@ -407,7 +412,9 @@ export default {
      }  
     },
      setTasksByDate(res) {       
-      this.freefieldusers = res.data.freefieldusers    
+      this.freefieldusers = res.data.freefieldusers
+      this.form.users = ''  
+      this.form.users.reset()   
       //console.log( this.freefieldusers) 
     }, 
     ///////////////UPDATE
@@ -416,8 +423,11 @@ export default {
                 this.form.post('/v1/api/tasks/update/'+this.form.location_id)
                 .then(()=>{
                     Fire.$emit('AfterCreate');
+                    //this.form.reset();
+                    this.clear()
                     $('#assignTaskToUserModal').modal('hide')
                      this.loadData()
+                     
                     toast({
                         type: 'success',
                         title: 'User Created in successfully'

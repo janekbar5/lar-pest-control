@@ -48,7 +48,7 @@ class BackendRepository implements BackendRepositoryInterface
                   ->with('locations')
                   ->with('statuses')
                   ->with('photos')    
-                  ->with('selectedUsers')    
+                  ->with('users')    
                   ->paginate(10); 
     }
     public function getUnassignedTasks(){
@@ -57,7 +57,7 @@ class BackendRepository implements BackendRepositoryInterface
                   with('locations')
                   ->with('statuses')
                   //->with('selectedUsers') 
-                  ->doesntHave('selectedUsers')    
+                  ->doesntHave('users')    
                   ->get(); 
     }
     public function getAssignedTasks(){
@@ -65,8 +65,8 @@ class BackendRepository implements BackendRepositoryInterface
                   //orderBy('created_at', 'desc')
                   with('locations')
                   ->with('statuses')
-                  ->with('selectedUsers')  //display users array
-                  ->has('selectedUsers')   //only act as filter   
+                  ->with('users')  //display users array
+                  ->has('users')   //only act as filter   
                   ->get(); 
     }
 	
@@ -75,7 +75,7 @@ class BackendRepository implements BackendRepositoryInterface
                   ->with('locations')
                   ->with('statuses')  
 				  ->with('selectedUsers')  //display users array
-                  ->has('selectedUsers')    
+                  ->has('users')    
                   ->get(); 
     }
 	
@@ -84,12 +84,12 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::where('id', '=', $id) 
                    ->with('locations')
                    ->with('statuses')
-                   ->with('selectedUsers')
+                   ->with('users')
                    ->first(); 
     }
 	public function getAllUsersTasks(){ 
-		   return Task::with(['selectedUsers'])                        
-            ->whereHas('selectedUsers',function($query) {                
+		   return Task::with(['users'])                        
+            ->whereHas('users',function($query) {                
                  $query->where('user_id', '=', \Auth::user()->id);                    
             })            
             ->get(); 
@@ -164,8 +164,8 @@ class BackendRepository implements BackendRepositoryInterface
 	public function getFreeFieldUsersForDate($date){  
 		 return	User::with('selectedTasks')
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
-				   ->wheredoesnthave('selectedTasks', function($q) use($date) {				   
-				     $q->where('start','LIKE', '%'.$date.'%'); 
+				       ->WhereDoesntHave('selectedTasks', function($q) use($date) {				   
+				       $q->where('start','LIKE', '%'.$date.'%'); 
 				   })				
 				   ->get(); 
 
