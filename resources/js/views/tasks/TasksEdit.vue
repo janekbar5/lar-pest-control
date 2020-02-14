@@ -121,7 +121,7 @@
                                     <div class="form-group">
                                         <label>Assigned Users</label>                                                                          
                                         <multiselect 
-                                        v-model="form.selected_users" 
+                                        v-model="form.users" 
                                         :options="allFieldUsers"
                                         :custom-label="nameWithSuename"                                          
                                         placeholder="Select users"

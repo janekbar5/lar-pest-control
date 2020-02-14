@@ -80,10 +80,11 @@ class LocationController extends Controller
         //dd($request->all());
         $fv = $this->validate($request, $this->vr->locationUpdate());        
         $location = Location::create(array_merge($request->all(), ['user_id' => \Auth::user()->id]));
+		
         if($request->has('selectedTreatments')){
             $location->treatments()->sync($request->input('selectedTreatments'));
         }       
-        return ['created' => 'true','id' => $property->id];             
+        return ['created' => 'true','id' => $location->id];             
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
    public function update(Request $request, $id)

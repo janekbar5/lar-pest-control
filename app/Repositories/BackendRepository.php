@@ -74,7 +74,7 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::where('location_id', '=', $id)
                   ->with('locations')
                   ->with('statuses')  
-				  ->with('selectedUsers')  //display users array
+				  ->with('users')  //display users array
                   ->has('users')    
                   ->get(); 
     }
@@ -97,8 +97,8 @@ class BackendRepository implements BackendRepositoryInterface
 			
     }
 	public function getAllUsersTasksByStatus($id){ 
-		return	Task::with(['selectedUsers'])                        
-            ->whereHas('selectedUsers',function($query) use($id){                
+		return	Task::with(['users'])                        
+            ->whereHas('users',function($query) use($id){                
                  $query->where('user_id', '=', \Auth::user()->id);
 				 $query->where('status_id', '=', $id);
             })            

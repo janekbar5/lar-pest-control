@@ -37,6 +37,7 @@ class Location extends Model implements Auditable, Searchable
                 'client_id',
                 'title',
                 'description',
+				'surface',
                 
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT

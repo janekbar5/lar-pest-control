@@ -29,14 +29,14 @@ class TasksTableSeeder extends Seeder
         $days = ['05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'];
         $months = ['01','01','03','04','05','06','07','08','09','10','11','12'];
 
-        for($i=0; $i<=20; $i++):
+        for($i=0; $i<=200; $i++):
         $day = $faker->randomElement($days);
         $month = $faker->randomElement($months);
         $status_id = $faker->numberBetween($min = 1, $max = 3);
             DB::table('tasks')
                 ->insert([
                     'location_id' => $faker->numberBetween($min = 1, $max = 4),
-                    'user_id' => 4,
+                    'user_id' => 1,
                     'status_id' => $status_id,
                     'substatus_id' => $status_id == 3 ? $faker->numberBetween($min = 3, $max = 5) : null,
                     'price' => $faker->numberBetween($min = 100, $max = 150),
@@ -49,18 +49,21 @@ class TasksTableSeeder extends Seeder
                 ]);
         endfor; 
 		
-         /* for($i=1; $i<=100; $i++):           
+		$tasks = Task::all()->pluck('id')->toArray();
+		
+        for($i=1; $i<=100; $i++):           
                 DB::table('task_user')
                     ->insert([
                         'task_id' => $i,
+						//'task_id' => $faker->randomElement($tasks),
                         'user_id' => 4,
                        
                     ]);
-        endfor;    */     
+        endfor; 
 
 
 		////////////////////////////////////////////////////////////////////////////////////////user 1
-        for($i=0; $i<=100; $i++):
+        for($i=201; $i<=300; $i++):
         $day = $faker->randomElement($days);
         $month = $faker->randomElement($months);
 		$status_id = $faker->numberBetween($min = 1, $max = 3);

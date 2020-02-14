@@ -14,12 +14,13 @@
 
 //////////////////////////
 Drag Drop Assign
+Drag Drop click edit
 Global Settings Modals
 Field User Tasks complete
 Location address validation !!!
 Users on map
 Popup Locations number
-
+Todo
 /////////////
 
 

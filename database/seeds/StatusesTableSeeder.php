@@ -11,8 +11,8 @@ class StatusesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('statuses')->insert(['title' => 'New','description' => '','colour' => '#c9b606']); // yellow
-        DB::table('statuses')->insert(['title' => 'Done','description' => '','colour' => '#0c6924']); // green
-        DB::table('statuses')->insert(['title' => 'Not Done','description' => '','colour' => '#9c0505']); // red
+        DB::table('statuses')->insert(['title' => 'New','colour' => '#c9b606']); // yellow
+        DB::table('statuses')->insert(['title' => 'Done','colour' => '#0c6924']); // green
+        DB::table('statuses')->insert(['title' => 'Not Done','colour' => '#9c0505']); // red
     }
 }

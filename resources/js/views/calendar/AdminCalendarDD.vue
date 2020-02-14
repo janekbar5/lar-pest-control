@@ -12,7 +12,8 @@
                     <div 
                     :data-title="per.title"
                     :data-price="per.price" 
-                    :data-status_id="per.status_id"  
+                    :data-status_id="per.status_id" 
+                    :data-location_id="per.location_id" 
                     v-bind:style="{ 'background-color': per.statuses.colour }" 
                     class="fc-event" v-for="(per, idx) in unassignedtasks" 
                     v-bind:key="idx" v-bind:id="per.id">
@@ -178,6 +179,12 @@
                             class="form-control" :class="{ 'is-invalid': form.errors.has('status_id') }">
                         <has-error :form="form" field="status_id"></has-error>
                     </div>
+                    <div class="form-group">
+                        <input v-model="form.location_id" type="text" name="location_id" id="location_id" ref="location_id"
+                            placeholder="location_id"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('location_id') }">
+                        <has-error :form="form" field="location_id"></has-error>
+                    </div>
 
 
                       <multiselect 
@@ -189,16 +196,7 @@
                     label="name" 
                     track-by="name">
                     </multiselect>
-
-                    <!-- <input type="text" id="start" value="" ref="start"></br>
-                                             <input type="text" id="end" value="" ref="end"></br>
-                                             <input type="text" id="itemid" value="" ref="itemid"></br>
-                                             <input type="text" id="title" value="" ref="title"></br> 
-
-                                              <input type="text" id="price" value="" ref="price"></br> 
-                                              <input type="text" id="location_id" value="" ref="location_id"></br> 
-                                              <input type="text" id="status_id" value="" ref="status_id"></br>  -->
-
+                
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -315,7 +313,7 @@ export default {
             $('#title').val($(this).data("title"));
             $('#price').val($(this).data("price"));
             $('#status_id').val($(this).data("status_id"));
-           
+            $('#location_id').val($(this).data("location_id"));
 
             this.start = date.format('YYYY-MM-DD hh:mm') 
             //var itemid = $(this).attr("id")  
@@ -325,10 +323,10 @@ export default {
               // console.log('Current html: ' + $(this).html());         
           }           
         },
-         eventDrop() {
-         alert('eventDrop')
-           console.log(event)
-        },
+        //  eventDrop() {
+        //  alert('eventDrop')
+        //    console.log(event)
+        // },
        
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
@@ -370,8 +368,7 @@ export default {
  
 
   created() { 
-    this.loadCalendar()
-    
+    this.loadCalendar()    
     //console.log(this.externalVar); 
   },
   mounted() {   
@@ -386,24 +383,16 @@ export default {
     },  
     getValues(){ 
       this.counter++  
-      if(this.counter == 1){
-           
+      if(this.counter == 1){           
       this.form.start = this.$refs.start.value
       this.form.end = this.$refs.end.value 
       this.form.itemid = this.$refs.itemid.value
       this.form.title = this.$refs.title.value
       this.form.price = this.$refs.price.value
-      this.form.status_id = this.$refs.status_id.value
-      
-      this.form.location_id = this.$refs.itemid.value
+      this.form.status_id = this.$refs.status_id.value      
+      this.form.location_id = this.$refs.location_id.value
       this.day = moment(String(this.$refs.start.value)).format('YYYY-MM-DD') 
-         
-
       console.log('getValues') 
-      // axios.get('/v1/api/tasks/gettasksbydate?date='+this.day).then((res) => {              
-      //       this.setTasksByDate(res) 
-      //       console.log(res)        
-      // })
         axios.get('/v1/api/tasks/gettasksbydate?date='+this.day)
         .then((res) => {
             this.setTasksByDate(res)
@@ -412,7 +401,8 @@ export default {
      }  
     },
      setTasksByDate(res) {       
-      this.freefieldusers = res.data.freefieldusers
+      //this.freefieldusers = res.data.freefieldusers
+      this.freefieldusers = res.data.allfieldusers
       this.form.users = ''  
       this.form.users.reset()   
       //console.log( this.freefieldusers) 
@@ -420,14 +410,14 @@ export default {
     ///////////////UPDATE
     updateAssignment(){
                 this.$Progress.start();
-                this.form.post('/v1/api/tasks/update/'+this.form.location_id)
+                this.form.post('/v1/api/tasks/update/'+this.form.itemid)
                 .then(()=>{
-                    Fire.$emit('AfterCreate');
+                    //Fire.$emit('AfterCreate');
                     //this.form.reset();
                     this.clear()
                     $('#assignTaskToUserModal').modal('hide')
-                     this.loadData()
-                     
+                     //this.loadData()
+                     this.loadCalendar()
                     toast({
                         type: 'success',
                         title: 'User Created in successfully'
@@ -483,23 +473,13 @@ export default {
           }
         this.isProcessing = false
       })   
-              //console.log('Day Clicked on : ' + calEvent.id);
-              // console.log('Clicked on: ' + date.format());
-              // console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-              // console.log('Current view: ' + view.name);
     },
     setData(res) { 
       this.unassignedtasks = res.data.unassignedtasks
       this.events = res.data.assignedtasks              
       this.locations = res.data.alllocations
     },
-         
     
-    
-
-
-
-
     eventClick(calEvent, jsEvent, view) {
            var dt = calEvent.start;
            alert('Event Clicked on : ' + calEvent.id);

@@ -148,37 +148,14 @@ class TaskController extends Controller
 	/**/////////////////////////////////////////////////////////////////////////////////////////////6 getTasksByDate 
     public function getTasksByDate()
     {
-        $date = request('date');  
+        $date = request('date'); 
 		
-        /*$tasksbydate = Task::
-							with('tasks')
-							->where('start','LIKE', '%'.$date.'%')
-							->get();*/
-
-		/*$freefieldusers = User:: 
-                with('tasks')
-                ->WhereDoesntHave('tasks', function ($a) use ( $date ) {
-                    $a
-                    //->whereRaw("start >= '$date' AND start < '$date'")
-                    ->whereRaw("'start','LIKE', '%'.$date.'%'")
-                    ;
-                })   
-                ->get();*/
-
-        /*$freefieldusers22 = User::with('tasks')                      
-                   ->wherehas('tasks', function($q) use($date) { 
-                       $q->where('status_id','=','1');
-                   })
-                   ->whereHas("roles", function($q){ $q->where("name", "Field User"); })              
-                   ->get();*/
-
-        //$locations = Location::with('treatments')->get();
-        //$treatments = Treatment::with('locations')->get();
-
-        $tasks = Task::with('users')->get();
-        $users = User::with('tasks')->get();
-
-         $freefieldusers = User::with('tasks')
+        //$tasks = Task::with('users')->get();
+        //$users = User::with('tasks')->get();
+        $allfieldusers = User::with('tasks')
+                            ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
+                            ->get();
+        $freefieldusers = User::with('tasks')
                             //->whereDoesntHave('tasks') //whereDoesntHave whereHas
                             //->has('tasks')
                             //->doesnthave('tasks')
@@ -188,39 +165,12 @@ class TaskController extends Controller
                             })
                             ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
                             ->get();
-
-         /*$freefieldusers =  User::doesntHave('tasks', function($q){
-                                $q->where('start','LIKE', '%'.$date.'%');
-                            })->get();*/
-
-       /* $freefieldusers = User::with(['tasks' => function($query) {
-                        $query->where('status_id','=',1);
-                       }])->get();*/
-
-        //$freefieldusers = Task::where('start','LIKE', '%'.$date.'%')->get();
-
-		//$freefieldusers = $this->br->getFreeFieldUsersForDate($date);
-		//$workingfieldusers = $this->br->getWorkingFieldUsersForDate($date);
-		
- 		/* $workingfieldusers = User::whereHas('selectedTasks', function($q) use($date) {	
-								 $q->whereDate('start','=',$date);
-							   })				
-							   ->get();  */
-							   
-		/*$freefieldusers = User::with('selectedTasks')->whereDoesntHave('selectedTasks', function ($query) use ($date) {
-			//$query->whereDate('start','=',$date);
-			$query->where('start','LIKE', '%'.$date.'%'); 
-		})->get();	*/ 				   
 												
         return response()
-            ->json([
-			//'workingfieldusersCount' => $workingfieldusers->count(),
-			//'locations' => $locations,
+            ->json([			
             'freefieldusersCount' => $freefieldusers->count(),
 			'freefieldusers' => $freefieldusers,
-			//'users' => $users,	
-			//'tasks' => $tasks,
-			//'workingfieldusers' => $workingfieldusers,		
+			'allfieldusers' => $allfieldusers,
 			
 			]);
     }
@@ -260,41 +210,10 @@ class TaskController extends Controller
     
     public function indexFieldUser()
     {       
-        /*
-        $days2 = Task::where('user_id', '=', \Auth::user()->id) 
-        ->orderBy('start')
-        ->get()
-        ->groupBy(function ($val) {
-            return Carbon::parse($val->start)->format('d-m');
-        });  */ 
-
-        /* $days = Task::whereBetween('start', [now(), now()->addDays(300)])
-        //$days = Task::where('user_id', '=', \Auth::user()->id)
-        //->orwhere('user_id', '=', \Auth::user()->id) 
-        ->orderBy('start','asc')
-        ->get()
-        ->groupBy(function ($val) {
-            return Carbon::parse($val->start)->format('d');
-        }); */
-		
-		
-		 
-		/* $days = Task::
-		with(['selectedUsers'])                        
-            ->whereHas('selectedUsers',function($query) {                
-            $query->where('user_id', '=', \Auth::user()->id);                    
-        })
-		->whereBetween('start', [now(), now()->addDays(30)])
-		->orderBy('start','asc')		 
-		->get(['status_id','title','start','end'])
-		//->get()
-		->groupBy(function($date) {
-			return Carbon::parse($date->start)->format('d-m-y'); // grouping by years			
-		});  */
-		
+		$statuses = Status::all();
 		
 		$days = Task::with('locations')                   
-         ->whereHas('selectedUsers',function($query) {                
+         ->whereHas('users',function($query) {                
             $query->where('user_id', '=', \Auth::user()->id);                    
          })
 		->whereBetween('start', [now(), now()->addDays(60)])
@@ -302,22 +221,44 @@ class TaskController extends Controller
 		//->get(['status_id','title','start','end'])
 		->get()		
 		->groupBy(function($date) {
-			return Carbon::parse($date->start)->format('d-m-y'); // grouping by years			
+			return Carbon::parse($date->start)->format('yy-m-d'); // grouping by years			
 		});  
 		
 		
-		
-		
-			
         return response()
                ->json([ 
                'results' => $days,
-               //'filterAllLocations'=> $filterAllLocations,
+               'statuses'=> $statuses,
                //'filterAllStatuses'=> $filterAllStatuses,
                ]);
                 
         
     }
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////// updateStatus
+	
+	 public function updateStatus(Request $request)
+    {
+	 //dd($request->input('taskid'));
+	 
+	 if($request->has('taskid') && $request->has('statusid')){
+	    
+		 $task = Task::where('id','=',$request->input('taskid'))->first();
+		 //dd($task);
+		 $task->status_id = request('statusid');
+		 $task->update();
+		 $saved = true;
+	 }else{
+	     $saved = 'problems';
+	 }
+	 
+	 return response()
+               ->json([ 
+               'saved' => $saved,
+               //'statuses'=> $statuses,
+               //'filterAllStatuses'=> $filterAllStatuses,
+               ]);
+	 
+	}
 	
 	
 

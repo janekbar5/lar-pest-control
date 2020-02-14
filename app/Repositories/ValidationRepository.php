@@ -74,7 +74,8 @@ class ValidationRepository
     public function statusUpdate()
     {        
         $rules = array(
-           'title' => 'required',          
+           'title' => 'required',
+		   'colour' => 'required',
         );        
         return $rules;
     }
@@ -83,6 +84,7 @@ class ValidationRepository
      {        
          $rules = array(
             'status_id' => 'required',
+			'colour' => 'required',
             'title' => 'required',          
          );        
          return $rules;

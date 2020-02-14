@@ -6,6 +6,7 @@
           <div class="col-md-6">
 
             <div class="card">
+
               <div class="card-header">
                 <h3 class="card-title">Treatments</h3> 
                 <div class="card-tools">                  
@@ -39,7 +40,7 @@
                             <i class="fa fa-edit black"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteTreatment(treat)">
+                        <a href="#" @click="deleteRecord(treat,model='treatments')">
                             <i class="fa fa-trash black"></i>
                         </a>
 
@@ -74,8 +75,15 @@
 
          <div class="col-md-6">
             <div class="card">
+
               <div class="card-header">
-                <h3 class="card-title">Task Statuses</h3>                
+                <h3 class="card-title">Task Statuses</h3>  
+                
+                <div class="card-tools">                  
+                    <div class="input-group-append">
+                     <button  class="btn btn-secondary" @click="newStatus()" >Add New Statuse</button> 
+                    </div>                 
+                </div>             
               </div>
               
               <div class="card-body p-0">
@@ -104,7 +112,7 @@
                             <i class="fa fa-edit black"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteUser(status.id)">
+                        <a href="#" @click="deleteRecord(status,model='statuses')">
                             <i class="fa fa-trash black"></i>
                         </a>
                         </td>
@@ -133,7 +141,12 @@
 
                      <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Subtatuses</h3>                
+                <h3 class="card-title">Subtatuses</h3> 
+                 <div class="card-tools">                  
+                    <div class="input-group-append">
+                     <button  class="btn btn-secondary" @click="newSubStatus()" >Add New Sub Statuse</button> 
+                    </div>                 
+                </div>                
               </div>
               
               <div class="card-body p-0">
@@ -144,8 +157,8 @@
                       
                       <th style="width: 30%">Substatus</th>
                       <th style="width: 20%">Parent Status</th>
-                      <th style="width: 20%">Colour</th>
-                      <th style="width: 10%"></th>
+                      <th style="width: 10%">Colour</th>
+                      <th style="width: 15%"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -164,7 +177,7 @@
                             <i class="fa fa-edit black"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteUser(status.id)">
+                       <a href="#" @click="deleteRecord(sub,model='substatuses')">
                             <i class="fa fa-trash black"></i>
                         </a>
                         </td>
@@ -193,7 +206,7 @@
 
 
             <!----------------------- Modal treatmentModal ------------------------------------>
-            <div class="modal fade" id="treatmentModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal fade" id="formTreatment" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -206,16 +219,16 @@
                 <form @submit.prevent="editmode ? updateTreatment() : createTreatment()">
                 <div class="modal-body">
                      <div class="form-group">
-                        <input v-model="form.title" type="text" name="title"
+                        <input v-model="formTreatment.title" type="text" name="title"
                             placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }">
-                        <has-error :form="form" field="title"></has-error>
+                            class="form-control" :class="{ 'is-invalid': formTreatment.errors.has('title') }">
+                        <has-error :form="formTreatment" field="title"></has-error>
                     </div>
 
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" @click="formHideReset('formTreatment')">Close</button>
                     <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
                     <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
                 </div>
@@ -232,7 +245,7 @@
 
 
               <!----------------------- Modal statusesModal------------------------------------>
-             <div class="modal fade" id="statusesModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+             <div class="modal fade" id="formStatus" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -242,26 +255,26 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editmode ? updateTreatment() : createTreatment()">
+                <form @submit.prevent="editmode ? updateStatus() : createStatus()">
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <input v-model="formstatuses.title" type="text" name="title"
+                        <input v-model="formStatus.title" type="text" name="title"
                             placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': formstatuses.errors.has('title') }">
-                        <has-error :form="formstatuses" field="title"></has-error>
+                            class="form-control" :class="{ 'is-invalid': formStatus.errors.has('title') }">
+                        <has-error :form="formStatus" field="title"></has-error>
                     </div>
                      <div class="form-group">
-                        <input v-model="formstatuses.colour" type="text" name="colour"
+                        <input v-model="formStatus.colour" type="text" name="colour"
                             placeholder="Colour"
-                            class="form-control" :class="{ 'is-invalid': formstatuses.errors.has('colour') }">
-                        <has-error :form="formstatuses" field="colour"></has-error>
+                            class="form-control" :class="{ 'is-invalid': formStatus.errors.has('colour') }">
+                        <has-error :form="formStatus" field="colour"></has-error>
                     </div>
 
                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" @click="formHideReset('formStatus')">Close</button>
                     <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
                     <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
                 </div>
@@ -277,8 +290,8 @@
 
 
 
-            <!----------------------- Modal treatmentModal ------------------------------------>
-            <div class="modal fade" id="substatusesModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <!----------------------- Modal substatuses ------------------------------------>
+            <div class="modal fade" id="formSubStatus" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -288,37 +301,37 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editmode ? updateTreatment() : createTreatment()">
+                <form @submit.prevent="editmode ? updateSubStatus() : createSubStatus()">
                 <div class="modal-body">
                      <div class="form-group">
-                        <input v-model="formsubstatus.title" type="text" name="title"
+                        <input v-model="formSubStatus.title" type="text" name="title"
                             placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': formsubstatus.errors.has('title') }">
-                        <has-error :form="formsubstatus" field="title"></has-error>
+                            class="form-control" :class="{ 'is-invalid': formSubStatus.errors.has('title') }">
+                        <has-error :form="formSubStatus" field="title"></has-error>
                     </div>
 
                      <div class="form-group">
-                        <input v-model="formsubstatus.colour" type="text" name="colour"
+                        <input v-model="formSubStatus.colour" type="text" name="colour"
                             placeholder="colour"
-                            class="form-control" :class="{ 'is-invalid': formsubstatus.errors.has('colour') }">
-                        <has-error :form="formsubstatus" field="colour"></has-error>
+                            class="form-control" :class="{ 'is-invalid': formSubStatus.errors.has('colour') }">
+                        <has-error :form="formSubStatus" field="colour"></has-error>
                     </div>
 
                      
  
                     <div class="form-group">
-                        <select name="status_id" v-model="formsubstatus.status_id" id="status_id" class="form-control" :class="{ 'is-invalid': formsubstatus.errors.has('status_id') }">
+                        <select name="status_id" v-model="formSubStatus.status_id" id="status_id" class="form-control" :class="{ 'is-invalid': formSubStatus.errors.has('status_id') }">
                             <option value="">Select Parent Status</option>                           
                             <option :value="status.id" v-for="status in statuses" :key="status.data">{{status.title}}</option>                           
                         </select>
-                        <has-error :form="formsubstatus" field="status_id"></has-error>
+                        <has-error :form="formSubStatus" field="status_id"></has-error>
                     </div>
 
                    
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger"  @click="formHideReset('formSubStatus')">Close</button>
                     <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
                     <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
                 </div>
@@ -367,7 +380,7 @@ return {
     // form: {
     //     errors:''        
     // },
-    form: new Form({
+    formTreatment: new Form({
                     id:'',
                     title : '',
                     user_id: '',
@@ -376,46 +389,25 @@ return {
                     bio: '',
                     photo: ''
     }),
-    formstatuses: new Form({                   
+    formStatus: new Form({ 
+        id:'',                  
         title : '',
         colour : '',
                    
     }),
-    formsubstatus: new Form({                   
+    formSubStatus: new Form({ 
+        id:'',                  
         title : '',
         colour : '',
         status_id : '',
                    
     }),
     
-    // form: new Form({
-    //     id:'',
-    //     name : '',
-    //     email: '',
-    //     password: '',
-    //     type: '',
-    //     bio: '',
-    //     photo: ''
-    // }),
+   
     
 }
 },
-//
-// beforeRouteEnter(to, from, next) {    
-//     get('/v1/api/home/globalsettings')
-//         .then((res) => {
-//             next(vm => vm.setData(res))
-//         })
-// },
-// //
-// beforeRouteUpdate(to, from, next) {
-//     get('/v1/api'+to.path+'/index', to.query)
-//         .then((res) => {
-//             this.setData(res)
-//             next()
-//     })
-// },
-//
+
 created() {
     this.$eventHub.$on('settings', this.modelSettings) 
      this.loadData()
@@ -431,38 +423,61 @@ methods: {
             this.setData(res)
         })
     },
+    formHideReset(form){ 
+        this.formTreatment.reset();
+        this.formStatus.reset();
+        this.formSubStatus.reset();
+        //this.errors = ''
+        //this.errors.clear();
+        //this.formStatus.errors = ''
+        //this.formSubStatus.errors = ''
+        $('#'+form).modal('hide');
+    },
+    ///////////////////////////////////////////////New
     newTreatment(){
                 this.editmode = false;
-                this.form.reset();
-                $('#treatmentModal').modal('show');
+                this.formTreatment.reset();
+                $('#formTreatment').modal('show');
     },
+    newStatus(){
+                this.editmode = false;
+                this.formStatus.reset();
+                $('#formStatus').modal('show');
+    },
+    newSubStatus(){
+                this.editmode = false;
+                this.formSubStatus.reset();
+                $('#formSubStatus').modal('show');
+    },
+    
+    /////////////////////////////////////////////Edit
     editTreatment(treat){
                 this.editmode = true;
-                this.form.reset();
-                $('#treatmentModal').modal('show');                
-                this.form.fill(treat);
+                this.formTreatment.reset();
+                $('#formTreatment').modal('show');                
+                this.formTreatment.fill(treat);
                 //console.log(this.form)
     },
     editStatus(stat){
                 this.editmode = true;
-                this.form.reset();
-                $('#statusesModal').modal('show');                
-                this.formstatuses.fill(stat);
+                this.formStatus.reset();
+                $('#formStatus').modal('show');                
+                this.formStatus.fill(stat);
                 //console.log(this.form)
     },
     editSubStatus(sub){
        this.editmode = true;
-       this.form.reset();
-       $('#substatusesModal').modal('show');                
-       this.formsubstatus.fill(sub);   
+       this.formSubStatus.reset();
+       $('#formSubStatus').modal('show');                
+       this.formSubStatus.fill(sub);   
     },
     ///////////////CREATE
     createTreatment(){
                 this.$Progress.start();
-                this.form.post('/v1/api/treatments/create')
+                this.formTreatment.post('/v1/api/treatments/create')
                 .then(()=>{
                     Fire.$emit('AfterCreate');
-                    $('#treatmentModal').modal('hide')
+                    $('#formTreatment').modal('hide')
                      this.loadData()
                     toast({
                         type: 'success',
@@ -475,14 +490,50 @@ methods: {
 
                 })
     },
-    /////////////// UPDATE       
+    createStatus(){
+                this.$Progress.start();
+                this.formStatus.post('/v1/api/statuses/create')
+                .then(()=>{
+                    //Fire.$emit('AfterCreate');
+                    $('#formStatus').modal('hide')
+                     this.loadData()
+                    toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                        })
+                    this.$Progress.finish();
+
+                })
+                .catch(()=>{
+
+                })
+    },
+    createSubStatus(){
+                this.$Progress.start();
+                this.formSubStatus.post('/v1/api/substatuses/create')
+                .then(()=>{
+                    //Fire.$emit('AfterCreate');
+                    $('#formSubStatus').modal('hide')
+                     this.loadData()
+                    toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                        })
+                    this.$Progress.finish();
+
+                })
+                .catch(()=>{
+
+                })
+    },
+    //////////////////////////////////////////////////////// UPDATE  Post     
     updateTreatment(){
                 this.$Progress.start();
                 // console.log('Editing data');
-                this.form.put('/v1/api/treatments/update/'+this.form.id)
+                this.formTreatment.put('/v1/api/treatments/update/'+this.formTreatment.id)
                 .then(() => {
                     // success
-                    $('#treatmentModal').modal('hide');
+                    $('#formTreatment').modal('hide');
                     this.loadData()
                      swal(
                         'Updated!',
@@ -497,8 +548,51 @@ methods: {
                 });
 
      },
-     ///////////////////////////DELETE
-     deleteTreatment(item){
+     updateStatus(){
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.formStatus.put('/v1/api/statuses/update/'+this.formStatus.id)
+                .then(() => {
+                    // success
+                    $('#formStatus').modal('hide');
+                    this.loadData()
+                     swal(
+                        'Updated!',
+                        'Information has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                         Fire.$emit('AfterCreate');
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+     },
+     
+     updateSubStatus(){
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.formSubStatus.put('/v1/api/substatuses/update/'+this.formSubStatus.id)
+                .then(() => {
+                    // success
+                    $('#formSubStatus').modal('hide');
+                    this.loadData()
+                     swal(
+                        'Updated!',
+                        'Information has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                         Fire.$emit('AfterCreate');
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+     },
+     /////////////////////////////////////////////////////////////DELETE
+     deleteRecord(item,model){
         swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -510,7 +604,7 @@ methods: {
         }).then((result) => {
         // Send request to the server
         if (result.value) {
-            byMethod('delete','v1/api/treatments/delete/'+item.id).then(()=>{
+            byMethod('delete','v1/api/'+model+'/delete/'+item.id).then(()=>{
             swal.fire('Deleted!','Your file has been deleted.','success')
             //this.getApi('this.apiList+'?page='+this.page')  
             //this.$router.push('/globalsettings') 

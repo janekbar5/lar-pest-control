@@ -33,7 +33,8 @@
                                             <input v-model="form.surface" type="text" name="surface" class="form-control" :class="{ 'is-invalid': errors.surface }" >
                                             <div class="alert alert-danger" v-if="errors.surface"> {{errors.surface[0]}}</div>
                                         </div>  
-                                </div>  
+                                </div>
+                                
                                                              
                                                                
                             </div>
