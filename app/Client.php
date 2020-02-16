@@ -21,14 +21,14 @@ class Client extends Model implements Auditable, Searchable
 	protected $fillable = [  
         //'user_id',
         //'client_id',        
-        'company_name','email','is_company','contract_number','vat_number','person_name','contract_start','contract_end',
-		'description',
+        'active','company_name','email','is_company','contract_number','vat_number','person_name','contract_start','contract_end',
+		'description','reccurence',
 		
 		
 		
     ];
     /////////////////////////////////////////////////////////////For typehead search
-    protected $appends = ['text'];
+    protected $appends = ['text','locationscount'];
     public function getTextAttribute()
     {
         return $this->attributes['company_name']. ' - '
@@ -46,12 +46,25 @@ class Client extends Model implements Auditable, Searchable
        return new SearchResult($this, $this->company_name, $url);
     }
 	
+	
+	function getLocationscountAttribute() {
+		return $this->locations->count();
+	}
+	
+	
+	
+	public function locations()
+    {
+        //return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
+        return $this->belongsToMany(Location::class,'client_location', 'client_id', 'location_id');
+    }
+	
     
     ////////////////////////////////////////////////////////////////HASMANY
     // Location-->belongsTo-->Client   <==>  Client-->hasMany-->Location
-    public function locations()
+    /* public function locations()
     {
         return $this->hasMany('App\Location');		
     }
-
+ */
 }

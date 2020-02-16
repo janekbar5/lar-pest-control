@@ -126,9 +126,22 @@
 
 
                      
-                      <div class="card-footer clearfix">
-                       sdvsdfv
-                      </div>
+                     <div>
+                                        <label class="typo__label">Tagging</label>
+                                        <multiselect 
+                                        v-model="value" 
+                                        
+                                        tag-placeholder="Add this as new tag" 
+                                        placeholder="Search or add a tag" 
+                                        label="name" 
+                                        track-by="name" 
+                                        :options="options" 
+                                        :multiple="true" 
+                                        :taggable="true"
+                                         @tag="addTag">
+                                        </multiselect>
+                                        <pre class="language-json"><code>{{ value  }}</code></pre>
+                                        </div>
                     </div>
               </div>   
                    
@@ -151,11 +164,11 @@ import moment from "moment"
 import "jquery-ui-bundle"
 import $ from 'jquery'
 import FullCalendar from "vue-full-calendar";   
-
+ import Multiselect from 'vue-multiselect'
 
 export default {
   name: "hello",
-  components: {  },  
+  components: { Multiselect },  
   data() {
     var $this = this;
     return {
@@ -195,6 +208,16 @@ export default {
         end:'',
         dueTasksCount:'',
         charges:'',
+        //
+        value: [],
+                options: [
+                    { name: 'Vue.js', language: 'JavaScript' },
+                    { name: 'Adonis', language: 'JavaScript' },
+                    { name: 'Rails', language: 'Ruby' },
+                    { name: 'Sinatra', language: 'Ruby' },
+                    { name: 'Laravel', language: 'PHP' },
+                    { name: 'Phoenix', language: 'Elixir' }
+                ],
     };
   },
   //data
@@ -212,6 +235,14 @@ export default {
   },
   //
   methods: {
+   addTag(newTag) {
+            const tag = {
+                name: newTag,
+                code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+            }
+            this.options.push(tag)
+            this.value.push(tag)
+            },
     today() {
       this.$refs.calendar.fireMethod('today')
       console.log('today'); 

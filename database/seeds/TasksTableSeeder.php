@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Task;
 use Faker\Factory;
 use Faker\Provider\dateTimeThisMonth;
 /*use dateTime;   
@@ -49,17 +48,7 @@ class TasksTableSeeder extends Seeder
                 ]);
         endfor; 
 		
-		$tasks = Task::all()->pluck('id')->toArray();
 		
-        for($i=1; $i<=100; $i++):           
-                DB::table('task_user')
-                    ->insert([
-                        'task_id' => $i,
-						//'task_id' => $faker->randomElement($tasks),
-                        'user_id' => 4,
-                       
-                    ]);
-        endfor; 
 
 
 		////////////////////////////////////////////////////////////////////////////////////////user 1

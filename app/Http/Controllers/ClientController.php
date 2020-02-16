@@ -20,32 +20,35 @@ class ClientController extends Controller
         $this->im = $im;
     }    
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    public function index()
-    {       
-        /* $clients = $this->br->getClients();       
-        return response()->json(['results' => $clients]); */
-		
-		$clients = Client::with('locations')->get();
+    
+	public function index(Request $request)
+    {      
+		$clients = Client::with('locations')
+						   ->get();
 		return response()
                ->json([ 
-			   'results' => $clients,			   
+			   'rows' => $clients,			   
 			   ]);
     }
      /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
      public function edit($id)
-     {        
-           
+     {    
          $client = $this->br->getClientById($id); 
+		 $alllocations = $this->br->getAllLocations();
          return response()
-             ->json([ 'form' => $client]);   
+             ->json([ 
+			 'form' => $client,
+			 'alllocations' => $alllocations,
+			 ]);   
          
      }
      /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
     public function create()
     {       
-       
+       $alllocations = $this->br->getAllLocations();
        return response()->json([
-           'form' => '',                
+           'form' => '',
+		   'alllocations' => $alllocations,
            ]);
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST
@@ -59,7 +62,14 @@ class ClientController extends Controller
     public function update(Request $request, $id){
         $client = $this->br->getClientById($id);
         $fv = $this->validate($request, $this->vr->clientUpdate());
-        $client->update($request->all());         
+        $client->update($request->all());   
+		///
+		$array_locations = [];
+        foreach($request->input('locations') as $location){           
+            $array_locations[] = $location['id'];
+        }		
+        $client->locations()->sync($array_locations);
+		
         return ['saved' => 'Saved the client info','id' => $client->id];
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   
@@ -70,7 +80,7 @@ class ClientController extends Controller
        return response()
            ->json(['deleted' => true]);
    }
-   /**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH CLIENTS
+    /**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH CLIENTS
     public function searchClients()
     {
         $results = Client::orderBy('company_name')

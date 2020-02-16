@@ -34,7 +34,13 @@ class TaskController extends Controller
     } */
 	public function index()
     {       
-		$filterAllLocations = $this->br->getAllLocations(); 
+		$tasks = Task::with('locations.clients')
+						 ->get();
+		return response()
+               ->json([ 
+			   'rows' => $tasks,			   
+			   ]);
+		/* $filterAllLocations = $this->br->getAllLocations(); 
 		$filterAllStatuses = $this->br->getAllStatuses2(); 
 						
 		$tasks_pre = Task::select('tasks.*')
@@ -63,7 +69,7 @@ class TaskController extends Controller
 			   'results' => $tasks_ok,
 			   'filterAllLocations'=> $filterAllLocations,
 			   'filterAllStatuses'=> $filterAllStatuses,
-			   ]);
+			   ]); */
 				
 		
     }
@@ -73,9 +79,10 @@ class TaskController extends Controller
         $task = $this->br->getTaskById($id); 
         $fieldusers = $this->br->getAllFieldUsers(); 
 		$statuses = $this->br->getAllStatuses2();
+		$alltreatments = Treatment::withTrashed()->get();
         return response()->json([
             'form' => $task, 
-            //'fieldusers' => $fieldusers->toArray(['name','last_name']) 
+            'alltreatments' => $alltreatments,
 			'fieldusers' => $fieldusers,
 			'statuses' => $statuses,
             ]);         
@@ -85,8 +92,10 @@ class TaskController extends Controller
      {        
         $fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();  
 		$statuses = $this->br->getAllStatuses2();
+		$alltreatments = Treatment::withTrashed()->get();
         return response()->json([
-            'form' => '',  
+            'form' => '', 
+			'alltreatments' => $alltreatments,
 			'fieldusers' => $fieldusers->toArray(['name']),
 			'statuses' => $statuses,
             ]);
@@ -108,7 +117,7 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
     public function update(Request $request, $id)
     {
-        //dd($request->all());       
+        //dd($request->input('selectedTreatments'));       
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdate());       
         //$task->update($request->all());
@@ -119,6 +128,9 @@ class TaskController extends Controller
             $array_users[] = $user['id'];
         }		
         $task->users()->sync($array_users); 
+		
+		$task->locations->treatments()->sync($request->input('selectedTreatments'));
+	    //$task->location->treatments()->sync($request->input('locations')['selectedTreatments']);
 		
         return ['saved' => 'true','id' => $task->id,'array_users' =>$array_users];        
     }

@@ -14,7 +14,8 @@ class CreateClientsTable extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->increments('id');								           
+            $table->increments('id');
+			$table->boolean('active');
 			$table->string('person_title')->nullable();
 			$table->string('person_name');
 			$table->string('company_name');
@@ -28,10 +29,14 @@ class CreateClientsTable extends Migration
 			$table->date('contract_start');
             $table->date('contract_end');            
             $table->text('description')->nullable();
+			$table->string('reccurence');
             //recurrence
 			$table->softDeletes();  //add this line
             $table->timestamps();
         });
+		
+		
+		
     }
 
     /**

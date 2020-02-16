@@ -21,6 +21,7 @@ class BackendRepository implements BackendRepositoryInterface
     }
 	public function getClientById($id){
         return Client::where('id', '=', $id)
+		           ->with('locations')
                    ->first(); 
     } 
 	public function getAllClients(){
@@ -56,6 +57,9 @@ class BackendRepository implements BackendRepositoryInterface
                   //orderBy('created_at', 'desc')
                   with('locations')
                   ->with('statuses')
+				  ->whereHas('statuses',function($query) {                
+						 $query->where('status_id', '=', 1);                    
+					})
                   //->with('selectedUsers') 
                   ->doesntHave('users')    
                   ->get(); 
@@ -82,7 +86,7 @@ class BackendRepository implements BackendRepositoryInterface
 	
     public function getTaskById($id){
         return Task::where('id', '=', $id) 
-                   ->with('locations')
+                   ->with('locations.treatments')
                    ->with('statuses')
                    ->with('users')
                    ->first(); 

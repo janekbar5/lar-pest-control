@@ -18,8 +18,8 @@
                     class="fc-event" v-for="(per, idx) in unassignedtasks" 
                     v-bind:key="idx" v-bind:id="per.id">
 
-                    {{ per.title }} 
-                    <!-- {{ per.locations.title }} {{ per.selected_users }} -->
+                    {{ per.title }} </br>
+                    {{ per.locations.title }} {{ per.users }} 
                     </div>
                     </div>
                       
@@ -89,7 +89,7 @@
                       <div class="card-body">                  
                       <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
                     <!-- tasksbydate {{ tasksbydate }}</br> -->
-                    <!-- <button class="btn btn-danger" @click="push">push</button> -->
+                    <button class="btn btn-danger" @click="loadCalendar">loadCalendar</button> 
                       
                     <!-- events {{ events }} -->
                     <!-- <div v-for="(un, index) in unassignedtasks" :key="index">{{un.title}} </div> -->
@@ -128,7 +128,7 @@
 
         <!-- <Modal :freefieldusers="freefieldusers" />  -->
         <!----------------------- Modal statusesModal------------------------------------>
-            <div class="modal fade" id="assignTaskToUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true" @mouseover="getValues">
+            <div class="modal fade" id="assignTaskToUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true" data-backdrop="static" @mouseover="getValues">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -187,15 +187,18 @@
                     </div>
 
 
-                      <multiselect 
+                    <multiselect 
                     v-model="form.users" 
                     :options="freefieldusers"
                     :custom-label="nameWithNameLastName"                                                                                         
                     placeholder="Select users"
                     :multiple="true"                                            
                     label="name" 
-                    track-by="name">
+                    track-by="name"
+                    :class="{ 'is-invalid': form.errors.has('users') }"
+                    >
                     </multiselect>
+                     <has-error :form="form" field="users"></has-error>
                 
                 </div>
                 <div class="modal-footer">
@@ -261,13 +264,13 @@ export default {
         allDayText: "All Day Events",        
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
-        eventRender(event, element) {                 
+        //eventRender(event, element) {                 
             //event.selected_users.forEach(function (item) {
-                      element.find('.fc-content').append(' <i class="delete fas fa-trash-alt"></i> <span class="description"></span>');                      
+                      //element.find('.fc-content').append(' <i class="delete fas fa-trash-alt"></i> <span class="description"></span>');                      
             //});   
-            element.find(".delete").click(function() {
+            //element.find(".delete").click(function() {
             //console.log(event._id)                    
-            $('#calendar').fullCalendar('removeEvents', event._id);
+            //$('#calendar').fullCalendar('removeEvents', event._id);
                         // swal.fire({
                         //     title: 'Weet je het zeker?',
                         //     text: "Je staat op het punt dit item te verwijderen",
@@ -289,8 +292,8 @@ export default {
                         //             )
                         //         }
                         //     })
-                    });
-         },
+                    //});
+         //},
         //////////////////////////////////////////////////////////////////////
         //drop(calEvent, jsEvent, view) {
         //drop(date, jsEvent, view) {  
@@ -417,7 +420,7 @@ export default {
                     this.clear()
                     $('#assignTaskToUserModal').modal('hide')
                      //this.loadData()
-                     this.loadCalendar()
+                    //this.loadCalendar()
                     toast({
                         type: 'success',
                         title: 'User Created in successfully'

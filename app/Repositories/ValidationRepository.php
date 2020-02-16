@@ -44,6 +44,7 @@ class ValidationRepository
 			'end' => 'required',
 			'location_id' => 'required',
 			'status_id' => 'required',
+			'users' => 'required',
 			
          );        
          return $rules;
@@ -66,7 +67,9 @@ class ValidationRepository
             'title' => 'required',
             'description' => 'required',
 			'surface' => 'required|numeric',
-			'client_id' => 'required',
+			//'client_id' => 'required',
+			
+			//'address_line1' => 'required',
          );        
          return $rules;
      }

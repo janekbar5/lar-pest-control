@@ -15,13 +15,13 @@
                         <th style="width: 10%">User</th>    
                         <th style="width: 5%">Action </th>                       
                         <th style="width: 5%">Model</th>
-                        <th style="width: 5%">Old Val.</th>
-                        <th style="width: 30%">New Val.</th>
+                        <th style="width: 20%">Old Val.</th>
+                        <th style="width: 20%">New Val.</th>
                         <!-- <th style="width: 5%">ip_address</th>
                         <th style="width: 5%">user_agent</th>                        -->
-                        <th style="width: 5%">tags</th>                       
+                        <!-- <th style="width: 10%">tags</th>                        -->
                         
-                        <th style="width: 5%">updated_at</th>
+                        <th style="width: 15%">created</th>
                     </tr>
                 </thead>
 
@@ -37,9 +37,9 @@
                         <!-- <td>{{item.url}}</td> -->
                         <!-- <td>{{item.ip_address}}</td>
                         <td>{{item.user_agent}}</td> -->
-                        <td>{{item.tags}}</td> 
+                        <!-- <td>{{item.tags}}</td>  -->
                         <td>{{item.created_at}}</td> 
-                        <td>{{item.updated_at}}</td>    
+                        <!-- <td>{{item.updated_at}}</td>     -->
                        
 
                         <td> <span class="badge bg-primary" v-for="role in item.roles" style="font-size:8px">{{role.name}} </span> </td>                      

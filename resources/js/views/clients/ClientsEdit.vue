@@ -16,20 +16,39 @@
                         </div>
                         
                         <div class="card-body">
-                            
-                            <div class="row">   
+                            <div class="row">
+                                <div class="col-md-2">   
+                                    <div class="form-group">                                       
+                                        <div class="custom-control custom-checkbox">
+                                        <input v-model="form.active" class="custom-control-input" type="checkbox" id="customCheckbox2"  :class="{ 'is-invalid': errors.active }">
+                                        <label for="customCheckbox2" class="custom-control-label">Active</label>
+                                         <div class="alert alert-danger" v-if="errors.active"> {{errors.active[0]}}</div>
+                                        </div>                                        
+                                    </div>
+                                </div>    
+                            </div>    
+                            <div class="row">
+                                <div class="col-md-2">   
+                                    <div class="form-group">                                       
+                                        <div class="custom-control custom-checkbox">
+                                        <input v-model="form.is_company" class="custom-control-input" type="checkbox" id="customCheckbox"  :class="{ 'is-invalid': errors.is_company }">
+                                        <label for="customCheckbox2" class="custom-control-label">Is Company</label>
+                                         <div class="alert alert-danger" v-if="errors.is_company"> {{errors.is_company[0]}}</div>
+                                        </div>                                        
+                                    </div>
+                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>Name</label>
+                                        <label>Company Name</label>
                                         <input v-model="form.company_name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
                                          <div class="alert alert-danger" v-if="errors.company_name"> {{errors.company_name[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                  <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>Is Company</label>
-                                        <input v-model="form.is_company" type="text" name="is_company" class="form-control" :class="{ 'is-invalid': errors.is_company }" >
-                                         <div class="alert alert-danger" v-if="errors.is_company"> {{errors.is_company[0]}}</div>
+                                        <label>Phone</label>
+                                        <input v-model="form.phone" type="text" name="phone" class="form-control" :class="{ 'is-invalid': errors.phone }" >
+                                         <div class="alert alert-danger" v-if="errors.phone"> {{errors.phone[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                                            
@@ -88,10 +107,16 @@
                                         <Datepicker format="YYYY-MM-DD" v-model="form.contract_end" class=""  />
                                         <div class="alert alert-danger" v-if="errors.contract_end"> {{errors.contract_end[0]}}</div>
                                     </div>  
-                                </div>                                   
+                                </div> 
+                                <div class="col-md-4">                                   
+                                    <div class="form-group">
+                                        <label>Reccurence</label>                                       
+                                        <input v-model="form.reccurence" type="text" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }" >                                         
+                                        <div class="alert alert-danger" v-if="errors.reccurence"> {{errors.reccurence[0]}}</div>
+                                    </div>  
+                                </div>                                    
                             </div>
-                            <div class="row">
-                               
+                            <div class="row">                               
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
                                         <label>Description</label>
@@ -100,6 +125,27 @@
                                     </div>  
                                 </div>                                 
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Locations</label>      
+
+                                            <multiselect 
+                                            v-model="form.locations" 
+                                            :options="alllocations"
+                                            :custom-label="nameWithNameLastName"                                                                                         
+                                            placeholder="Select users"
+                                            :multiple="true"                                            
+                                            label="name" 
+                                            track-by="title">
+                                            </multiselect>
+                                     </div>  
+                                </div>                                 
+                            </div>
+                           
+
+                           
+                                           
 
                                     
                        </div> 
@@ -126,10 +172,11 @@
     //import DzoneComponent from '../../components/DzoneComponent';
     import Buttons from './Buttons';
     import Datepicker from 'vuejs-datetimepicker'
-
+    import Multiselect from 'vue-multiselect'
         
     export default {
-        components: { Buttons,Datepicker },
+        components: { Buttons, Datepicker, Multiselect },
+        //components: {  Multiselect },
         data () {
             return {
                 modelSingular: '',
@@ -138,7 +185,9 @@
                 urlList:'', urlCreate:'', urlEdit:'',              
                 ////////////////////////////////////////////////////////// 
                 editMode: this.$route.meta.mode,
-                form: {},
+                form: {
+                    //active:false
+                },
                 errors: {},                         
                 //////////////////////////////////////////////////////////               
                 photable_Type: "App\\User",
@@ -149,6 +198,28 @@
                 //allroles: [],
                 datetime:'',
                 date:'',
+                //
+                alllocations:[],
+                //locations:[],
+                // value: [],
+                // options: [
+                //     { name: 'Vue.js', language: 'JavaScript' },
+                //     { name: 'Adonis', language: 'JavaScript' },
+                //     { name: 'Rails', language: 'Ruby' },
+                //     { name: 'Sinatra', language: 'Ruby' },
+                //     { name: 'Laravel', language: 'PHP' },
+                //     { name: 'Phoenix', language: 'Elixir' }
+                // ],
+                //
+                modelPlural: 'clients', modelSingular: 'Client', 
+                urlList:'/clients',
+                urlCreate:'/clients/create',
+                urlEdit:'/clients/',
+                apiList:'/v1/api/clients/index',
+                apiCreate:'/v1/api/clients/create',
+                apiEdit:'/v1/api/clients/edit/',       
+                apiUpdate:'/v1/api/clients/update/',     
+                apiDelete:'/v1/api/clients/delete/'
             }
         },
         beforeRouteEnter(to, from, next) {            
@@ -169,32 +240,46 @@
           
         },
         created() {
-            this.$eventHub.$on('settings', this.modelSettings) 
+            //this.$eventHub.$on('settings', this.modelSettings) 
         },
         methods: {
-            modelSettings(settings){                
-                //return name
-                this.settings = settings;
-                this.urlList = settings.urlList
-                this.urlEdit = settings.urlEdit
-                this.urlCreate = settings.urlCreate
-                //         
-                this.apiList = settings.apiList
-                this.apiDelete = settings.apiDelete
-                this.apiCreate = settings.apiCreate
-                this.apiEdit = settings.apiEdit
-                this.apiUpdate = settings.apiUpdate
-                //
-                this.modelSingular = settings.modelSingular
-                //console.log(settings)                
+            // addTag(newTag) {
+            // const tag = {
+            //     name: newTag,
+            //     code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+            // }
+            // this.options.push(tag)
+            // this.value.push(tag)
+            // },
+            nameWithNameLastName ({ title }) {
+                return `${title}`
             },
+            // modelSettings(settings){                
+            //     //return name
+            //     this.settings = settings;
+            //     this.urlList = settings.urlList
+            //     this.urlEdit = settings.urlEdit
+            //     this.urlCreate = settings.urlCreate
+            //     //         
+            //     this.apiList = settings.apiList
+            //     this.apiDelete = settings.apiDelete
+            //     this.apiCreate = settings.apiCreate
+            //     this.apiEdit = settings.apiEdit
+            //     this.apiUpdate = settings.apiUpdate
+            //     //
+            //     this.modelSingular = settings.modelSingular
+            //     //console.log(settings)                
+            // },
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
-                    Vue.set(this.$data, 'form', res.data.form)
+                    Vue.set(this.$data, 'form', res.data.form)                     
                     this.store = this.apiUpdate + this.$route.params.id
+                    this.locations =  res.data.form.locations //assigned locations
                     this.method = 'PUT'
                     this.title = 'Edit'    
-                }               
+                } 
+               
+                this.alllocations =  res.data.alllocations //alllocations            
             }, 
             onSave() {
                 this.errors = {}
@@ -224,34 +309,34 @@
             loadToast(icon,text){
               toast.fire({icon: icon,title: text })
             }, 
-            onDelete(){
-                swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!"+this.urlList,
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        // Send request to the server
-                         if (result.value) {
-                                //byMethod('delete', `/api/properties/${this.model.id}`).then(()=>{
-                                byMethod('delete',this.apiDelete+this.$route.params.id).then(()=>{
-                                        swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
-                                        'success'
-                                        )
-                                    //Fire.$emit('AfterCreate');
-                                    this.$router.push(this.urlList)
-                                }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
-                                });
-                         }
-                    })
-            },
+            // onDelete(){
+            //     swal.fire({
+            //         title: 'Are you sure?',
+            //         text: "You won't be able to revert this!"+this.urlList,
+            //         type: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Yes, delete it!'
+            //         }).then((result) => {
+            //             // Send request to the server
+            //              if (result.value) {
+            //                     //byMethod('delete', `/api/properties/${this.model.id}`).then(()=>{
+            //                     byMethod('delete',this.apiDelete+this.$route.params.id).then(()=>{
+            //                             swal.fire(
+            //                             'Deleted!',
+            //                             'Your file has been deleted.',
+            //                             'success'
+            //                             )
+            //                         //Fire.$emit('AfterCreate');
+            //                         this.$router.push(this.urlList)
+            //                     }).catch(()=> {
+            //                         swal.fire("Failed!", "There was something wronge.", "warning");
+            //                     });
+            //              }
+            //         })
+            // },
         }
     }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+ <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

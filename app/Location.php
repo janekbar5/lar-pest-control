@@ -27,7 +27,8 @@ class Location extends Model implements Auditable, Searchable
     protected $appends = ['text'];
     public function getTextAttribute()
     {
-        return $this->attributes['title']. ' - '.$this->attributes['description'];
+        //return $this->attributes['title']. ' - '.$this->attributes['description'];
+		return $this->attributes['title'];
     }
 	
 	
@@ -47,6 +48,14 @@ class Location extends Model implements Auditable, Searchable
         return $this->belongsToMany(Treatment::class, 'location_treatment', 'location_id', 'treatment_id');
         //return $this->belongsToMany(Treatment::class);
     }
+	public function clients()
+    {
+        //return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
+        return $this->belongsToMany(Client::class, 'client_location', 'client_id', 'location_id');
+    }
+	
+	
+	
  
     ////////////////////////////////////////////////////////////////HASMANY
     // Task-->hasMany-->Location   <==>  Location-->belongsTo-->Task
@@ -57,10 +66,10 @@ class Location extends Model implements Auditable, Searchable
     
     ////////////////////////////////////////////////////////////////BELONGSTO
     // Location-->belongsTo-->Client   <==>  Client-->hasMany-->Location
-    public function clients()
+    /* public function clients()
     {
         return $this->belongsTo('App\Client', 'client_id');		
-    }
+    } */
 
     /////////////////////////////////////////////////////////////Address
     public function address()

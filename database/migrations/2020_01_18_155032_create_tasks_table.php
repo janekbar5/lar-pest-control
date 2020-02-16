@@ -43,8 +43,7 @@ class CreateTasksTable extends Migration
             $table->primary(['task_id','user_id']); //prevent repeating (1,1  1,2  1,3  1,1)			
             $table->integer('user_id')->unsigned();											
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');  
-            $table->timestamps();
-			
+            $table->timestamps();		
 
         });
         

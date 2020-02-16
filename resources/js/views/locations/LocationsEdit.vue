@@ -33,8 +33,15 @@
                                             <input v-model="form.surface" type="text" name="surface" class="form-control" :class="{ 'is-invalid': errors.surface }" >
                                             <div class="alert alert-danger" v-if="errors.surface"> {{errors.surface[0]}}</div>
                                         </div>  
-                                </div>
-                                
+                                </div>  
+
+                                <div class="col-md-4">                                   
+                                        <div class="form-group">
+                                            <label>Price</label>
+                                            <input v-model="form.price" type="text" name="price" class="form-control" :class="{ 'is-invalid': errors.price }" >
+                                            <div class="alert alert-danger" v-if="errors.price"> {{errors.price[0]}}</div>
+                                        </div>  
+                                </div> 
                                                              
                                                                
                             </div>
@@ -55,27 +62,37 @@
                             
 
 
-                            <div class="row"> 
+                            <!-- <div class="row"> 
                                     <div class="col-md-12">
                                        <div class="form-group">
                                             <label> Client </label>
                                                 <typeahead :url="dataURL" :initialize="form.clients" @input="onClient" />                                                
-                                                <!-- <small class="error-control" v-if="errors.customer_id">
+                                                 <small class="error-control" v-if="errors.customer_id">
                                                     {{errors.customer_id[0]}}
-                                                </small> -->
+                                                </small> 
                                                 <div class="alert alert-danger" v-if="errors.client_id"> {{errors.client_id[0]}}</div>
                                     </div>
-
-                                    <input v-model="form.client_id" type="hidden" name="name" class="form-control" :class="{ 'is-invalid': errors.client_id }" >
-                                     
+                                    <input v-model="form.client_id" type="hidden" name="name" class="form-control" :class="{ 'is-invalid': errors.client_id }" >                                     
                                    </div>
-                                
-                                   
-                                                                
-                                
-                               
+                            </div>   -->
 
-                            </div>     
+                             <div class="row">
+                                <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Clients</label>      
+
+                                            <multiselect 
+                                            v-model="form.clients" 
+                                            :options="allclients"
+                                            :custom-label="nameWithNameLastName"                                                                                         
+                                            placeholder="Select clients"
+                                            :multiple="true"                                            
+                                            label="person_name" 
+                                            track-by="person_name">
+                                            </multiselect>
+                                     </div>  
+                                </div>                                 
+                            </div>   
 
 
                              
@@ -147,14 +164,15 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <input v-model="form.address.lat" type="text" class="form-control" id="latitude" placeholder="Latitude">
+                                    <input v-model="form.address.lat" type="text" class="form-control" id="latitude" placeholder="Latitude" disabled>
                                 </div>
                                 <div class="col-md-3">
-                                    <input v-model="form.address.lng" type="text" class="form-control" id="longitude" placeholder="Longitude">
+                                    <input v-model="form.address.lng" type="text" class="form-control" id="longitude" placeholder="Longitude" disabled>
                                 </div>
 
                                 <div class="col-md-3">
-                                   <button id="target2" @click="searchLocation2()" >Find Location</button>
+                                  
+                                   <button id="target2" @click="searchLocation2()" class="btn btn-secondary">Search Location...</button>
                                 </div>
                             </div>
 
@@ -181,13 +199,13 @@
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'
-    import {Typeahead } from '../../components/typeahead'
+    //import {Typeahead } from '../../components/typeahead'
     //import DzoneComponent from '../../components/dzone/DzoneComponent';
     import Buttons from './Buttons';
     import LocationPicker from '../../components/locationpicker/LocationPicker3'  
-    
+    import Multiselect from 'vue-multiselect'
     export default {
-        components: {  Buttons, LocationPicker, Typeahead },
+        components: {  Buttons, Multiselect, LocationPicker },
         data () {
             return {
                 lat:'',lng:'',
@@ -218,7 +236,7 @@
                 //photable_Id: this.$route.params.id,
                 grantedTreatments:[], //dont need allPermissions in form only selected 
                 allTreatments:[], //dont need allPermissions in form only selected 
-                
+                allclients:[],
             }
         },
         beforeRouteEnter(to, from, next) {            
@@ -245,12 +263,14 @@
             console.log(this.apiUpdate)
         },
         methods: {
-            onClient(e) {
-                const customer = e.target.value
-                Vue.set(this.$data.form, 'clients', customer)
-                Vue.set(this.$data.form, 'client_id', customer.id) 
-                                         
-            },
+            nameWithNameLastName ({ person_name  }) {
+                    return `${person_name}`
+             },
+            // onClient(e) {
+            //     const customer = e.target.value
+            //     Vue.set(this.$data.form, 'clients', customer)
+            //     Vue.set(this.$data.form, 'client_id', customer.id) 
+            // },
             updateLocation(itm) {             
                Vue.set(this.form.address, 'lat', itm.lat) 
                Vue.set(this.form.address, 'lng', itm.lng)               
