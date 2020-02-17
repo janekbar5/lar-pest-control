@@ -73,7 +73,7 @@ Route::post('v1/api/tasks/updatefromcalendar/{id}', 'TaskController@updateFromCa
 Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  post
 
 Route::get('/v1/api/tasks/gettasksbydate', 'TaskController@getTasksByDate'); //list 
-
+Route::get('/v1/api/tasks/getfreefieldusersfordate', 'TaskController@getFreeFieldUsersForDate'); //list 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////LOCATIONS
 Route::get('v1/api/locations/searchlocations', 'LocationController@searchLocations'); //list 
 Route::get('v1/api/locations/filter', 'LocationController@filter'); //list 

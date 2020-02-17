@@ -1,6 +1,10 @@
 Pytania
 Reccurence???
 Add Clients location przy clientach
+////////////////Users Menu Access
+Admin           Dashboard   Clients(e,d)
+Desktop User    Dashboard   Clients(e)
+Field User      Dashboard   Clients(e)
 
 /////////////// History Log //// Soft Delete  // Searchable
 ---Users          ok              ok          ok             
@@ -13,6 +17,9 @@ Add Clients location przy clientach
 ---Clients      
 
 ///////////////////Crud Validation
+
+
+
 
 //done
 Global Settings Modals

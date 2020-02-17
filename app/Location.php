@@ -39,6 +39,7 @@ class Location extends Model implements Auditable, Searchable
                 'title',
                 'description',
 				'surface',
+				'price',
                 
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT

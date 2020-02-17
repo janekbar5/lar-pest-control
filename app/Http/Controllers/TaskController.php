@@ -90,13 +90,13 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
      public function create()
      {        
-        $fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();  
+        //$fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();  
 		$statuses = $this->br->getAllStatuses2();
 		$alltreatments = Treatment::withTrashed()->get();
         return response()->json([
             'form' => '', 
 			'alltreatments' => $alltreatments,
-			'fieldusers' => $fieldusers->toArray(['name']),
+			//'fieldusers' => $fieldusers->toArray(['name']),
 			'statuses' => $statuses,
             ]);
      }
@@ -271,6 +271,35 @@ class TaskController extends Controller
                ]);
 	 
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	//  http://www.lar-pest-control.test/v1/api/tasks/getfreefieldusersfordate?start=2020-02-17 07:21&end=2020-02-17 15:21
+	public function getFreeFieldUsersForDate(){ 
+	      $startTime = request('start');
+		  $endTime = request('end');
+		 
+		   $allAvailableFieldUsers =	User::with('tasks')
+		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
+				       /* ->WhereDoesntHave('tasks', function($q) {
+					   $q->where('start','>=', request('start'))->where('end','<=', request('end'));					   
+				       }) */
+					   ->WhereDoesntHave('tasks', function ($q) use ( $startTime, $endTime) {
+						$q
+						->whereRaw("start >= '$startTime' AND start < '$endTime'")
+						->orwhereRaw("start <= '$startTime' AND end > '$endTime'")
+						->orwhereRaw("end > '$startTime' AND end <= '$endTime'")
+						->orwhereRaw("start >= '$startTime' AND end <= '$endTime'")
+						;
+					})
+				   ->get(); 
+			return response()
+               ->json([ 
+			   'count'=> $allAvailableFieldUsers->count(),
+               'allAvailableFieldUsers' => $allAvailableFieldUsers,
+               //'statuses'=> $statuses,
+               //'filterAllStatuses'=> $filterAllStatuses,
+               ]);	   
+
+    }
 	
 	
 

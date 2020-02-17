@@ -33,9 +33,11 @@
       >
         <template slot="table-row" slot-scope="props">
 
-                <span v-if="props.column.field == 'action_buttons'">               
+                <span v-if="props.column.field == 'action_buttons'">   
+
                  <i aria-hidden="true" class="fa fa-pen" @click="recordEdit(props.row.id)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                 <i aria-hidden="true" class="fa fa-trash" @click="recordDelete(props.row.id)"></i>  
+                 <i aria-hidden="true" class="fa fa-trash" v-if="$can('client-delete')" @click="recordDelete(props.row.id)"></i>  
+
                 </span>
 
                 <span v-else-if="props.column.field == 'location'">
@@ -182,7 +184,7 @@ components: {VueGoodTable},
           field: 'active',
           filterOptions: {
             enabled: true, // enable filter for this column
-            placeholder: 'Reccurence...', // placeholder for filter input
+            placeholder: 'Active / Inactive', // placeholder for filter input
             filterValue: '', // initial populated value for this filter
             filterDropdownItems: [  
               { value: 1, text: 'Active' },  

@@ -51,9 +51,11 @@ class LocationController extends Controller
     public function create()
     {       
        $alltreatments = Treatment::withTrashed()->get();  
+	   $allclients = $this->br->getAllClients();
        return response()->json([
            'form' => '',
-           'alltreatments' => $alltreatments,           
+           'alltreatments' => $alltreatments, 
+		   'allclients' => $allclients,
            ]);
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST

@@ -35,6 +35,8 @@
                   <i class="nav-icon fas fa-tachometer-alt orange"></i> <p> Dashboard </p>
                 </router-link>
         </li>
+
+        
         @can('client-list')
         <li class="nav-item">
             <router-link to="/clients" class="nav-link">

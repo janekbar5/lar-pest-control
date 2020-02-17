@@ -111,7 +111,12 @@
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Reccurence</label>                                       
-                                        <input v-model="form.reccurence" type="text" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }" >                                         
+                                        <!-- <input v-model="form.reccurence" type="text" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }" >  -->
+                                        <select v-model="form.reccurence" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }">
+                                            <option v-for="rec in reccurences" :value="rec.id">
+                                            {{rec.name}}
+                                            </option>
+                                        </select>                                        
                                         <div class="alert alert-danger" v-if="errors.reccurence"> {{errors.reccurence[0]}}</div>
                                     </div>  
                                 </div>                                    
@@ -128,7 +133,7 @@
                             <div class="row">
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
-                                        <label>Locations</label>      
+                                        <label>Locations</label>     
 
                                             <multiselect 
                                             v-model="form.locations" 
@@ -219,7 +224,17 @@
                 apiCreate:'/v1/api/clients/create',
                 apiEdit:'/v1/api/clients/edit/',       
                 apiUpdate:'/v1/api/clients/update/',     
-                apiDelete:'/v1/api/clients/delete/'
+                apiDelete:'/v1/api/clients/delete/',
+                reccurences: [
+                {id: 1,name: 'Requested' },
+                {id: 2,name: 'Bi-monthly' },
+                {id: 3,name: 'Monthly' },
+                {id: 4,name: '2 Months' },
+                {id: 5,name: '3 Months' },
+                {id: 6,name: '6 Months' },
+                {id: 7,name: 'Yearly' },
+                {id: 8,name: 'Custom' },             
+                ],
             }
         },
         beforeRouteEnter(to, from, next) {            

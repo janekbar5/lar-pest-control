@@ -117,34 +117,34 @@ export default {
                droppable: true,
                
 
-            //     eventRender(event, element) {
-            //         element.find('.fc-content').append('<i class="delete fas fa-trash-alt"></i> <span class="description">' + event.description + '</span>');
-            //         element.find('.fc-content').append('</br> <span class="description">Jan</span>');
+                eventRender(event, element) {
+                    element.find('.fc-content').append('<i class="delete fas fa-trash-alt"></i> <span class="description">' + event.description + '</span>');
+                    element.find('.fc-content').append('</br> <span class="description">Jan</span>');
 
-            //         element.find(".delete").click(function() {
-            //             Swal.fire({
-            //                 title: 'Weet je het zeker?',
-            //                 text: "Je staat op het punt dit item te verwijderen",
-            //                 type: 'warning',
-            //                 showCancelButton: true,
-            //                 confirmButtonColor: '#3085d6',
-            //                 cancelButtonColor: '#d33',
-            //                 confirmButtonText: 'Ja, verwijderen'
-            //                 }).then((result) => {
-            //                     if (result.value) {
-            //                         $('#calendar').fullCalendar('removeEvents', event._id);
+                    element.find(".delete").click(function() {
+                        Swal.fire({
+                            title: 'Weet je het zeker?',
+                            text: "Je staat op het punt dit item te verwijderen",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ja, verwijderen'
+                            }).then((result) => {
+                                if (result.value) {
+                                    $('#calendar').fullCalendar('removeEvents', event._id);
 
-            //                         axios.delete('/agenda_items/'+ event.id)
+                                    axios.delete('/agenda_items/'+ event.id)
 
-            //                         Swal.fire(
-            //                         'Verwijderd!',
-            //                         'De afspraak is verwijderd.',
-            //                         'success'
-            //                         )
-            //                     }
-            //                 })
-            //         });
-            //     },
+                                    Swal.fire(
+                                    'Verwijderd!',
+                                    'De afspraak is verwijderd.',
+                                    'success'
+                                    )
+                                }
+                            })
+                    });
+                },
 
 
                 // drop(info) {

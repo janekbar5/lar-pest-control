@@ -177,8 +177,16 @@ Vue.filter('formatDate', function(value) {
       return moment(String(value)).format('hh:mm')
     }
 });
-
-
+Vue.filter('formatDayOnly', function(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD')
+    }
+});
+Vue.filter('formatDateNoSeconds', function(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD hh:mm')
+    }
+});
 ////////////////////////////////////////////////3 define router
 const router = new VueRouter({    
     mode: 'history',

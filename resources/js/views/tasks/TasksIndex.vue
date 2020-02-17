@@ -35,7 +35,7 @@
 
                 <span v-if="props.column.field == 'action_buttons'">               
                  <i aria-hidden="true" class="fa fa-pen" @click="recordEdit(props.row.id)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                 <i aria-hidden="true" class="fa fa-trash" @click="recordDelete(props.row.id)"></i>  
+                 <i aria-hidden="true" class="fa fa-trash" v-if="$can('task-delete')" @click="recordDelete(props.row.id)"></i>  
                 </span>
 
                 <span v-else-if="props.column.field == 'location'">

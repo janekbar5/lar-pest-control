@@ -21,7 +21,7 @@ class Client extends Model implements Auditable, Searchable
 	protected $fillable = [  
         //'user_id',
         //'client_id',        
-        'active','company_name','email','is_company','contract_number','vat_number','person_name','contract_start','contract_end',
+        'active','phone','company_name','email','is_company','contract_number','vat_number','person_name','contract_start','contract_end',
 		'description','reccurence',
 		
 		

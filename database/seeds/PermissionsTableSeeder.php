@@ -146,8 +146,40 @@ class PermissionsTableSeeder extends Seeder
 		
         /////////////////////////////////////Desk User
         //DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 2]);
+        //DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 2]);
+        //DB::table('role_has_permissions')->insert(['permission_id' => 15,'role_id' => 2]);
+		
+		///////////41-44 Client (list,create,edit,delete)       	
+		DB::table('role_has_permissions')->insert(['permission_id' => 41,'role_id' => 2]);
+        DB::table('role_has_permissions')->insert(['permission_id' => 42,'role_id' => 2]);
+		DB::table('role_has_permissions')->insert(['permission_id' => 43,'role_id' => 2]);
+        //DB::table('role_has_permissions')->insert(['permission_id' => 44,'role_id' => 2]);
+		///////////33-36 Location (list,create,edit,delete)       		
+		DB::table('role_has_permissions')->insert(['permission_id' => 33,'role_id' => 2]);
+        DB::table('role_has_permissions')->insert(['permission_id' => 34,'role_id' => 2]);
+		DB::table('role_has_permissions')->insert(['permission_id' => 35,'role_id' => 2]);
+        //DB::table('role_has_permissions')->insert(['permission_id' => 36,'role_id' => 2]);
+		
+		///////////13-16 Tasks (list,create,edit,delete)
+        DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 2]);
         DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 2]);
-        DB::table('role_has_permissions')->insert(['permission_id' => 15,'role_id' => 2]);
+		DB::table('role_has_permissions')->insert(['permission_id' => 15,'role_id' => 2]);
+        //DB::table('role_has_permissions')->insert(['permission_id' => 16,'role_id' => 2]);
+		///////////29-32 Calendar (list,create,edit,delete)
+        DB::table('role_has_permissions')->insert(['permission_id' => 29,'role_id' => 2]);  
+        DB::table('role_has_permissions')->insert(['permission_id' => 30,'role_id' => 2]);  
+        DB::table('role_has_permissions')->insert(['permission_id' => 31,'role_id' => 2]);  
+        //DB::table('role_has_permissions')->insert(['permission_id' => 32,'role_id' => 2]); 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
         /////////////////////////////////////Field User
 		//DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 3]);
         DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 3]);

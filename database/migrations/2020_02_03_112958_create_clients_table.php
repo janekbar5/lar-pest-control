@@ -18,11 +18,11 @@ class CreateClientsTable extends Migration
 			$table->boolean('active');
 			$table->string('person_title')->nullable();
 			$table->string('person_name');
-			$table->string('company_name');
+			$table->string('company_name')->nullable();
 			 
             $table->string('email'); 
 			$table->string('phone');
-            $table->boolean('is_company');  
+            $table->boolean('is_company')->nullable();  
             $table->string('contract_number');              
             $table->string('vat_number');
 			           			

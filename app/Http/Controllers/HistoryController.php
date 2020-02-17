@@ -24,6 +24,8 @@ class HistoryController extends Controller
     public function index()
     {       
         $users = $this->br->getHistory();       
-        return response()->json(['results' => $users]);
+        return response()->json([
+		'rows' => $users
+		]);
     }
 }

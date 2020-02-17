@@ -28,7 +28,7 @@ public function run()
                     'vat_number' => 'vat-651651'.$i,                    
                     'contract_end' => '2021-'.$faker->randomElement($months).'-01',
                     'description' => $faker->text,
-					'reccurence' => $faker->randomElement($reccurence),
+					'reccurence' => $faker->numberBetween($min = 1, $max = 8),
                     //'address'
                     //'lat' => 51.483,
                     //'lng' => -0.132,

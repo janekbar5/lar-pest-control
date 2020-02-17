@@ -12,6 +12,8 @@
                     <div 
                     :data-title="per.title"
                     :data-price="per.price" 
+                    :data-start="per.start|formatDateNoSeconds" 
+                    :data-end="per.end|formatDateNoSeconds" 
                     :data-status_id="per.status_id" 
                     :data-location_id="per.location_id" 
                     v-bind:style="{ 'background-color': per.statuses.colour }" 
@@ -19,7 +21,7 @@
                     v-bind:key="idx" v-bind:id="per.id">
 
                     {{ per.title }} </br>
-                    {{ per.locations.title }} {{ per.users }} 
+                    {{ per.locations.title }} {{ per.start | formatDayOnly }} {{ per.start | formatDate }} {{ per.end | formatDate }}  
                     </div>
                     </div>
                       
@@ -32,6 +34,7 @@
                     <!-- DIRECT CHAT -->
                     <div class="card direct-chat direct-chat-warning" v-show="tasksbydate.length > 0">
                       <div class="card-header">
+                       
                         <h3 class="card-title">Tasks for {{ tasksbydate_date }}</h3>
                         <div class="card-tools">                     
                         </div>
@@ -83,13 +86,15 @@
                 
                     <div class="card">
                       <div class="card-header">
-                        <!-- <h3 class="card-title">Bordered Table</h3> -->
+                       <h3 class="card-title"> Admin User</h3>
                       </div>
                       
                       <div class="card-body">                  
                       <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
                     <!-- tasksbydate {{ tasksbydate }}</br> -->
                     <button class="btn btn-danger" @click="loadCalendar">loadCalendar</button> 
+                    <button class="btn btn-danger" @click="refetchEvents">refetchEvents</button>  
+                    
                       
                     <!-- events {{ events }} -->
                     <!-- <div v-for="(un, index) in unassignedtasks" :key="index">{{un.title}} </div> -->
@@ -105,7 +110,9 @@
 
                       
                         <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
-                        <full-calendar id="calendar" 
+                        <full-calendar 
+                        id="calendar" 
+                        ref="calendar" 
                         :config="config" 
                         :events="events"                        
                         @day-click="dayClick"                        
@@ -128,13 +135,14 @@
 
         <!-- <Modal :freefieldusers="freefieldusers" />  -->
         <!----------------------- Modal statusesModal------------------------------------>
-            <div class="modal fade" id="assignTaskToUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true" data-backdrop="static" @mouseover="getValues">
+            <div class="modal fade" id="assignTaskToUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true" data-backdrop="static" >
+              <!-- @mouseover="getValues" -->
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
                     
                     <h5 class="modal-title"  id="addNewLabel">Update Status</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" @click="clear()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -145,14 +153,26 @@
                         <input v-model="form.start" type="text" name="start" id="start" ref="start"
                             placeholder="start"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('start') }">
+                            
                         <has-error :form="form" field="start"></has-error>
                     </div>
+
+
+
+
+                    <!-- <datetime type="time" v-model="time"></datetime>
+                    <datetime type="datetime" v-model="datetime13" format="yyyy-MM-dd HH:mm:ss" name="datetime13" id="datetime13" ref="datetime13"></datetime> -->
+
+
                     <div class="form-group">
                         <input v-model="form.end" type="text" name="end" id="end" ref="end"
                             placeholder="end"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('end') }">
+                            
                         <has-error :form="form" field="end"></has-error>
                     </div>
+
+                    <div style="display:none">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
@@ -167,29 +187,32 @@
                             class="form-control" :class="{ 'is-invalid': form.errors.has('title') }">
                         <has-error :form="form" field="title"></has-error>
                     </div>
-                    <div class="form-group">
-                        <input v-model="form.price" type="text" name="price" id="price" ref="price"
-                            placeholder="price"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('price') }">
-                        <has-error :form="form" field="price"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <input v-model="form.status_id" type="text" name="status_id" id="status_id" ref="status_id"
-                            placeholder="status_id"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('status_id') }">
-                        <has-error :form="form" field="status_id"></has-error>
-                    </div>
-                    <div class="form-group">
-                        <input v-model="form.location_id" type="text" name="location_id" id="location_id" ref="location_id"
-                            placeholder="location_id"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('location_id') }">
-                        <has-error :form="form" field="location_id"></has-error>
+
+                        <div class="form-group">
+                            <input v-model="form.price" type="text" name="price" id="price" ref="price"
+                                placeholder="price"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('price') }">
+                            <has-error :form="form" field="price"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <input v-model="form.status_id" type="text" name="status_id" id="status_id" ref="status_id"
+                                placeholder="status_id"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('status_id') }">
+                            <has-error :form="form" field="status_id"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <input v-model="form.location_id" type="text" name="location_id" id="location_id" ref="location_id"
+                                placeholder="location_id"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('location_id') }">
+                            <has-error :form="form" field="location_id"></has-error>
+                        </div>
                     </div>
 
 
                     <multiselect 
+                    v-show="usersMultiselectBox"
                     v-model="form.users" 
-                    :options="freefieldusers"
+                    :options="allAvailableFieldUsers"
                     :custom-label="nameWithNameLastName"                                                                                         
                     placeholder="Select users"
                     :multiple="true"                                            
@@ -202,7 +225,7 @@
                 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
                     <button  type="submit" class="btn btn-success">Update</button>
                     <button type="button" class="btn btn-danger" @click="clear()">Close</button>
                 </div>
@@ -227,10 +250,14 @@ import "jquery-ui-bundle"
 import $ from 'jquery'
 // import Modal from './Modal.vue'    
 import Multiselect from 'vue-multiselect'
+import Datepicker from 'vuejs-datetimepicker'
+//
+import { Datetime } from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
 
 export default {
   name: "hello",
-  components: { Multiselect },  
+  components: { Multiselect,Datepicker,Datetime },  
   data() {
     var $this = this;
     return {
@@ -246,9 +273,12 @@ export default {
       //
       tasksbydate:[], 
       tasksbydate_date:'',
-      freefieldusers:[],
+      allAvailableFieldUsers:[],
       //
-      //start:'',     
+      //start:'',  
+      time:'',
+      datetime13:'', 
+      usersMultiselectBox:false,  
       config: {          
         //defaultView: "agendaWeek",
         defaultView: "month",
@@ -264,10 +294,19 @@ export default {
         allDayText: "All Day Events",        
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
-        //eventRender(event, element) {                 
-            //event.selected_users.forEach(function (item) {
-                      //element.find('.fc-content').append(' <i class="delete fas fa-trash-alt"></i> <span class="description"></span>');                      
-            //});   
+        eventRender(event, element) {  
+          if(event.end){
+             element.find('.fc-content').append('<b>'+event.end.format('HH:mm')+'</b>'); 
+           }
+            if(event.users) {             
+              event.users.forEach(function (item) {
+                   
+                  element.find('.fc-content').append(' <br><i class="delete fas fa-user"></i> <span class="description">'+item.name+' '+item.last_name+'</span>');                      
+              });   
+            }
+
+           
+            
             //element.find(".delete").click(function() {
             //console.log(event._id)                    
             //$('#calendar').fullCalendar('removeEvents', event._id);
@@ -293,7 +332,7 @@ export default {
                         //         }
                         //     })
                     //});
-         //},
+         },
         //////////////////////////////////////////////////////////////////////
         //drop(calEvent, jsEvent, view) {
         //drop(date, jsEvent, view) {  
@@ -304,19 +343,28 @@ export default {
         //             //this.collapse()
         // },
        // drop(date,jsEvent) {
-        drop(date, jsEvent, resource){   
+        drop(date, jsEvent, resource){  
+          this.usersMultiselectBox = false 
           // is the "remove after drop" checkbox checked?
           if ($("#drop-remove").is(":checked")) {            
             $(this).remove();    
             $("#assignTaskToUserModal").modal("show")  
+            ///////////////////////////////////////////////////taken from calendar
             $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-            $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
+            $('#end').val(date.format('YYYY-MM-DD hh:mm'));
+            
+            
+
+            //$('#start').val($(this).data("start"));
+            //$('#end').val($(this).data("end"));
+
             $('#itemid').val($(this).attr("id")); 
             //$('#title').val($(this).html());
             $('#title').val($(this).data("title"));
             $('#price').val($(this).data("price"));
             $('#status_id').val($(this).data("status_id"));
             $('#location_id').val($(this).data("location_id"));
+            
 
             this.start = date.format('YYYY-MM-DD hh:mm') 
             //var itemid = $(this).attr("id")  
@@ -338,13 +386,15 @@ export default {
             $("#calendar").fullCalendar("removeEvents", event._id);
             var el = $("<div class='fc-event'>")
               .appendTo("#external-events-listing")
-              .text(event.title);
-            el.draggable({
+              .text(event.title)
+              .text(event.start)
+              .text(event.end);
+              el.draggable({
               zIndex: 999,
               revert: true,
               revertDuration: 0
             });
-            el.data("event", { title: event.title, id: event.id, stick: true });
+            el.data("event", { id: event.id,title: event.title,start: event.start, stick: true });
           }
         },
         //////////////////////////////////////////////////////////////////////
@@ -376,17 +426,50 @@ export default {
   },
   mounted() {   
   },
+  watch: {
+            'form.start': function(newVal1) {              
+                this.newStart = newVal1
+                this.fillForm()  
+                //this.getValues()
+            },
+            'form.end': function(newVal2) { 
+                this.newEnd = newVal2
+                this.fillForm() 
+                //this.getValues()
+                           
+            },            
+  },
   //
   methods: { 
+    refetchEvents(){
+    //this.$refs.calendar.$emit('refetch-events')
+    //this.$refs.calendar.fireMethod('refetchEvents')
+    this.$refs.calendar.fireMethod('refetchEventSources')
+    this.$refs.calendar.fireMethod('changeView', 'month')
+    },
+    Search(){
+      if (this.newStart && this.newEnd ) {
+        //console.log('value changed from ' + this.newStart + this.newEnd );
+         axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+this.newStart+'&end='+this.newEnd)
+            .then((res) => {                        
+            //this.setFreeUser(res) 
+        })   
+      }
+    },
     nameWithNameLastName ({ name, last_name }) {
         return `${name} ${last_name}`
     },
     clear(){
-      this.form.users = ''  
+      this.usersMultiselectBox = false
+      console.log(this.usersMultiselectBox)
+      this.form.users = []
+      //this.allAvailableFieldUsers = [];
+      $("#assignTaskToUserModal").modal("hide")
+      this.form.reset()
+      //this.loadCalendar()           
     },  
-    getValues(){ 
-      this.counter++  
-      if(this.counter == 1){           
+    fillForm(){
+      
       this.form.start = this.$refs.start.value
       this.form.end = this.$refs.end.value 
       this.form.itemid = this.$refs.itemid.value
@@ -395,20 +478,30 @@ export default {
       this.form.status_id = this.$refs.status_id.value      
       this.form.location_id = this.$refs.location_id.value
       this.day = moment(String(this.$refs.start.value)).format('YYYY-MM-DD') 
+      this.getValues()
+    },  
+    getValues(){ 
+      this.counter++  
+      
+      //if(this.counter == 1){
       console.log('getValues') 
-        axios.get('/v1/api/tasks/gettasksbydate?date='+this.day)
-        .then((res) => {
+        //axios.get('/v1/api/tasks/gettasksbydate?date='+this.day)
+        axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+ this.form.start+'&end='+this.form.end)        
+        .then((res) => {            
             this.setTasksByDate(res)
-             console.log(res)    
+             //console.log(res)    
         })
-     }  
+    // }  
     },
-     setTasksByDate(res) {       
-      //this.freefieldusers = res.data.freefieldusers
-      this.freefieldusers = res.data.allfieldusers
-      this.form.users = ''  
-      this.form.users.reset()   
-      //console.log( this.freefieldusers) 
+     setTasksByDate(res) { 
+      
+      this.allAvailableFieldUsers = res.data.allAvailableFieldUsers
+      this.usersMultiselectBox = true
+      console.log(this.usersMultiselectBox) 
+    }, 
+     setFreeUser(res) {  
+      this.allAvailableFieldUsers = res.data.allAvailableFieldUsers
+      //this.form.users = '' 
     }, 
     ///////////////UPDATE
     updateAssignment(){
@@ -416,7 +509,7 @@ export default {
                 this.form.post('/v1/api/tasks/update/'+this.form.itemid)
                 .then(()=>{
                     //Fire.$emit('AfterCreate');
-                    //this.form.reset();
+                    this.form.reset();                    
                     this.clear()
                     $('#assignTaskToUserModal').modal('hide')
                      //this.loadData()
@@ -431,6 +524,23 @@ export default {
 
                 })
     },
+    loadCalendar(){      
+      axios.get('/v1/api/tasks/calendar').then((res) => {
+      if(res.data) {       
+          this.setData(res)
+      }})
+      .catch((error) => {
+        if(error.response.status === 422) {
+          this.errors = error.response.data.errors
+        }
+      
+    })
+    },
+    setData(res) { 
+      this.unassignedtasks = res.data.unassignedtasks
+      this.events = res.data.assignedtasks              
+      this.locations = res.data.alllocations
+    },    
     ////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -453,35 +563,20 @@ export default {
         locations:'',
       });
     },
-    loadCalendar(){
-      axios.get('/v1/api/tasks/calendar').then((res) => {
-      if(res.data) {       
-          this.setData(res)
-      }})
-      .catch((error) => {
-        if(error.response.status === 422) {
-          this.errors = error.response.data.errors
-        }
-       this.isProcessing = false
-    })
-    },    
+    
     dayClick(date, jsEvent, view){ 
-        axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
-        if(res.data) {       
-            this.setTasksByDate(res,date)
-        }})
-        .catch((error) => {
-          if(error.response.status === 422) {
-            this.errors = error.response.data.errors
-          }
-        this.isProcessing = false
-      })   
+    //     axios.get('/v1/api/tasks/gettasksbydate?date='+date.format()).then((res) => {
+    //     if(res.data) {       
+    //         this.setTasksByDate(res,date)
+    //     }})
+    //     .catch((error) => {
+    //       if(error.response.status === 422) {
+    //         this.errors = error.response.data.errors
+    //       }
+    //     this.isProcessing = false
+    //   })   
     },
-    setData(res) { 
-      this.unassignedtasks = res.data.unassignedtasks
-      this.events = res.data.assignedtasks              
-      this.locations = res.data.alllocations
-    },
+    
     
     eventClick(calEvent, jsEvent, view) {
            var dt = calEvent.start;
@@ -535,6 +630,8 @@ export default {
       $(this).data("event", {
         id:$(this).attr('id'),        
         title: $.trim($(this).text()), // use the element's text as the event title
+        start: '2020-02-02 07:30', // use the element's text as the event title
+        end: '2020-02-02 07:30', // use the element's text as the event title
         stick: true // maintain when user navigates (see docs on the renderEvent method)
       });
       // make the event draggable using jQuery UI

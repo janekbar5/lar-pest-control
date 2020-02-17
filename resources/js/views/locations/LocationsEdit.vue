@@ -305,7 +305,7 @@
                     this.store = this.apiUpdate + this.$route.params.id
                     this.method = 'PUT'
                     this.title = 'Edit'
-                    this.grantedTreatments = res.data.form.treatments 
+                    this.grantedTreatments = res.data.form.treatments                    
                     this.lat = res.data.form.address.lat
                     this.lng = res.data.form.address.lng              
                     this.isMounted = true
@@ -313,7 +313,8 @@
                 this.isMounted = true
                 var itm;
                 this.updateLocation(itm = {lat:40.446947, lng:13.004})
-                this.allTreatments = res.data.alltreatments      
+                this.allTreatments = res.data.alltreatments  
+                this.allclients = res.data.allclients    
                 this.objectToArray();            
             }, 
             objectToArray() {                

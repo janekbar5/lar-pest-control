@@ -11,8 +11,8 @@
         initialSortBy: [
         //{field: 'person_name', type: 'asc'},
        // {field: 'id', type: 'asc'},
-        {field: 'active', type: 'desc'},
         {field: 'id', type: 'asc'},
+        {field: 'active', type: 'desc'},        
         ],
       }"
       :pagination-options="{
@@ -35,12 +35,11 @@
 
                 <span v-if="props.column.field == 'action_buttons'">               
                  <i aria-hidden="true" class="fa fa-pen" @click="recordEdit(props.row.id)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                 <i aria-hidden="true" class="fa fa-trash" @click="recordDelete(props.row.id)"></i>  
+                 <i aria-hidden="true" class="fa fa-trash" v-if="$can('location-delete')" @click="recordDelete(props.row.id)"></i>  
                 </span>
 
                 <span v-else-if="props.column.field == 'client'">
-                    <span  v-for="client in props.row.clients" :key="client.data">{{ client.person_name }}</span> 
-                 
+                    <span  v-for="client in props.row.clients" :key="client.data">{{ client.person_name }}</span>                  
                 </span>
 
                 

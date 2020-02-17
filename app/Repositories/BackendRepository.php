@@ -26,7 +26,7 @@ class BackendRepository implements BackendRepositoryInterface
     } 
 	public function getAllClients(){
         return Client::all(); 
-                
+		
     }
     /////////////////////////////////////////////////////////////////////////////////TREATMENTS    
     public function getTreatmentById($id){
@@ -207,8 +207,8 @@ class BackendRepository implements BackendRepositoryInterface
                   ->orderBy('created_at', 'desc')                  
                   ->paginate(10);  */
 		return History::with('users')  
-                  ->orderBy('created_at', 'desc')                  
-                  ->paginate(10); 		  
+                  //->orderBy('created_at', 'desc')                  
+                  ->get(); 		  
     }   
     
     
