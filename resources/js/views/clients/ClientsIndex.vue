@@ -194,9 +194,12 @@ components: {VueGoodTable},
             trigger: '', //only trigger on enter not on keyup 
           },
           sortable: true,
-          sortFn: this.sortFn,
-          formatFn: this.formatFn,
+          sortFn: this.sortActive,
+          formatFn: this.formatActive,
         },   
+
+        
+        
         {
         label: 'Action',
         field: 'action_buttons',
@@ -236,7 +239,7 @@ beforeDestroy(){
    this.fetchData()       
  },
   methods: {
-    sortFn(x, y, col, rowX, rowY) {
+    sortActive(x, y, col, rowX, rowY) {
       // x - row1 value for column
       // y - row2 value for column
       // col - column being sorted
@@ -245,7 +248,7 @@ beforeDestroy(){
       return (x < y ? -1 : (x > y ? 1 : 0))
       
     },
-    formatFn: function(value) {
+    formatActive: function(value) {
       return value==1 ? 'Active' : 'Inactive';
     },     
     onChangeQuery(queryParams) {

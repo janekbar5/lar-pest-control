@@ -88,8 +88,9 @@
                                         :multiple="true"                                       
                                         label="name" 
                                         track-by="name"
-                                        
+                                        :class="{ 'is-invalid': errors.users }"
                                         ></multiselect>
+                                         <div class="alert alert-danger" v-if="errors.users"> {{errors.users[0]}}</div>
                                   </div>  
                                 </div> 
                             </div>

@@ -21,7 +21,7 @@ class Client extends Model implements Auditable, Searchable
 	protected $fillable = [  
         //'user_id',
         //'client_id',        
-        'active','phone','company_name','email','is_company','contract_number','vat_number','person_name','contract_start','contract_end',
+        'active','phone','name','email','client_type','contract_number','vat_number','person_name','contract_start','contract_end',
 		'description','reccurence',
 		
 		
@@ -31,7 +31,7 @@ class Client extends Model implements Auditable, Searchable
     protected $appends = ['text','locationscount'];
     public function getTextAttribute()
     {
-        return $this->attributes['company_name']. ' - '
+        return $this->attributes['name']. ' - '
 		.$this->attributes['person_name']. ' - '
 		.$this->attributes['email']. ' - '
 		.$this->attributes['contract_number']. ' - '

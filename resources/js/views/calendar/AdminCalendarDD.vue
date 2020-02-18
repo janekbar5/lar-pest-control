@@ -3,7 +3,7 @@
       
       <div class="row">
                 
-               <div class="col-md-3">
+               <div class="col-md-2">
 
                    <div id='external-events'>
                     <div id='external-events-listing' @mouseover="getNotifications">
@@ -32,8 +32,10 @@
                         <label for='drop-remove'>remove after drop</label>
                       </p>
                     </div>
-<!------------------------------------DATTASKS--------------------------------------------->  
-                    <!-- DIRECT CHAT -->
+
+                   
+
+
                     <div class="card direct-chat direct-chat-warning" v-show="tasksbydate.length > 0">
                       <div class="card-header">
                        
@@ -77,14 +79,14 @@
                       {{user.name}}  {{user.last_name}}
                     </div>  
                     </div>            
-  <!------------------------------------DATTASKS--------------------------------------------->              
+               
                </div>  
 
 
             
                  
                
-              <div class="col-md-9">                 
+              <div class="col-md-10">                 
                 
                     <div class="card">
                       <div class="card-header">
@@ -170,20 +172,22 @@
                         <!-- <input v-model="form.start" type="text" name="start" 
                             placeholder="start"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"> -->
-                          <Datepicker format="YYYY-MM-DD H:i" v-model="form.start" class="" :class="{ 'is-invalid': form.errors.has('start') }" />   
-                            
+                          <Datepicker format="YYYY-MM-DD H:i" v-model="form.start"  :class="{ 'is-invalid': form.errors.has('start') }" />   
+                        <!--  <datetime type="datetime" v-model="form.start" format="yyyy-MM-dd HH:mm" class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"></datetime>   -->
                         <has-error :form="form" field="start"></has-error>
                     </div>
 
 
 
 
-                    <!-- <datetime type="time" v-model="time"></datetime>
-                    <datetime type="datetime" v-model="datetime13" format="yyyy-MM-dd HH:mm:ss" name="datetime13" id="datetime13" ref="datetime13"></datetime> -->
+                    <!-- <datetime type="time" v-model="time"></datetime> -->
+
+                    
                    
 
                     <div class="form-group">
                       <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': form.errors.has('end') }" />
+                      <!-- <datetime type="datetime" v-model="form.end" format="yyyy-MM-dd HH:mm" class="form-control"></datetime> -->
                         <!-- <input v-model="form.end" type="text" name="end" id="end" ref="end"
                             placeholder="end"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('end') }"> -->
@@ -191,7 +195,7 @@
                         <has-error :form="form" field="end"></has-error>
                     </div>
 
-                    <div style="display:block">
+                    <div style="display:none">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
@@ -318,9 +322,11 @@ export default {
             if(event.end){
               element.find('.fc-content').append('<b> '+event.end.format('HH:mm')+'</b>'); 
             }
+
+
             if(event.users) {             
               event.users.forEach(function (item) {                   
-                  element.find('.fc-content').append(' <br><i class="delete fas fa-user"></i> <span class="description">'+item.name+' '+item.last_name+'</span>');                      
+                  element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
               });   
             }
 
@@ -690,6 +696,10 @@ export default {
 </script>
 
 <style>
+.fc-more-popover {
+    z-index: 2;
+    width: 300px;
+}
 #external-events { 
   padding: 0 10px;
   border: 1px solid #ccc;

@@ -1,7 +1,27 @@
 <template>
   <div>
 
-
+          <div class="row">      
+                        <div class="col-md-12">
+                           
+                            <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                              <div class="card">
+                                <div class="card-header">
+                                  <h3 class="card-title">Bordered Table</h3>
+                                </div>
+                                
+                                <div class="card-body">                  
+                                <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                                </div>
+                                  <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
+                               
+                                <div class="card-footer clearfix">
+                                 
+                                </div>
+                              </div>
+                        </div>   
+                             
+                  </div>
 
 
                  <div class="row">    
@@ -20,35 +40,8 @@
                           </div>
                           <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
-                      </div>
-                      
-                      <!-- <div class="col-lg-2 col-6">                        
-                        <div class="small-box">
-                          <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-                            <p>Done Dasks</p>
-                          </div>
-                          <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                          </div>
-                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                      </div>
-                       <div class="col-lg-2 col-6">                        
-                        <div class="small-box">
-                          <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-                            <p>Done Dasks</p>
-                          </div>
-                          <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                          </div>
-                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                      </div> -->
-                    
-                    
-                      
+                      </div>                      
+                                               
                       <div class="col-lg-6 col-6"> 
                          <div class="small-box">
                           <div class="inner">
@@ -95,27 +88,7 @@
                   </div>
                 </div>
 
-      <div class="row">      
-              <div class="col-md-12">
-                 
-                  <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Bordered Table</h3>
-                      </div>
-                      
-                      <div class="card-body">                  
-                      <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
-                      </div>
-                        <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
-                     
-                      <div class="card-footer clearfix">
-                       sdvsdfv
-                      </div>
-                    </div>
-              </div>   
-                   
-        </div>
+      
       
       <!-- <Modal /> -->
 

@@ -48,7 +48,7 @@ class ValidationRepository
 			'end' => 'required|date|after:start',
 			'location_id' => 'required',
 			'status_id' => 'required',
-			//'users' => 'required',
+			'users' => 'required',
 			
          );        
          return $rules;
