@@ -278,7 +278,8 @@ export default {
       //start:'',  
       time:'',
       datetime13:'', 
-      usersMultiselectBox:false,  
+      usersMultiselectBox:false, 
+      janek:'',
       config: {          
         //defaultView: "agendaWeek",
         defaultView: "month",
@@ -344,40 +345,37 @@ export default {
         // },
        // drop(date,jsEvent) {
         drop(date, jsEvent, resource){  
-          this.usersMultiselectBox = false 
+            this.janek = 'franek' 
           // is the "remove after drop" checkbox checked?
           if ($("#drop-remove").is(":checked")) {            
             $(this).remove();    
             $("#assignTaskToUserModal").modal("show")  
             ///////////////////////////////////////////////////taken from calendar
             $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-            $('#end').val(date.format('YYYY-MM-DD hh:mm'));
-            
-            
-
+            $('#end').val(date.format('YYYY-MM-DD hh:mm'));                      
             //$('#start').val($(this).data("start"));
             //$('#end').val($(this).data("end"));
-
-            $('#itemid').val($(this).attr("id")); 
-            //$('#title').val($(this).html());
+            $('#itemid').val($(this).attr("id"));             
             $('#title').val($(this).data("title"));
             $('#price').val($(this).data("price"));
             $('#status_id').val($(this).data("status_id"));
-            $('#location_id').val($(this).data("location_id"));
-            
+            $('#location_id').val($(this).data("location_id"));               
+          }    
+           //return this.janek    
+           //vm.$refs.calendar.doSomething();  
+           console.log(vm.$children[6]) 
+           methods.callbackFunction()
+           //m.$children[6].methods.callbackFunction() 
+           //vm.$root.callbackFunction() 
 
-            this.start = date.format('YYYY-MM-DD hh:mm') 
-            //var itemid = $(this).attr("id")  
-              // console.log('Clicked on: ' + date.format());
-              // console.log('Coordinates: ' + jsEvent);
-              // console.log('Current text: ' + $(this).text());
-              // console.log('Current html: ' + $(this).html());         
-          }           
+           //vm.calendar()
+           //Event.$emit("fetchdata"); //is not a function
+           //app.$refs.calendar.doSomething();    
         },
-        //  eventDrop() {
-        //  alert('eventDrop')
-        //    console.log(event)
-        // },
+
+         eventBebe() {
+         return 'bebe'
+        },
        
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
@@ -425,22 +423,31 @@ export default {
     //console.log(this.externalVar); 
   },
   mounted() {   
+    //console.log(this.config.eventBebe())
+    // Event.$on("fetchdata", group => {
+    // this.fetchData();
+    // })
   },
   watch: {
             'form.start': function(newVal1) {              
                 this.newStart = newVal1
                 this.fillForm()  
-                //this.getValues()
+                console.log(newVal1)
             },
             'form.end': function(newVal2) { 
                 this.newEnd = newVal2
                 this.fillForm() 
-                //this.getValues()
-                           
-            },            
+                console.log(newVal2)                          
+            }, 
+            'janek': function(newVal) { 
+                console.log(newVal)                        
+            },               
   },
   //
   methods: { 
+    callbackFunction() {
+      console.log('bla');
+    },
     refetchEvents(){
     //this.$refs.calendar.$emit('refetch-events')
     //this.$refs.calendar.fireMethod('refetchEvents')

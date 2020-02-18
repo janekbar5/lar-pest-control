@@ -17,6 +17,11 @@ export default {
     return {
       
     }
+  },
+  methods: { 
+    callbackFunction() {
+      console.log('bla');
+  },
   }
 }
 </script>

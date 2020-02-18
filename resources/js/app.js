@@ -195,7 +195,6 @@ const router = new VueRouter({
 import { Typeahead2 } from './components/typeahead'
 
 const app = new Vue({
-
     el: '#app',
     components: { Typeahead2 },
     data: function () {
@@ -216,3 +215,4 @@ const app = new Vue({
     //
     router,
 });
+global.vm = app;
