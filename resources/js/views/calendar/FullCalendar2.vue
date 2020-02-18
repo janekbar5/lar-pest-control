@@ -6,55 +6,39 @@
                 
 
                 <div id="external_events">
+                  
+
+                    <!-- <div class="fc-event"  v-for="item in draggables" :key="item.data">
+                        <div class="type">{{item.title}}</div>
+                        <div class="class">{{item.title}}</div>
+                        <div class="date"> 
+                            <span class="date__day">{{item.id}}</span>
+                            <span class="date__month">mei</span>
+                        </div>
+                    </div> -->
+
+                    <div class="fc-event">
+                        <div class="type">HW</div>
+                        <div class="class">Aardrijkskunde</div>
+                        <div class="date"> 
+                            <span class="date__day">4</span>
+                            <span class="date__month">mei</span>
+                        </div>
+                    </div>
 
                     <div class="fc-event">
                         <div class="type">HW</div>
                         <div class="class">Engels</div>
-                        <div class="date"> 
-                            <span class="date__day">3</span>
-                            <span class="date__month">mei</span>
-                        </div>
-                    </div>
-                    <div class="fc-event">
-                        <div class="type">HW</div>
-                        <div class="class">Aardrijkskunde</div>
                         <div class="date"> 
                             <span class="date__day">5</span>
                             <span class="date__month">mei</span>
                         </div>
                     </div>
-                    <div class="fc-event">
-                        <div class="type">HW</div>
-                        <div class="class">Engels</div>
-                        <div class="date"> 
-                            <span class="date__day">3</span>
-                            <span class="date__month">mei</span>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         
-        <div class="calendar_wrap">
-            <!-- <full-calendar 
-            :config="config" 
-            :events="agenda_items"  
-            @event-selected="eventClick" 
-            @day-click="dayClick"
-            @event-drop="eventDrop"
-            @drop="eventDrop" 
-             /> -->
-
-             <!-- <full-calendar 
-            :config="config" 
-            :events="agenda_items"  
-            @date-click="dateClick"
-            @day-click="dayClick"
-            @event-selected="eventClick"
-            
-            @drop="eventDrop" 
-            v-on:eventDrop="eventDrop"
-            v-on:drop="itemDrop"
-             /> -->
+        <div class="calendar_wrap">           
 
               <FullCalendar
             ref="pickupCalendar"
@@ -66,13 +50,14 @@
             :events="agenda_items"
             v-on:eventDrop="eventDrop"
             v-on:drop="itemDrop"
+            @event-receive="onEventReceive"
         ></FullCalendar>
 
 
              <!-- @event-drop="eventDrop" -->
         </div>
 
-        <div class="sidebar">
+        <!-- <div class="sidebar">
 
             <div class="sidebar__header">
                 <button @click="collapse" class="close" aria-label="Close menu" type="button">
@@ -85,14 +70,14 @@
             </div>
 
             
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
 import { FullCalendar } from 'vue-full-calendar'
 import 'fullcalendar/dist/locale/nl'
-
+import moment from "moment"
 import dayGridPlugin from '@fullcalendar/daygrid'
     import interactionPlugin from '@fullcalendar/interaction';
 //import navHeader from '../components/navHeader.vue'
@@ -110,7 +95,7 @@ export default {
             plugins: [dayGridPlugin, interactionPlugin],
             agenda_items: [],
             //config:{} ,          
-             
+              draggables:[],
              config: {
                selectable: true,
                locale: 'en',
@@ -189,14 +174,31 @@ export default {
     mounted() {
         this.get_agenda_items();
         this.makeDraggable();
-        //
-        //  this.config = {
-        //         selectable: true,
-        //         locale: 'en',
-        //         droppable: true,
-        //  }
+         this.draggables = [
+            { id: 1, title: 'event janek 1', start: '2020-02-02 07:30',end: '2020-02-02 09:30',allDay: false, },
+            { id: 2, title: 'event janek 2', start: '2020-02-05 07:30',end: '2020-02-05 09:30',allDay: false, },
+            { id: 3, title: 'event janek 3', start: '2020-02-06 07:30',end: '2020-02-06 09:30',allDay: true, },   
+            ]
     },
     methods: {
+        onEventReceive(info,date, jsEvent, resource){
+        if ($("#drop-remove").is(":checked")) {  
+            $(this).remove();
+        }  
+        
+       
+        //this.form.end = moment(date.start._d).add(2, 'hours').format('YYYY-MM-DD HH:mm') //02
+       
+        //console.log(this.$refs.location_id)
+        //console.log(this)
+        //console.log(info.id) //dropped if
+        console.log(info)
+        
+        //console.log($(this).$refs.location_id)
+        
+        // console.log(date.id)
+        // console.log(jsEvent)
+        },
         collapse(){
           console.log('collapse')  
         },
@@ -222,6 +224,9 @@ export default {
                 // store data so the calendar knows to render an event upon drop
                 $(this).data('event', {
                     title: $.trim($(this).text()), // use the element's text as the event title
+                    color: $.trim($(this).text()), // use the element's text as the event title
+                    className: [{costam: 'event janek 1'}],
+                    eventSources:{costam: 'event janek 1'},
                     stick: true // maintain when user navigates (see docs on the renderEvent method)
                 });
 

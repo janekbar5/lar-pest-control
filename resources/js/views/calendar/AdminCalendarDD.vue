@@ -10,6 +10,8 @@
                         <h4> Unassigned Tasks </h4> 
                        <!-- v-show="per.selected_users.length === 0"-->
                     <div 
+                    :class="per.price"
+                    :alt="per.location_id"
                     :data-title="per.title"
                     :data-price="per.price" 
                     :data-start="per.start|formatDateNoSeconds" 
@@ -115,7 +117,9 @@
                         ref="calendar" 
                         :config="config" 
                         :events="events"                        
-                        @day-click="dayClick"                        
+                        @day-click="dayClick" 
+                        @event-receive="onEventReceive"  
+                        @event-selected="eventClick"                        
                          /> 
                         <!-- 
                         @event-selected="eventClick"       
@@ -133,6 +137,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
         <!-- <Modal :freefieldusers="freefieldusers" />  -->
         <!----------------------- Modal statusesModal------------------------------------>
             <div class="modal fade" id="assignTaskToUserModal" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true" data-backdrop="static" >
@@ -146,13 +161,16 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
+
                 <form @submit.prevent="updateAssignment()">
                 <div class="modal-body">
                      
                     <div class="form-group">
-                        <input v-model="form.start" type="text" name="start" id="start" ref="start"
+                        <!-- <input v-model="form.start" type="text" name="start" 
                             placeholder="start"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('start') }">
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"> -->
+                          <Datepicker format="YYYY-MM-DD H:i" v-model="form.start" class="" :class="{ 'is-invalid': form.errors.has('start') }" />   
                             
                         <has-error :form="form" field="start"></has-error>
                     </div>
@@ -162,17 +180,18 @@
 
                     <!-- <datetime type="time" v-model="time"></datetime>
                     <datetime type="datetime" v-model="datetime13" format="yyyy-MM-dd HH:mm:ss" name="datetime13" id="datetime13" ref="datetime13"></datetime> -->
-
+                   
 
                     <div class="form-group">
-                        <input v-model="form.end" type="text" name="end" id="end" ref="end"
+                      <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': form.errors.has('end') }" />
+                        <!-- <input v-model="form.end" type="text" name="end" id="end" ref="end"
                             placeholder="end"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('end') }">
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('end') }"> -->
                             
                         <has-error :form="form" field="end"></has-error>
                     </div>
 
-                    <div style="display:none">
+                    <div style="display:block">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
@@ -296,12 +315,11 @@ export default {
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
         eventRender(event, element) {  
-          if(event.end){
-             element.find('.fc-content').append('<b>'+event.end.format('HH:mm')+'</b>'); 
-           }
+            if(event.end){
+              element.find('.fc-content').append('<b> '+event.end.format('HH:mm')+'</b>'); 
+            }
             if(event.users) {             
-              event.users.forEach(function (item) {
-                   
+              event.users.forEach(function (item) {                   
                   element.find('.fc-content').append(' <br><i class="delete fas fa-user"></i> <span class="description">'+item.name+' '+item.last_name+'</span>');                      
               });   
             }
@@ -344,39 +362,31 @@ export default {
         //             //this.collapse()
         // },
        // drop(date,jsEvent) {
-        drop(date, jsEvent, resource){  
-            this.janek = 'franek' 
-          // is the "remove after drop" checkbox checked?
-          if ($("#drop-remove").is(":checked")) {            
-            $(this).remove();    
-            $("#assignTaskToUserModal").modal("show")  
-            ///////////////////////////////////////////////////taken from calendar
-            $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-            $('#end').val(date.format('YYYY-MM-DD hh:mm'));                      
-            //$('#start').val($(this).data("start"));
-            //$('#end').val($(this).data("end"));
-            $('#itemid').val($(this).attr("id"));             
-            $('#title').val($(this).data("title"));
-            $('#price').val($(this).data("price"));
-            $('#status_id').val($(this).data("status_id"));
-            $('#location_id').val($(this).data("location_id"));               
-          }    
-           //return this.janek    
-           //vm.$refs.calendar.doSomething();  
-           console.log(vm.$children[6]) 
-           methods.callbackFunction()
-           //m.$children[6].methods.callbackFunction() 
-           //vm.$root.callbackFunction() 
 
-           //vm.calendar()
-           //Event.$emit("fetchdata"); //is not a function
-           //app.$refs.calendar.doSomething();    
-        },
 
-         eventBebe() {
-         return 'bebe'
-        },
-       
+
+        // drop(date, jsEvent, resource){  
+        //     this.janek = 'franek'           
+        //   if ($("#drop-remove").is(":checked")) {            
+        //     $(this).remove();    
+        //     $("#assignTaskToUserModal").modal("show")  
+        //     ///////////////////////////////////////////////////taken from calendar
+        //     $('#start').val(date.format('YYYY-MM-DD hh:mm'));
+        //     $('#end').val(date.format('YYYY-MM-DD hh:mm'));                      
+        //     //$('#start').val($(this).data("start"));
+        //     //$('#end').val($(this).data("end"));
+        //     $('#itemid').val($(this).attr("id"));             
+        //     $('#title').val($(this).data("title"));
+        //     $('#price').val($(this).data("price"));
+        //     $('#status_id').val($(this).data("status_id"));
+        //     $('#location_id').val($(this).data("location_id"));               
+        //   }              
+        //    console.log(vm.$children[6]) 
+        //    methods.callbackFunction()
+          
+        // },
+
+    
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
         eventDragStop: function(event, jsEvent) {  
@@ -392,7 +402,7 @@ export default {
               revert: true,
               revertDuration: 0
             });
-            el.data("event", { id: event.id,title: event.title,start: event.start, stick: true });
+            el.data("event", { id: event.id,title: event.title,start: event.start,eventSources: [{url: '/myfeed.php'}], stick: true });
           }
         },
         //////////////////////////////////////////////////////////////////////
@@ -439,15 +449,35 @@ export default {
                 this.fillForm() 
                 console.log(newVal2)                          
             }, 
-            'janek': function(newVal) { 
-                console.log(newVal)                        
-            },               
+                   
   },
   //
   methods: { 
-    callbackFunction() {
-      console.log('bla');
+    eventClick() {     
+      alert('eventClick')
+      console.log(event.target.innerText)
+    },  
+    onEventReceive(date, jsEvent, resource){
+      if ($("#drop-remove").is(":checked")) {  
+        $(this).remove();
+      }  
+      $("#assignTaskToUserModal").modal("show")  ///////////////////////////////////////////////// 1 Modal open fill fields
+      this.form.start = moment(date.start._d).format('YYYY-MM-DD hh:mm')      
+      this.form.end = moment(date.start._d).add(14, 'hours').format('YYYY-MM-DD HH:m') //02
+      this.form.itemid = date.id
+      this.form.title = date.className[0].title
+      this.form.location_id = date.className[0].price
+      this.form.price = date.className[0].location_id
+      this.form.status_id = date.className[0].status_id
+      // console.log(date)
+    
     },
+
+
+
+
+
+
     refetchEvents(){
     //this.$refs.calendar.$emit('refetch-events')
     //this.$refs.calendar.fireMethod('refetchEvents')
@@ -473,23 +503,13 @@ export default {
       //this.allAvailableFieldUsers = [];
       $("#assignTaskToUserModal").modal("hide")
       this.form.reset()
-      //this.loadCalendar()           
+      this.loadCalendar()           
     },  
-    fillForm(){
-      
-      this.form.start = this.$refs.start.value
-      this.form.end = this.$refs.end.value 
-      this.form.itemid = this.$refs.itemid.value
-      this.form.title = this.$refs.title.value
-      this.form.price = this.$refs.price.value
-      this.form.status_id = this.$refs.status_id.value      
-      this.form.location_id = this.$refs.location_id.value
-      this.day = moment(String(this.$refs.start.value)).format('YYYY-MM-DD') 
+    fillForm(){    
       this.getValues()
     },  
     getValues(){ 
-      this.counter++  
-      
+      this.counter++        
       //if(this.counter == 1){
       console.log('getValues') 
         //axios.get('/v1/api/tasks/gettasksbydate?date='+this.day)
@@ -501,7 +521,6 @@ export default {
     // }  
     },
      setTasksByDate(res) { 
-      
       this.allAvailableFieldUsers = res.data.allAvailableFieldUsers
       this.usersMultiselectBox = true
       console.log(this.usersMultiselectBox) 
@@ -520,7 +539,7 @@ export default {
                     this.clear()
                     $('#assignTaskToUserModal').modal('hide')
                      //this.loadData()
-                    //this.loadCalendar()
+                    this.loadCalendar()
                     toast({
                         type: 'success',
                         title: 'User Created in successfully'
@@ -637,6 +656,18 @@ export default {
       $(this).data("event", {
         id:$(this).attr('id'),        
         title: $.trim($(this).text()), // use the element's text as the event title
+        className: [
+          { 
+          location_id: $(this).data("location_id"),
+          price: $(this).data("price"),
+          status_id: $(this).data("status_id"),
+          title: $(this).data("title"),
+          }],
+        //$('#itemid').val($(this).attr("id"));             
+        //     $('#title').val($(this).data("title"));
+        //     $('#price').val($(this).data("price"));
+        //     $('#status_id').val($(this).data("status_id"));
+        //     $('#location_id').val($(this).data("location_id")); 
         start: '2020-02-02 07:30', // use the element's text as the event title
         end: '2020-02-02 07:30', // use the element's text as the event title
         stick: true // maintain when user navigates (see docs on the renderEvent method)
