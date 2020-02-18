@@ -107,7 +107,9 @@
                         <full-calendar id="calendar" 
                         :config="config" 
                         :events="events"                        
-                        @day-click="dayClick"                        
+                        @day-click="dayClick" 
+                        @event-receive="onEventReceive"  
+                        @event-selected="eventClick"                     
                          /> 
                         <!-- 
                         @event-selected="eventClick"       
@@ -303,28 +305,28 @@ export default {
         //             //this.collapse()
         // },
        // drop(date,jsEvent) {
-        drop(date, jsEvent, resource){   
-          // is the "remove after drop" checkbox checked?
-          if ($("#drop-remove").is(":checked")) {            
-            $(this).remove();    
-            $("#assignTaskToUserModal").modal("show")  
-            $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-            $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
-            $('#itemid').val($(this).attr("id")); 
-            //$('#title').val($(this).html());
-            $('#title').val($(this).data("title"));
-            $('#price').val($(this).data("price"));
-            $('#status_id').val($(this).data("status_id"));
+        // drop(date, jsEvent, resource){   
+        //   // is the "remove after drop" checkbox checked?
+        //   if ($("#drop-remove").is(":checked")) {            
+        //     $(this).remove();    
+        //     $("#assignTaskToUserModal").modal("show")  
+        //     $('#start').val(date.format('YYYY-MM-DD hh:mm'));
+        //     $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
+        //     $('#itemid').val($(this).attr("id")); 
+        //     //$('#title').val($(this).html());
+        //     $('#title').val($(this).data("title"));
+        //     $('#price').val($(this).data("price"));
+        //     $('#status_id').val($(this).data("status_id"));
            
 
-            this.start = date.format('YYYY-MM-DD hh:mm') 
-            //var itemid = $(this).attr("id")  
-              // console.log('Clicked on: ' + date.format());
-              // console.log('Coordinates: ' + jsEvent);
-              // console.log('Current text: ' + $(this).text());
-              // console.log('Current html: ' + $(this).html());         
-          }           
-        },
+        //     this.start = date.format('YYYY-MM-DD hh:mm') 
+        //     //var itemid = $(this).attr("id")  
+        //       // console.log('Clicked on: ' + date.format());
+        //       // console.log('Coordinates: ' + jsEvent);
+        //       // console.log('Current text: ' + $(this).text());
+        //       // console.log('Current html: ' + $(this).html());         
+        //   }           
+        // },
          eventDrop() {
          alert('eventDrop')
            console.log(event)
@@ -378,6 +380,14 @@ export default {
   },
   //
   methods: { 
+    eventClick() {
+          alert('eventClick')
+          console.log(event.target.innerText)
+    },
+    onEventReceive(date, jsEvent, resource){
+    alert('onEventReceive')
+    console.log(date)
+	  },
     nameWithNameLastName ({ name, last_name }) {
         return `${name} ${last_name}`
     },
