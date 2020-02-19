@@ -57,12 +57,12 @@ class ValidationRepository
          $rules = array(
             'title' => 'required',
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/', 
-			'start' => 'required|date',			
+			//'start' => 'required|date',			
 			//'end' => 'required|date|after:start|date_format:YYYY-MM-DD H:i',
-			'end' => 'required|date|after:start',
+			//'end' => 'required|date|after:start',
 			'location_id' => 'required',
 			'status_id' => 'required',
-			'users' => 'required',
+			//'users' => 'required',
 			
          );        
          return $rules;
@@ -73,7 +73,7 @@ class ValidationRepository
 			'start' => 'required',
 			'end' => 'required',
 			'location_id' => 'required',
-			'selected_users' => 'required',
+			'users' => 'required',
 			
          );        
          return $rules;

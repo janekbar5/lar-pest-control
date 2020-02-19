@@ -106,37 +106,33 @@ class TaskController extends Controller
         //dd( $request->all() );
         $fv = $this->validate($request, $this->vr->taskUpdate());        
         $task = Task::create(array_merge($request->all(), [
-		'user_id' => \Auth::user()->id,
-		//'location_id' => $request->input('location'),
-		//'status_id' => 1,
-		//'price' => 100,
+		'user_id' => \Auth::user()->id,		
 		]));    
 		
         return ['created' => 'true','id' => $task->id];
     }
-    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
+    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST FROM CRUD
     public function update(Request $request, $id)
     {
         //dd($request->input('selectedTreatments'));       
         $task = $this->br->getTaskById($id);
-        $fv = $this->validate($request, $this->vr->taskUpdate());       
-        //$task->update($request->all());
+        $fv = $this->validate($request, $this->vr->taskUpdate()); 
 		$task->update(array_merge($request->all(), ['user_id' => \Auth::user()->id ]));
-		
         $array_users = [];
         foreach($request->input('users') as $user){           
             $array_users[] = $user['id'];
         }		
         $task->users()->sync($array_users); 
 		
-		$task->locations->treatments()->sync($request->input('selectedTreatments'));
-	    //$task->location->treatments()->sync($request->input('locations')['selectedTreatments']);
+		$task->locations->treatments()->sync($request->input('selectedTreatments'));	    
 		
         return ['saved' => 'true','id' => $task->id,'array_users' =>$array_users];        
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST FROM CALENDAR
 	public function updateFromCalendar(Request $request, $id)
     {
-        dd($request->all());       
+        //dd($request->all());       
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdateFromCalendar());       
         $task->update($request->all());   
@@ -144,7 +140,7 @@ class TaskController extends Controller
         foreach($request->input('users') as $user){           
             $array_users[] = $user['id'];
         }		
-        $task->selectedUsers()->sync($array_users);  
+        $task->users()->sync($array_users);  
         return ['saved' => 'true','id' => $task->id];        
     }
 	

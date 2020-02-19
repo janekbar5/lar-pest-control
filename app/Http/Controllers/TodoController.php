@@ -16,7 +16,7 @@ class TodoController extends Controller
         $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
 		$this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
 		$this->middleware('permission:user-delete', ['only' => ['destroy']]); 
-		$this->middleware('permission:task-edit', ['only' => ['userSettings','updateSettings']]);
+		$this->middleware('permission:user-usersettings', ['only' => ['userSettings','updateSettings']]);
 		
         $this->br = $br;
         $this->vr = $vr;

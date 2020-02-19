@@ -113,7 +113,7 @@
                       </div>
 
                       
-                        <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
+                      
                         <full-calendar 
                         id="calendar" 
                         ref="calendar" 
@@ -122,12 +122,7 @@
                         @day-click="dayClick" 
                         @event-receive="onEventReceive"  
                         @event-selected="eventClick"                        
-                         /> 
-                        <!-- 
-                        @event-selected="eventClick"       
-                        @event-drop="eventDrop"
-                        @drop="eventDrop"
-                         -->                     
+                         />                                          
                       <div class="card-footer clearfix">
                      
                       </div>
@@ -538,7 +533,7 @@ export default {
     ///////////////UPDATE
     updateAssignment(){
                 this.$Progress.start();
-                this.form.post('/v1/api/tasks/update/'+this.form.itemid)
+                this.form.post('/v1/api/tasks/updatefromcalendar/'+this.form.itemid)
                 .then(()=>{
                     //Fire.$emit('AfterCreate');
                     this.form.reset();                    
