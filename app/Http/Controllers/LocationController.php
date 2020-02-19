@@ -23,34 +23,11 @@ class LocationController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index(Request $request)
     {       
-		/* $filterAllClients = $this->br->getAllClients(); 
 		
-		$locations_pre = Location::select('locations.*')
-		          ->where('user_id', '=', \Auth::user()->id) 
-                  ->with('address') 
-                  ->with('clients') 
-                  ->orderBy('created_at', 'desc');                  
-                						
-								
-	    if ($request->input('loc'))
-        {
-            $locations_pre = $locations_pre->where('client_id', '=', $request->input('loc'));			
-        }		
-		
-		
-		$total = $locations_pre->get()->count();		
-		
-		$locations_ok = $locations_pre->paginate($request->input('perpage'));		
-		
+	    $locations = Location::with(['address','clients'])->get();
 		return response()
                ->json([ 
-			   'results' => $locations_ok,
-			   'filterAllClients'=> $filterAllClients,
-			   ]); */
-	   $locations = Location::with(['address','clients'])->get();
-		return response()
-               ->json([ 
-			   'results' => $locations,			   
+			   'rows' => $locations,			   
 			   ]);	   
 				
 		
@@ -60,18 +37,25 @@ class LocationController extends Controller
     {        
         $location = $this->br->getLocationsById($id); 
         $alltreatments = Treatment::withTrashed()->get();
-
+        $allclients = $this->br->getAllClients();
         return response()
-               ->json([ 'form' => $location,'alltreatments' => $alltreatments ]);   
+               ->json([ 
+			   'form' => $location,
+			   'address' => $location->address,
+			   'alltreatments' => $alltreatments,
+			   'allclients' => $allclients,
+			   ]);   
         
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
     public function create()
     {       
        $alltreatments = Treatment::withTrashed()->get();  
+	   $allclients = $this->br->getAllClients();
        return response()->json([
            'form' => '',
-           'alltreatments' => $alltreatments,           
+           'alltreatments' => $alltreatments, 
+		   'allclients' => $allclients,
            ]);
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////4 CREATE POST
@@ -80,29 +64,45 @@ class LocationController extends Controller
         //dd($request->all());
         $fv = $this->validate($request, $this->vr->locationUpdate());        
         $location = Location::create(array_merge($request->all(), ['user_id' => \Auth::user()->id]));
+		
         if($request->has('selectedTreatments')){
             $location->treatments()->sync($request->input('selectedTreatments'));
         }       
-        return ['created' => 'true','id' => $property->id];             
+        return ['created' => 'true','id' => $location->id];             
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
    public function update(Request $request, $id)
    {
        //dd($request->all()['clients']['id']);
+	   //dd($request->all());
        //$property = Property::findOrFail($id);
        $location = $this->br->getLocationsById($id);
        $fv = $this->validate($request, $this->vr->locationUpdate());       
        
-       $location->update($request->all());   
-       $location->update(array_merge($request->all(), ['client_id' => $request->all()['clients']['id']]));
+       $location->update($request->all());
+       //$location->update(array_merge($request->all(), ['client_id' => $request->all()['clients']['id']]));
        
        $address = $this->br->getUserAddressById($type='App\Location',$id);
        $address->update($request->all()['address']);
        
-
+      
+	  /* aleady made in vue script in objectToArray()
+	  "selectedTreatments" => array:3 [
+		0 => 2
+		1 => 6
+		2 => 10
+	  ] */	  
        $location->treatments()->sync($request->input('selectedTreatments'));
-       //$location->clients()->sync($request->input('selectedTreatments'));
-       
+	   
+	   
+	   //////////here we do the same but in php
+	   $array_clients = [];
+        foreach($request->input('clients') as $client){           
+            $array_clients[] = $client['id'];
+        }		
+        $location->clients()->sync($array_clients);	
+		
+		
        
        return ['saved' => 'true','id' => $location->id];        
    }
@@ -135,7 +135,7 @@ class LocationController extends Controller
 	/**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH LOCATIONS
     public function searchLocations()
     {
-        $results = Location::orderBy('title')		    
+        $results = Location::with('treatments')->orderBy('title')		    
             ->when(request('q'), function($query) {
                 $query->where('title', 'like', '%'.request('q').'%')				        
 					  //->orWhere('person_name', 'like', '%'.request('q').'%')

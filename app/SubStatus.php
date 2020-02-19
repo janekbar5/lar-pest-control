@@ -9,7 +9,7 @@ class SubStatus extends Model
     protected $fillable = [
         'status_id',
 	    'title',
-        'description',
+        'colour',
     ];
     /////////////////////////////////////////////////////////////////Belongsto   
     //SubStatus-->belongsTo-->Status  <==>   Status-->hasMany-->SubStatus     

@@ -11,17 +11,20 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="https://adminlte.io/themes/dev/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2"
-          alt="User Image">
+
+         @auth  
+        <!--  {{ Auth::user()->photos }} -->
+        
+        @endauth
+        <img src="https://adminlte.io/themes/dev/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
+
       <div class="info">
         <a href="#" class="d-block">
           @auth
           {{ Auth::user()->name }}
           @endauth
-        </a>       
-			
-         
+        </a>
       </div>
     </div>
 
@@ -35,10 +38,17 @@
                   <i class="nav-icon fas fa-tachometer-alt orange"></i> <p> Dashboard </p>
                 </router-link>
         </li>
+
+        
         @can('client-list')
         <li class="nav-item">
             <router-link to="/clients" class="nav-link">
               <i class="nav-icon fas fa-users orange"></i> <p>Clients </p>
+            </router-link>
+        </li>
+        <li class="nav-item">
+            <router-link to="/clients2" class="nav-link">
+              <i class="nav-icon fas fa-users orange"></i> <p>Clients 2 </p>
             </router-link>
         </li>
         @endcan
@@ -180,6 +190,15 @@
         <li class="nav-item">
           <router-link to="/usertasks" class="nav-link">
             <i class="nav-icon fas fa-cogs orange"></i> <p>My Task List</p>
+          </router-link>
+        </li>
+        @endrole
+
+
+        @role('Field User')
+        <li class="nav-item">
+          <router-link to="/usersettings" class="nav-link">
+            <i class="nav-icon fas fa-cog orange"></i> <p>Settings</p>
           </router-link>
         </li>
         @endrole

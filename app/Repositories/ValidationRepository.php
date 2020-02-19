@@ -14,13 +14,16 @@ class ValidationRepository
          $rules = array(
             //'company_name' => 'required',
             'email' => 'required',
-			//'email' => 'required|email|unique:clients,email',
-			'is_company' => 'required',
+			'phone' => 'required',
+			//'phone' => 'required|email|unique:clients,email',
+			//'is_company' => 'required',
 			'contract_number' => 'required',
 			'vat_number' => 'required',
 			'contract_start' => 'required',
 			'contract_end' => 'required',
 			'person_name' => 'required',
+			'reccurence' => 'required',
+			
 			
          );        
          return $rules;
@@ -39,11 +42,13 @@ class ValidationRepository
      {        
          $rules = array(
             'title' => 'required',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',    
-			'start' => 'required',
-			'end' => 'required',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/', 
+			'start' => 'required|date',			
+			//'end' => 'required|date|after:start|date_format:YYYY-MM-DD H:i',
+			'end' => 'required|date|after:start',
 			'location_id' => 'required',
 			'status_id' => 'required',
+			'users' => 'required',
 			
          );        
          return $rules;
@@ -66,7 +71,9 @@ class ValidationRepository
             'title' => 'required',
             'description' => 'required',
 			'surface' => 'required|numeric',
-			'client_id' => 'required',
+			//'client_id' => 'required',
+			
+			//'address_line1' => 'required',
          );        
          return $rules;
      }
@@ -74,7 +81,8 @@ class ValidationRepository
     public function statusUpdate()
     {        
         $rules = array(
-           'title' => 'required',          
+           'title' => 'required',
+		   'colour' => 'required',
         );        
         return $rules;
     }
@@ -83,6 +91,7 @@ class ValidationRepository
      {        
          $rules = array(
             'status_id' => 'required',
+			'colour' => 'required',
             'title' => 'required',          
          );        
          return $rules;

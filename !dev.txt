@@ -1,3 +1,11 @@
+Pytania
+Reccurence???
+Add Clients location przy clientach
+////////////////Users Menu Access
+Admin           Dashboard   Clients(e,d)
+Desktop User    Dashboard   Clients(e)
+Field User      Dashboard   Clients(e)
+
 /////////////// History Log //// Soft Delete  // Searchable
 ---Users          ok              ok          ok             
 ---Treatment      ok              ok          ok 
@@ -8,22 +16,41 @@
 ---Users        ok            ok          ok        ok
 ---Clients      
 
-//////////////Crud Validation
+///////////////////Crud Validation
 
 
 
-//////////////////////////
-Drag Drop Assign
+
+//done
 Global Settings Modals
 Field User Tasks complete
+
+//////////////////////////
+Tasks Grid table
+Task history
+Users Grid table
+Calendar Unassigned & New Tasks Only
+Drag Drop Assign
+Drag Drop click edit
+Field User prev next
 Location address validation !!!
 Users on map
 Popup Locations number
-
+TODO
+Is Company
+Field User on Map
 /////////////
 
 
 FILTERS
+https://www.vuetable.com/guide/fields-definition.html#referencing-nested-json-data
+
+https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#so-what-is-happening
+https://jbaysolutions.github.io/vue2-bootstrap-table/
+
+
+https://github.com/jamesdordoy/Laravel-Vue-Datatable_Laravel-Package
+
 https://github.com/spatie/vue-table-component/blob/master/README.md#props          
 https://rubanraj54.gitbook.io/vue-bootstrap4-table/installation
 https://rubanraj54.gitbook.io/vue-bootstrap4-table/

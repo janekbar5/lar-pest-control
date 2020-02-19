@@ -17,7 +17,7 @@ class CreateStatusesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('colour');
-            $table->text('description');
+            //$table->text('description');
             $table->timestamps();
         });
     }

@@ -61,6 +61,13 @@ Vue.use(VueProgressBar, {
     failedColor: 'red',
     height: '3px'
   })
+/////////////////////////////////////////////////////////////BootstrapVue
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 
 ////////////////////////////////////////////////////
@@ -96,6 +103,7 @@ import SubStatusesShow from './views/substatuses/SubStatusesShow'
 import SubStatusesEdit from './views/substatuses/SubStatusesEdit'
 
 import ClientsIndex from './views/clients/ClientsIndex'
+import ClientsIndex2 from './views/clients/ClientsIndex2'
 import ClientsEdit from './views/clients/ClientsEdit'
 
 import HistoryIndex from './views/history/HistoryIndex'
@@ -151,6 +159,7 @@ let routes = [
     { path: '/substatuses/:id',  name: 'SubStatusesShow', component: SubStatusesShow, meta: {mode: 'view'} },
 
     { path: '/clients', name: 'ClientsIndex', component:ClientsIndex, meta: {mode: 'list'} },
+    { path: '/clients2', name: 'ClientsIndex2', component:ClientsIndex2, meta: {mode: 'list'} },
     { path: '/clients/create', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'create'} },
     { path: '/clients/:id/edit', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'edit'} },
 
@@ -170,8 +179,16 @@ Vue.filter('formatDate', function(value) {
       return moment(String(value)).format('hh:mm')
     }
 });
-
-
+Vue.filter('formatDayOnly', function(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD')
+    }
+});
+Vue.filter('formatDateNoSeconds', function(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD hh:mm')
+    }
+});
 ////////////////////////////////////////////////3 define router
 const router = new VueRouter({    
     mode: 'history',
@@ -180,7 +197,6 @@ const router = new VueRouter({
 import { Typeahead2 } from './components/typeahead'
 
 const app = new Vue({
-
     el: '#app',
     components: { Typeahead2 },
     data: function () {
@@ -201,3 +217,4 @@ const app = new Vue({
     //
     router,
 });
+global.vm = app;

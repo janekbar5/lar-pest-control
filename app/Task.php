@@ -30,7 +30,7 @@ class Task extends Model implements Auditable, Searchable
     //////////////////////////////////////////
     protected $appends = [
         //'color','firstPhoto','extendedProps','textColor',
-		//'color','firstPhoto',
+		'color','firstPhoto',
     ];
 	
     function getColorAttribute() {

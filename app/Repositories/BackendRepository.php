@@ -21,11 +21,12 @@ class BackendRepository implements BackendRepositoryInterface
     }
 	public function getClientById($id){
         return Client::where('id', '=', $id)
+		           ->with('locations')
                    ->first(); 
     } 
 	public function getAllClients(){
         return Client::all(); 
-                
+		
     }
     /////////////////////////////////////////////////////////////////////////////////TREATMENTS    
     public function getTreatmentById($id){
@@ -56,6 +57,9 @@ class BackendRepository implements BackendRepositoryInterface
                   //orderBy('created_at', 'desc')
                   with('locations')
                   ->with('statuses')
+				  ->whereHas('statuses',function($query) {                
+						 $query->where('status_id', '=', 1);                    
+					})
                   //->with('selectedUsers') 
                   ->doesntHave('users')    
                   ->get(); 
@@ -74,7 +78,7 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::where('location_id', '=', $id)
                   ->with('locations')
                   ->with('statuses')  
-				  ->with('selectedUsers')  //display users array
+				  ->with('users')  //display users array
                   ->has('users')    
                   ->get(); 
     }
@@ -82,7 +86,7 @@ class BackendRepository implements BackendRepositoryInterface
 	
     public function getTaskById($id){
         return Task::where('id', '=', $id) 
-                   ->with('locations')
+                   ->with('locations.treatments')
                    ->with('statuses')
                    ->with('users')
                    ->first(); 
@@ -97,8 +101,8 @@ class BackendRepository implements BackendRepositoryInterface
 			
     }
 	public function getAllUsersTasksByStatus($id){ 
-		return	Task::with(['selectedUsers'])                        
-            ->whereHas('selectedUsers',function($query) use($id){                
+		return	Task::with(['users'])                        
+            ->whereHas('users',function($query) use($id){                
                  $query->where('user_id', '=', \Auth::user()->id);
 				 $query->where('status_id', '=', $id);
             })            
@@ -203,8 +207,8 @@ class BackendRepository implements BackendRepositoryInterface
                   ->orderBy('created_at', 'desc')                  
                   ->paginate(10);  */
 		return History::with('users')  
-                  ->orderBy('created_at', 'desc')                  
-                  ->paginate(10); 		  
+                  //->orderBy('created_at', 'desc')                  
+                  ->get(); 		  
     }   
     
     

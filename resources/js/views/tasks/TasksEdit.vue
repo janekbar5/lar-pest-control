@@ -62,7 +62,7 @@
                                     <div class="form-group">
                                         <label>Start</label>
                                         <!-- <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" > -->
-                                        <Datepicker format="YYYY-MM-DD h:i" v-model="form.start" class="" :class="{ 'is-invalid': errors.start }"  />
+                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start" class="" :class="{ 'is-invalid': errors.start }"  />
                                          <div class="alert alert-danger" v-if="errors.start"> {{errors.start[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -71,14 +71,30 @@
                                     <div class="form-group">
                                         <label>End</label>
                                         <!-- <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" > -->
-                                         <Datepicker format="YYYY-MM-DD h:i" v-model="form.end" class=""  />
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': errors.end }" />
                                          <div class="alert alert-danger" v-if="errors.end"> {{errors.end[0]}}</div>
                                     </div>  
                                 </div>
-
-                                
-                               
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">                                   
+                                    <div class="form-group">
+                                        <label>Assigned Users</label>                                                                          
+                                        <multiselect 
+                                        v-model="form.users" 
+                                        :options="allAvailableFieldUsers"
+                                        :custom-label="nameWithSuename"                                          
+                                        placeholder="Select users"
+                                        :multiple="true"                                       
+                                        label="name" 
+                                        track-by="name"
+                                        :class="{ 'is-invalid': errors.users }"
+                                        ></multiselect>
+                                         <div class="alert alert-danger" v-if="errors.users"> {{errors.users[0]}}</div>
+                                  </div>  
+                                </div> 
+                            </div>
+
                             <div class="row"> </div>
                            <div class="row">
                                                                  
@@ -116,22 +132,24 @@
                             </div>
 
 
-                           <div class="row">
-                                <div class="col-md-12">                                   
+                           
+
+
+
+                            <div class="row">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Assigned Users</label>                                                                          
-                                        <multiselect 
-                                        v-model="form.selected_users" 
-                                        :options="allFieldUsers"
-                                        :custom-label="nameWithSuename"                                          
-                                        placeholder="Select users"
-                                        :multiple="true"                                       
-                                        label="name" 
-                                        track-by="name"
-                                        
-                                        ></multiselect>
-                                  </div>  
-                                </div> 
+                                        <label class="label">Treatment List</label>
+                                        <br>
+                                        <div class="icheck-danger d-inline">
+                                            <div v-for="treat in allTreatments" style="border:solid 0px red;width:300px;float:left">
+                                                <input :value="treat.id" v-model="form.selectedTreatments" type="checkbox" :disabled="treat.deleted_at !== null"/> {{treat.title}}
+                                            </div>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                                 
 
@@ -195,9 +213,9 @@
                    //locations:{}
                    status_id: this.$route.meta.mode==="edit" ? '' : 1,
                    //start: this.$route.meta.mode==="edit" ? '' : moment().format('MMMM Do YYYY, h:mm'),
-                   start: this.$route.meta.mode==="edit" ? '' : '2020-02-02 07:30',
-                   end: this.$route.meta.mode==="edit" ? '' : '2020-02-02 08:30',
-                  
+                   start: this.$route.meta.mode==="edit" ? '' : '',
+                   end: this.$route.meta.mode==="edit" ? '' : '',
+                   //selectedTreatments:[],
                 },               
                 errors: {},               
                 //
@@ -213,8 +231,23 @@
                 //fieldusers: [],
                 //options:[],
                 selected_users:[], //dont need allPermissions in form only selected 
-                allFieldUsers:[], //dont need allPermissions in form only selected 
-                
+                allAvailableFieldUsers:[], //dont need allPermissions in form only selected 
+                //
+                grantedTreatments:[], //dont need allPermissions in form only selected 
+                selectedTreatments:[],
+                allTreatments:[], //dont need allPermissions in form only selected 
+                //
+                modelPlural: 'tasks', modelSingular: 'Task', 
+                urlList:'/tasks',
+                urlCreate:'/tasks/create',
+                urlEdit:'/tasks/',
+                apiList:'/v1/api/tasks/index',
+                apiCreate:'/v1/api/tasks/create',
+                apiEdit:'/v1/api/tasks/edit/',       
+                apiUpdate:'/v1/api/tasks/update/',     
+                apiDelete:'/v1/api/tasks/delete/',
+                newStart:'',
+                newEnd:'',
                
             }
         },
@@ -233,33 +266,48 @@
                 })
         },
         computed: {
-          
+            
         },
-        created() {
-            this.$eventHub.$on('settings', this.modelSettings) 
+        watch: {
+            'form.start': function(newVal1) {
+                //console.log('value changed from ' + newVal1);
+                this.newStart = newVal1
+                this.Search()  
+            },
+            'form.end': function(newVal2) {              
+                //console.log('value changed from ' + newVal2);
+                this.newEnd = newVal2
+                this.Search()            
+                },
+
+           
+
+            
         },
+        // created() {
+        //     this.$eventHub.$on('settings', this.modelSettings) 
+        // },
         methods: {
+            Search(){
+            if (this.newStart && this.newEnd ) {
+                console.log('value changed from ' + this.newStart + this.newEnd );
+                axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+this.newStart+'&end='+this.newEnd)
+                    .then((res) => {                        
+                    this.setFreeUser(res) 
+                })   
+            }
+            },
             onLocation(e) {
                 const locations = e.target.value
                 Vue.set(this.$data.form, 'locations', locations) 
                 Vue.set(this.$data.form, 'location_id', locations.id) 
-                                                         
+                Vue.set(this.$data.form, 'price', locations.price)
+                //Vue.set(this.$data.form, 'grantedTreatments', locations.treatments)  
+                this.grantedTreatments = locations.treatments
+                this.objectToArray();                                         
             },
-            modelSettings(settings){                
-                //return name
-                this.settings = settings;
-                this.urlList = settings.urlList
-                this.urlEdit = settings.urlEdit
-                this.urlCreate = settings.urlCreate
-                //         
-                this.apiList = settings.apiList
-                this.apiDelete = settings.apiDelete
-                this.apiCreate = settings.apiCreate
-                this.apiEdit = settings.apiEdit
-                this.apiUpdate = settings.apiUpdate
-                //
-                this.modelSingular = settings.modelSingular
-                //console.log(settings)                
+            setFreeUser(res){
+                this.allAvailableFieldUsers = res.data.allAvailableFieldUsers
             },
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
@@ -269,19 +317,31 @@
                     this.title = 'Edit'                    
                     this.roles =  res.data.form.roles //assigned roles                   
                     this.photos_List = res.data.form.photos;
+
+                    this.grantedTreatments = res.data.form.locations.treatments
                 }
                 this.photos_List = res.data.form.photos;
-                this.allFieldUsers =  res.data.fieldusers //all roles
+                //for create get only available users
+                this.allAvvailableFieldUsers =  [] //all roles 
                 this.statuses =  res.data.statuses //all roles
-               //this.allFieldUsers = [{"id":1,"name":"ddddd"}]
-            },          
-            objectToArray() {                
-                var user_array = [];               
-                this.allFieldUsers.forEach(element => {
-                    user_array.push(element.id);
-                });
-                this.selected_users = user_array;
+                this.allTreatments = res.data.alltreatments
+
+                this.objectToArray();
             }, 
+            objectToArray() {                
+                var treatment_array = [];               
+                this.grantedTreatments.forEach(element => {
+                    treatment_array.push(element.id);
+                });
+                this.form.selectedTreatments = treatment_array;
+            },           
+            // objectToArray() {                
+            //     var user_array = [];               
+            //     this.allFieldUsers.forEach(element => {
+            //         user_array.push(element.id);
+            //     });
+            //     this.selected_users = user_array;
+            // }, 
             nameWithSuename ({ name, last_name }) {
             return `${name} ${last_name}`
             },  

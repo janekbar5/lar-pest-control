@@ -58,6 +58,8 @@ Route::post('v1/api/treatments/update/{id}', 'TreatmentController@update'); //up
 Route::put('v1/api/treatments/update/{id}', 'TreatmentController@update'); //update  post 
 Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); //update  post  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
+
+Route::get('v1/api/tasks/updatestatus', 'TaskController@updateStatus'); //list 
 Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list 
 Route::get('v1/api/tasks/usercalendar', 'TaskController@userCalendar'); //list
 Route::get('v1/api/tasks/index', 'TaskController@index'); //list  
@@ -71,7 +73,7 @@ Route::post('v1/api/tasks/updatefromcalendar/{id}', 'TaskController@updateFromCa
 Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  post
 
 Route::get('/v1/api/tasks/gettasksbydate', 'TaskController@getTasksByDate'); //list 
-
+Route::get('/v1/api/tasks/getfreefieldusersfordate', 'TaskController@getFreeFieldUsersForDate'); //list 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////LOCATIONS
 Route::get('v1/api/locations/searchlocations', 'LocationController@searchLocations'); //list 
 Route::get('v1/api/locations/filter', 'LocationController@filter'); //list 

@@ -168,7 +168,7 @@
                 this.apiCreate = settings.apiCreate
                 this.apiEdit = settings.apiEdit
                 this.apiUpdate = settings.apiUpdate
-                console.log(settings)                
+                //console.log(settings)                
             },
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
@@ -179,10 +179,8 @@
                     this.roles =  res.data.form.roles //assigned roles                  
                     this.photos_List = res.data.form.photos;
                     //console.log('setData-parent')
-                }
-                
+                }                
                 //    console.log(this.photos_List)
-
                 this.allroles =  res.data.allroles //all roles
                 this.isMounted = true 
             },

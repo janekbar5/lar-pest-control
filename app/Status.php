@@ -11,7 +11,7 @@ class Status extends Model implements Auditable
     
     protected $fillable = [
 	    'title',
-        'description',
+        'colour',
     ];
     protected $auditInclude  = [
         'title', 'description'

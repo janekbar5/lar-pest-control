@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
                 ]);
             App\User::create([
                 'status' => 1,
-                'name' => 'jan',
+                'name' => 'janekbar3',
                 'last_name' => 'gmx',
                 'email' => 'janekbar3@gmx.com',
                 'password' => bcrypt('janekbar3@gmx.com'),
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
                 ]);
             App\User::create([
                 'status' => 1,
-                'name' => 'jan',
+                'name' => 'janekbar4',
                 'last_name' => 'gmx',
                 'email' => 'janekbar4@gmx.com',
                 'password' => bcrypt('janekbar4@gmx.com'),
@@ -59,7 +59,7 @@ class UsersTableSeeder extends Seeder
 
             App\User::create([
                 'status' => 1,
-                'name' => 'jan',
+                'name' => 'janekbar5',
                 'last_name' => 'gmx',
                 'email' => 'janekbar5@gmx.com',
                 'password' => bcrypt('janekbar5@gmx.com'),
