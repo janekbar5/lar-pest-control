@@ -99,32 +99,7 @@
         </li>
         @endcan
 
-
-        <!-- <li class="nav-item">
-            <router-link to="/leaflet" class="nav-link">
-              <i class="nav-icon fas fa-cubes orange"></i> <p>leaflet </p>
-            </router-link>
-          </li> -->
-
-          <!-- @can('status-list') 
-          <li class="nav-item">
-              <router-link to="/statuses" class="nav-link">
-                <i class="nav-icon fas fa-cubes orange"></i> <p>Statuses </p>
-              </router-link>
-            </li>
-          @endcan
-
-          @can('substatus-list') 
-          <li class="nav-item">
-              <router-link to="/substatuses" class="nav-link">
-                <i class="nav-icon fas fa-bars orange"></i> <p>Substatuses </p>
-              </router-link>
-            </li>
-          @endcan -->
-
-         
-       
-
+        
         @can('user-list')
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link"><i class="nav-icon fa fa-user orange" aria-hidden="true"></i> <p> Users <i class="fas fa-angle-left right"></i>                           
@@ -148,7 +123,7 @@
         </li>
         @endcan
 
-        @can('role-list')
+        <!-- @can('role-list')
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link"><i class="nav-icon fa fa-cubes orange" aria-hidden="true"></i> <p> Users Roles <i class="fas fa-angle-left right"></i>                           
             </p>
@@ -174,7 +149,7 @@
             
           </ul>
         </li>
-        @endcan
+        @endcan -->
 
 
         @role('Admin')
@@ -207,9 +182,7 @@
         <li class="nav-item">
           <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
             <i class="nav-icon fas fa-power-off"></i>
-            <p>
-              {{ __('Logout') }}
-            </p>
+            <p>{{ __('Logout') }}</p>
           </a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf

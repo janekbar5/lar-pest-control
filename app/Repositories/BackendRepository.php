@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client,History};
+use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client,History,Todo};
 use Spatie\Permission\Models\Role;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
 use DB;
@@ -10,6 +10,13 @@ use DB;
 class BackendRepository implements BackendRepositoryInterface
 {
 
+
+    /////////////////////////////////////////////////////////////////////////////////TODO
+    public function getTodoById($id){
+        return Todo::where('id', '=', $id)
+                   ->with('users')
+                   ->first(); 
+    }
     /////////////////////////////////////////////////////////////////////////////////CLIENTS    
 	public function getClients(){
         return Client::  
@@ -203,12 +210,12 @@ class BackendRepository implements BackendRepositoryInterface
       }
     /////////////////////////////////////////////////////////////////////////////////HISTORY   
     public function getHistory(){
-        /* return DB::table('audits')  
-                  ->orderBy('created_at', 'desc')                  
-                  ->paginate(10);  */
-		return History::with('users')  
-                  //->orderBy('created_at', 'desc')                  
-                  ->get(); 		  
+     
+		/* return History::with('users')                                    
+                  ->get();  */
+				  
+		return History::all();                             
+                 		  
     }   
     
     

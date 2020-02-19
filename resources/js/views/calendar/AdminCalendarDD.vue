@@ -121,11 +121,7 @@
                         :events="events"                        
                         @day-click="dayClick" 
                         @event-receive="onEventReceive"  
-<<<<<<< HEAD
-                        @event-selected="eventClick"                     
-=======
                         @event-selected="eventClick"                        
->>>>>>> e116ff716172ebb3999779bbeea2b9cb6894deea
                          /> 
                         <!-- 
                         @event-selected="eventClick"       
@@ -372,35 +368,6 @@ export default {
         //             //this.collapse()
         // },
        // drop(date,jsEvent) {
-<<<<<<< HEAD
-        // drop(date, jsEvent, resource){   
-        //   // is the "remove after drop" checkbox checked?
-        //   if ($("#drop-remove").is(":checked")) {            
-        //     $(this).remove();    
-        //     $("#assignTaskToUserModal").modal("show")  
-        //     $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-        //     $('#end').val(date.format('YYYY-MM-DD hh:mm'));  
-        //     $('#itemid').val($(this).attr("id")); 
-        //     //$('#title').val($(this).html());
-        //     $('#title').val($(this).data("title"));
-        //     $('#price').val($(this).data("price"));
-        //     $('#status_id').val($(this).data("status_id"));
-           
-
-        //     this.start = date.format('YYYY-MM-DD hh:mm') 
-        //     //var itemid = $(this).attr("id")  
-        //       // console.log('Clicked on: ' + date.format());
-        //       // console.log('Coordinates: ' + jsEvent);
-        //       // console.log('Current text: ' + $(this).text());
-        //       // console.log('Current html: ' + $(this).html());         
-        //   }           
-        // },
-         eventDrop() {
-         alert('eventDrop')
-           console.log(event)
-        },
-       
-=======
 
 
 
@@ -426,7 +393,6 @@ export default {
         // },
 
     
->>>>>>> e116ff716172ebb3999779bbeea2b9cb6894deea
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
         eventDragStop: function(event, jsEvent) {  

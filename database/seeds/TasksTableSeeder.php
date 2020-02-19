@@ -25,8 +25,8 @@ class TasksTableSeeder extends Seeder
 
 
         $faker = Factory::create();   
-        $days = ['05','06','07','08','09','10','11','12','13','14','15','16','17','18','19'];
-        $months = ['01','01','03','04','05','06','07','08','09','10','11','12'];
+        $days = ['02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22'];
+        $months = ['02','03','04','05','06','07','08','09','10','11','12'];
 
         for($i=0; $i<=200; $i++):
         $day = $faker->randomElement($days);
@@ -42,15 +42,12 @@ class TasksTableSeeder extends Seeder
                     'title' => "Task title ".$i,
                     'description' => $faker->text,  
                     'comment' => $faker->text,                    
-                    'start' => '2020-'.$month.'-'.$day.' 07:30',
-                    'end' => '2020-'.$month.'-'.$day.' 10:30',                  
+                    'start' => '2020-'.$month.'-'.$day.' 0'.$faker->numberBetween($min = 7, $max = 11).':30',
+                    'end' => '2020-'.$month.'-'.$day.' '.$faker->numberBetween($min = 12, $max = 20).':30',                  
                     
                 ]);
         endfor; 
 		
-		
-
-
 		////////////////////////////////////////////////////////////////////////////////////////user 1
         for($i=201; $i<=300; $i++):
         $day = $faker->randomElement($days);
@@ -73,13 +70,6 @@ class TasksTableSeeder extends Seeder
                 ]);
         endfor;     
 
-        /* for($i=5; $i<=100; $i++):           
-                DB::table('task_user')
-                    ->insert([                        
-						'task_id' => $i,
-                        'user_id' => $i,
-                    ]);
-        endfor;   */   
             
 
            

@@ -27,6 +27,7 @@ class PermissionsTableSeeder extends Seeder
         for($i=4; $i<=30; $i++):
         DB::table('model_has_roles')->insert(['role_id' => 3,'model_type' => 'App\User','model_id' => $i]);
         endfor;
+		
         ///////////////////////////1-4 Role
 		DB::table('permissions')->insert(['name' => 'role-list','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'role-create','guard_name' => 'web']);
@@ -82,6 +83,13 @@ class PermissionsTableSeeder extends Seeder
 		DB::table('permissions')->insert(['name' => 'client-create','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'client-edit','guard_name' => 'web']);
 		DB::table('permissions')->insert(['name' => 'client-delete','guard_name' => 'web']);
+		///////////45 User Settings
+		DB::table('permissions')->insert(['name' => 'user-usersettings','guard_name' => 'web']);
+		///////////46-49 Client
+        DB::table('permissions')->insert(['name' => 'todo-list','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'todo-create','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'todo-edit','guard_name' => 'web']);
+		DB::table('permissions')->insert(['name' => 'todo-delete','guard_name' => 'web']);
 		
 		//////////////////////////////////Admin		
         DB::table('role_has_permissions')->insert(['permission_id' => 1,'role_id' => 1]);  		
@@ -138,7 +146,15 @@ class PermissionsTableSeeder extends Seeder
        DB::table('role_has_permissions')->insert(['permission_id' => 42,'role_id' => 1]);  
        DB::table('role_has_permissions')->insert(['permission_id' => 43,'role_id' => 1]);  
        DB::table('role_has_permissions')->insert(['permission_id' => 44,'role_id' => 1]);
-		
+	   
+	   ///////////////// Field User settings
+	   DB::table('role_has_permissions')->insert(['permission_id' => 45,'role_id' => 3]);
+	    		
+		///////////46-49 Todo
+	   DB::table('role_has_permissions')->insert(['permission_id' => 46,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 47,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 48,'role_id' => 1]);  
+       DB::table('role_has_permissions')->insert(['permission_id' => 49,'role_id' => 1]);
 		
 		
 		
@@ -184,5 +200,9 @@ class PermissionsTableSeeder extends Seeder
 		//DB::table('role_has_permissions')->insert(['permission_id' => 13,'role_id' => 3]);
         DB::table('role_has_permissions')->insert(['permission_id' => 14,'role_id' => 3]);
         DB::table('role_has_permissions')->insert(['permission_id' => 15,'role_id' => 3]);
+		/// usersettings
+		
+		
+		
     }
 }

@@ -70,10 +70,15 @@ return {
     ////
     // url:'',
     // settings: {},
-    urlList: '',
-    urlEdit: '',
-    urlCreate:'',
-    apiList: '',
+    modelPlural: 'users', modelSingular: 'user', 
+    urlList:'/users',
+    urlCreate:'/users/create',
+    urlEdit:'/users/',
+    apiList:'/v1/api/users/index',
+    apiCreate:'/v1/api/users/create',
+    apiEdit:'/v1/api/users/edit/',       
+    apiUpdate:'/v1/api/users/update/',     
+    apiDelete:'/v1/api/users/delete/',
     //    
     editMode: this.$route.meta.mode,
     model: {
@@ -86,27 +91,27 @@ return {
 }
 },
 created() {
-    this.$eventHub.$on('settings', this.modelSettings) 
+    //this.$eventHub.$on('settings', this.modelSettings) 
 },
 beforeDestroy(){
-    this.$eventHub.$off('settings');
+    //this.$eventHub.$off('settings');
 },
 //
 mounted() {   
     this.onFilter() 
 },          
 methods: {
-    modelSettings(settings){
-        //return name
-        this.settings = settings;
-        this.urlList = settings.urlList
-        this.urlEdit = settings.urlEdit
-        this.urlCreate = settings.urlCreate
-        //
-        this.apiList = settings.apiList
-        this.apiDelete = settings.apiDelete
-        //console.log(settings)  
-    },
+    // modelSettings(settings){
+    //     //return name
+    //     this.settings = settings;
+    //     this.urlList = settings.urlList
+    //     this.urlEdit = settings.urlEdit
+    //     this.urlCreate = settings.urlCreate
+    //     //
+    //     this.apiList = settings.apiList
+    //     this.apiDelete = settings.apiDelete
+    //     //console.log(settings)  
+    // },
     newUser(){
        this.$router.push(this.urlCreate) 
     },

@@ -67,20 +67,12 @@
       </div>
     </section> 
       <div class="row">
-              <div class="col-md-12">                 
-                 
+              <div class="col-md-12">  
                     <div class="card">
                       <div class="card-header">
                         <!-- <h3 class="card-title">Bordered Table</h3> -->
                       </div>
-                      
-                      <div class="card-body"> 
-                       <!-- <select @change="filterLocation()" v-model="location" class="form-control">
-                        <option value="" selected>All Locations</option>
-                         <option :value="location.id" v-for="(location, index) in locations" :key="index">
-									        	{{ location.title }} 
-									     	</option>                                       
-                       </select> -->
+                      <div class="card-body">                        
                           <button class="btn btn-secondary" @click="prev"><< Prev</button>
                           <button class="btn btn-secondary" @click="next">Next >></button>
                           <button class="btn btn-secondary" @click="today">Today</button>                         
@@ -89,16 +81,7 @@
                           <button class="btn btn-secondary" @click="changeView('agendaWeek')">Week</button>
                           <button class="btn btn-secondary" @click="changeView('agendaDay')">Day</button>
                           
-                      </div>
-
-                       
-
-
-
-
-                      <!-- <button id="next" @click="next()">next</button> -->
-
-                        <!-- <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick"  />  -->
+                      </div> 
                         <full-calendar 
                         :header="{
                             left:'',
@@ -111,42 +94,124 @@
                         @scrollTime="scrollTime" 
                         ref="calendar"   
                         @changeMonth="changeMonth"                    
-                         /> 
-                        <!-- 
-                        @event-selected="eventClick"       
-                        @event-drop="eventDrop"
-                        @drop="eventDrop"
-                         -->
-                        
-                        <!--:header="{
-                            left:'',
-                            center: 'title',
-                            right: '',
-                          }"-->
+                         />            
+                    </div>
+              </div>  
+        </div>
 
+        <div class="row">
+              <div class="col-md-12">
+
+ <div class="card">
+                
+              <div class="card-header">
+                <h3 class="card-title">Subtatuses</h3> 
+                 <div class="card-tools">                  
+                    <div class="input-group-append">
+                     <button  class="btn btn-secondary" @click="newTodo()" >Add New Todo</button> 
+                    </div>                 
+                </div>                
+              </div>
+                <div class="card-body p-0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th style="width: 10%">#</th>
+                      
+                      <th style="width: 30%">Substatus</th>
+                      <th style="width: 20%">Parent Status</th>
+                      <th style="width: 10%">Colour</th>
+                      <th style="width: 15%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <tr v-for="todo in todos" :key="todo.data"> 
+                      <td>{{todo.id}}</td>
+                      <td>{{todo.title}}</td>
+                      <td>{{todo.users.name}} {{todo.users.last_name}}</td>
+                                                            
+                     
+                      <td>    
+                        <a href="#" @click="editTodo(todo)">
+                            <i class="fa fa-edit black"></i>
+                        </a>
+                        /
+                       <a href="#" @click="deleteRecord(todo,model='todos')">
+                            <i class="fa fa-trash black"></i>
+                        </a>
+                        </td>
+                    </tr>
+                           
+                  </tbody>
+                </table>
+              </div>
+                   <div class="card-tools">
+                  <!-- <ul class="pagination pagination-sm float-right">
+                    <li class="page-item"><a class="page-link" href="#">«</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">»</a></li>
+                  </ul> -->
+                </div>
+              
+            </div>
+
+            </div>  
+        </div>
+
+        <!----------------------- Modal substatuses ------------------------------------>
+            <div class="modal fade" id="formTodo" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
+                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User's Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form @submit.prevent="editmode ? updateTodo() : createTodo()">
+                <div class="modal-body">
+                     <div class="form-group">
+                        <input v-model="formTodo.title" type="text" name="title"
+                            placeholder="Title"
+                            class="form-control" :class="{ 'is-invalid': formTodo.errors.has('title') }">
+                        <has-error :form="formTodo" field="title"></has-error>
+                    </div>
+
+                     <div class="form-group">
+                        <input v-model="formTodo.description" type="text" name="description"
+                            placeholder="description"
+                            class="form-control" :class="{ 'is-invalid': formTodo.errors.has('description') }">
+                        <has-error :form="formTodo" field="description"></has-error>
+                    </div>
 
                      
-                     <div>
-                                        <label class="typo__label">Tagging</label>
-                                        <multiselect 
-                                        v-model="value" 
-                                        
-                                        tag-placeholder="Add this as new tag" 
-                                        placeholder="Search or add a tag" 
-                                        label="name" 
-                                        track-by="name" 
-                                        :options="options" 
-                                        :multiple="true" 
-                                        :taggable="true"
-                                         @tag="addTag">
-                                        </multiselect>
-                                        <pre class="language-json"><code>{{ value  }}</code></pre>
-                                        </div>
+ 
+                    <div class="form-group">
+                        <select name="user_id" v-model="formTodo.user_id" id="user_id" class="form-control" :class="{ 'is-invalid': formTodo.errors.has('user_id') }">
+                            <option value="">Select User</option>                           
+                            <option :value="user.id" v-for="user in fieldusers" :key="user.data">{{user.name}} {{user.last_name}}</option>                           
+                        </select>
+                        <has-error :form="formTodo" field="user_id"></has-error>
                     </div>
-              </div>   
+
                    
-        </div>
-      
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger"  @click="formHideReset('formTodo')">Close</button>
+                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                </div>
+
+                </form>
+
+                </div>
+            </div>
+            </div> 
+            <!----------------------- Modal ------------------------------------>
 
 
 
@@ -164,15 +229,16 @@ import moment from "moment"
 import "jquery-ui-bundle"
 import $ from 'jquery'
 import FullCalendar from "vue-full-calendar";   
- import Multiselect from 'vue-multiselect'
+// import Multiselect from 'vue-multiselect'
+import { get, byMethod } from '../../lib/api'
 
 export default {
   name: "hello",
-  components: { Multiselect },  
+  components: {  },  
   data() {
     var $this = this;
     return {
-      //isModalMounted: false,
+      editmode: false,
       unassignedtasks:[],
       value:'',
       events: [],
@@ -210,14 +276,17 @@ export default {
         charges:'',
         //
         value: [],
-                options: [
-                    { name: 'Vue.js', language: 'JavaScript' },
-                    { name: 'Adonis', language: 'JavaScript' },
-                    { name: 'Rails', language: 'Ruby' },
-                    { name: 'Sinatra', language: 'Ruby' },
-                    { name: 'Laravel', language: 'PHP' },
-                    { name: 'Phoenix', language: 'Elixir' }
-                ],
+        todos:[],
+        fieldusers:[],
+      ///
+      formTodo: new Form({ 
+        id:'',                  
+        title : '',        
+        user_id : '',
+        description : '',
+                   
+    }),  
+                
     };
   },
   //data
@@ -232,17 +301,98 @@ export default {
       this.setStartEnd()
       this.loadStatistics()
       this.loadCalendar()
+      this.loadTodo()
   },
   //
   methods: {
-   addTag(newTag) {
-            const tag = {
-                name: newTag,
-                code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-            }
-            this.options.push(tag)
-            this.value.push(tag)
-            },
+     formHideReset(form){ 
+        this.formTodo.reset();             
+        $('#'+form).modal('hide');
+    },
+   ///////////////////////////////////////////////New
+    newTodo(){
+                this.editmode = false;
+                this.formTodo.reset();
+                $('#formTodo').modal('show');
+    },
+    /////////////////////////////////////////////Edit
+    editTodo(todo){
+                this.editmode = true;
+                this.formTodo.reset();
+                $('#formTodo').modal('show');                
+                this.formTodo.fill(todo);
+                //console.log(this.form)
+    },
+    ////////////////////////////////////////////////////////CREATE POST
+    createTodo(){ 
+                this.$Progress.start();
+                this.formTodo.post('/v1/api/todos/create')
+                .then(()=>{
+                    //Fire.$emit('AfterCreate');
+                    $('#formTodo').modal('hide')
+                    this.loadTodo()
+                     toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                        })
+                    this.$Progress.finish();
+
+                })
+                .catch(()=>{})
+    },
+ //////////////////////////////////////////////////////// UPDATE  Post     
+    updateTodo(){
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.formTodo.put('/v1/api/todos/update/'+this.formTodo.id)
+                .then(() => {
+                    // success
+                    $('#formTodo').modal('hide');
+                    this.loadTodo()
+                     swal(
+                        'Updated!',
+                        'Information has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                         Fire.$emit('AfterCreate');
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+     },
+ /////////////////////////////////////////////////////////////DELETE
+     deleteRecord(item,model){
+        swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+            byMethod('delete','v1/api/'+model+'/delete/'+item.id).then(()=>{
+            swal.fire('Deleted!','Your file has been deleted.','success')
+             this.loadTodo()
+                                                
+        }).catch(()=> {
+            swal.fire("Failed!", "There was something wronge.", "warning");
+            });
+        }
+        })
+    },
+
+
+
+
+
+
+
+     ///////////////////////////////////////////////////////////////////////////////////
     today() {
       this.$refs.calendar.fireMethod('today')
       console.log('today'); 
@@ -297,7 +447,19 @@ export default {
           this.errors = error.response.data.errors
         }       
     })
-    },    
+    },
+     loadTodo(){
+      axios.get('v1/api/todos/index').then((res) => {
+      if(res.data) {       
+          this.setDataTodo(res)
+      }})
+      .catch((error) => {
+        if(error.response.status === 422) {
+          this.errors = error.response.data.errors
+        }       
+    })
+    },
+
     dayClick(date, jsEvent, view){ 
     },
     setData(res) { 
@@ -308,6 +470,10 @@ export default {
     setStats(res) { 
       this.dueTasksCount = res.data.dueTasksCount 
       this.charges = res.data.charges   
+    },  
+    setDataTodo(res) { 
+      this.todos = res.data.todos  
+      this.fieldusers = res.data.fieldusers      
     },  
     eventClick(calEvent, jsEvent, view) {
            var dt = calEvent.start;

@@ -20,7 +20,7 @@ class PivotsTableSeeder extends Seeder
 		$clients = Client::all()->pluck('id')->toArray();
 		$surfaces = [200,210,250,270,290,300,310];
 		
-		//$clients = Client::all()->pluck('id')->toArray();
+		////////////////////////////////////////////////////////////Clients 100
 		for($i=1; $i<=100; $i++):	
             DB::table('locations')
                 ->insert([ 
@@ -33,45 +33,37 @@ class PivotsTableSeeder extends Seeder
                 ]);
         endfor;
 		
-		
+		////////////////////////////////////////////////////////////Clients Locatons 100
 		$locations = Location::all()->pluck('id')->toArray();
 		$clients = Client::all()->pluck('id')->toArray();
 		
-        for($i=1; $i<=10; $i++):           
+        for($i=1; $i<=100; $i++):           
                 DB::table('client_location')
-                    ->insert([
-                        //'client_id' => $i,
-						'client_id' => $faker->randomElement($clients),
-						//'task_id' => $faker->randomElement($tasks),
-                        //'location_id' => 4,
+                    ->insert([                       
+						'client_id' => $faker->randomElement($clients),						
                          'location_id' => $faker->randomElement($locations),
                     ]);
         endfor; 
 		
 		
 		
-        for($i=1; $i<=10; $i++):           
+       /*  for($i=1; $i<=10; $i++):           
                 DB::table('client_location')
-                    ->insert([
-                        //'client_id' => $i,
-						'client_id' => $faker->randomElement($clients),
-						//'task_id' => $faker->randomElement($tasks),
-                        //'location_id' => 4,
+                    ->insert([                        
+						'client_id' => $faker->randomElement($clients),						
                          'location_id' => $faker->randomElement($locations),
                     ]);
-        endfor; 
+        endfor;  */
 		
 		
 		
-		
-		$tasks = Task::all()->pluck('id')->toArray();
-		
+		//////////////////////////////////////////////////////////////Task
+		$tasks = Task::all()->pluck('id')->toArray();		
         for($i=1; $i<=100; $i++):           
                 DB::table('task_user')
                     ->insert([
-                        'task_id' => $i,
-						//'task_id' => $faker->randomElement($tasks),
-                        'user_id' => 4,
+                        'task_id' => $i,						
+                        'user_id' => 5,
                        
                     ]);
         endfor; 

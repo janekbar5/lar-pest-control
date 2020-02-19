@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Buttons :editMode="editMode" style="display:none"></Buttons>
+        <!-- <Buttons :editMode="editMode" style="display:none"></Buttons> -->
   
       <vue-bootstrap4-table 
       :rows="rows"
@@ -50,7 +50,7 @@ return {
                         {label: "Reccurence", name: "reccurence",filter: {type: "simple",placeholder: "Reccurence"},sort: true,},
                         
                         {
-						        label: "active",
+						        label: "Active",
 						        name: "active", // access nested objects properties with "."
 						        filter: {
 						            type: "select",
@@ -64,11 +64,10 @@ return {
 						                {
 						                    "name": "Inactive",
 						                    "value": 0
-						                },
-						                
-						            ],
-						            
-						        }
+						                },						                
+						            ],						            
+                                },
+                                sort: true
 						 },
 
                         {label: "Actions",name: "id",slot_name: "actions"}, 
@@ -90,11 +89,16 @@ return {
                     },
     ////
     // url:'',
-    // settings: {},
-    urlList: '',
-    urlEdit: '',
-    urlCreate:'',
-    apiList: '',
+       // settings: {},
+        modelPlural: 'clients', modelSingular: 'Client', 
+        urlList:'/clients',
+        urlCreate:'/clients/create',
+        urlEdit:'/clients/',
+        apiList:'/v1/api/clients/index',
+        apiCreate:'/v1/api/clients/create',
+        apiEdit:'/v1/api/clients/edit/',       
+        apiUpdate:'/v1/api/clients/update/',     
+        apiDelete:'/v1/api/clients/delete/',
     //    
     editMode: this.$route.meta.mode,
     model: {
@@ -107,27 +111,27 @@ return {
 }
 },
 created() {
-    this.$eventHub.$on('settings', this.modelSettings) 
+    //this.$eventHub.$on('settings', this.modelSettings) 
 },
 beforeDestroy(){
-    this.$eventHub.$off('settings');
+   //this.$eventHub.$off('settings');
 },
 //
 mounted() {   
     this.onFilter() 
 },          
 methods: {
-    modelSettings(settings){
-        //return name
-        this.settings = settings;
-        this.urlList = settings.urlList
-        this.urlEdit = settings.urlEdit
-        this.urlCreate = settings.urlCreate
-        //
-        this.apiList = settings.apiList
-        this.apiDelete = settings.apiDelete
-        //console.log(settings)  
-    },
+    // modelSettings(settings){
+    //     //return name
+    //     this.settings = settings;
+    //     this.urlList = settings.urlList
+    //     this.urlEdit = settings.urlEdit
+    //     this.urlCreate = settings.urlCreate
+    //     //
+    //     this.apiList = settings.apiList
+    //     this.apiDelete = settings.apiDelete
+    //     //console.log(settings)  
+    // },
     newUser(){
        this.$router.push(this.urlCreate) 
     },

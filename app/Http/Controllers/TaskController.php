@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Task,User,Status,Location,Treatment};
+use App\{Task,User,Status,Location,Treatment,Todo};
 
 use Illuminate\Http\Request;
 use App\Repositories\ValidationRepository;
@@ -207,14 +207,19 @@ class TaskController extends Controller
 	/**///////////////////////////////////////////////////////////////////////////////////////////// FIELD USER CALENDAR
 	public function userCalendar()    {
         $userstasks = $this->br->getAllUsersTasks();
+		$todos = Todo::where('user_id', '=', \Auth::user()->id)->get();
+		
 		$statuses = array();
+		
 		foreach(Status::all() as $status){			
 			$statuses[] = array("title"=>$status->title,"count"=>$this->br->getAllUsersTasksByStatus($status->id)->count());			
 		}
 		//dd($userstasks);
         return response()->json([            
             'userstasks' => $userstasks,
-			'statuses' => $statuses,			
+			'statuses' => $statuses,
+			'todos' => $todos,
+			
            
         ]);
     }

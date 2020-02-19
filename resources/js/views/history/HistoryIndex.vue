@@ -2,7 +2,7 @@
   <div>
 
     
-    <router-link :to="{path: this.urlCreate}" class="btn btn-secondary"> New Client </router-link>
+ 
     <vue-good-table
       :columns="columns"
       :rows="rows"
@@ -31,15 +31,16 @@
         <template slot="table-row" slot-scope="props">
 
                 <span v-if="props.column.field == 'action_buttons'">               
-                 <i aria-hidden="true" class="fa fa-pen" @click="recordEdit(props.row.id)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                 <i aria-hidden="true" class="fa fa-trash" @click="recordDelete(props.row.id)"></i>  
+                 <i aria-hidden="true" class="fa fa-eye" @click="recordEdit(props.row.id)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
+                 <!-- <i aria-hidden="true" class="fa fa-trash" @click="recordDelete(props.row.id)"></i>   -->
                 </span>
 
-                <span v-else-if="props.column.field == 'location'">
+                <span v-else-if="props.column.field == 'link'">
                   <div>
-                      <p :id="'tooltip-target-'+props.row.id">
-                        Location details
-                      </p>                     
+                              
+                        <router-link :to="{path: modelLink(props.row.auditable_type)+props.row.id+'/edit'}" class="btn btn-info">
+                            <i aria-hidden="true" class="fa fa-pen"></i> Link
+                        </router-link>
 
                       <b-tooltip :target="'tooltip-target-'+props.row.id" triggers="hover">
                         <span class="badge badge-info right" v-for="item in props.row.locations" :key="item.data">{{ item.title }}</span>                   
@@ -76,33 +77,22 @@ components: {VueGoodTable},
         {
         label: 'Id',
         field: 'id',
-        type: 'number',        
+        type: 'number',
+        width: '50px',        
         }, 
-        { 
-            label: 'User Type',
-            field: 'user_type',
-            filterOptions: {
-            enabled: true, // enable filter for this column
-            placeholder: 'User Type...', // placeholder for filter input
-            filterValue: '', // initial populated value for this filter
-            filterDropdownItems:'',  
-            //filterFn: this.columnFilterFn, //custom filter function that
-            trigger: '', //only trigger on enter not on keyup 
-            },
-        },
+       
         { 
             label: 'User',
-            field: 'users',
+            field: 'user',
             filterOptions: {
             enabled: true, // enable filter for this column
             placeholder: 'Location...', // placeholder for filter input
             filterValue: '', // initial populated value for this filter
             filterDropdownItems:'',  
-            //filterFn: this.columnFilterFn, //custom filter function that
-            
+            //filterFn: this.filterUser, //custom filter function that            
             trigger: '', //only trigger on enter not on keyup 
             },
-            formatFn: this.formatUser,
+            //formatFn: this.formatUser,
             width: '150px',
         },
               
@@ -118,21 +108,52 @@ components: {VueGoodTable},
             //filterFn: this.columnFilterFn, //custom filter function that
             trigger: '', //only trigger on enter not on keyup 
             },
-            //width: '150px',
+            width: '100px',
         },
-        { 
-            label: 'Old Value',
-            field: 'old_values',
-            sortable: false,
-            //width: '150px',
-        },
-                
+
          { 
-            label: 'New Value',
-            field: 'new_values',
-            sortable: false,
-            //width: '150px',
+            label: 'Model',
+            field: 'auditable_type',
+            filterOptions: {
+            enabled: true, // enable filter for this column
+            placeholder: 'Model...', // placeholder for filter input
+            filterValue: '', // initial populated value for this filter
+            filterDropdownItems:'',  
+            //filterFn: this.columnFilterFn, //custom filter function that
+            trigger: '', //only trigger on enter not on keyup 
+            },
+            formatFn: this.formatModel,
+            width: '150px',
         },
+        // { 
+        //     label: 'Model Id',
+        //     field: 'auditable_id',
+        //     filterOptions: {
+        //     enabled: true, // enable filter for this column
+        //     placeholder: 'Model Id...', // placeholder for filter input
+        //     filterValue: '', // initial populated value for this filter
+        //     filterDropdownItems:'',  
+        //     //filterFn: this.columnFilterFn, //custom filter function that
+        //     trigger: '', //only trigger on enter not on keyup 
+        //     },
+        //     width: '100px',
+        // },
+
+        // { 
+        //     label: 'Old Value',
+        //     field: 'old_values',
+        //     sortable: false,
+        //     //width: '150px',
+        // },
+                
+        //  { 
+        //     label: 'New Value',
+        //     field: 'new_values',
+        //     sortable: false,
+        //     //width: '150px',
+        // },
+
+
         // {
         //   label: 'Active',
         //   field: 'active',
@@ -150,12 +171,38 @@ components: {VueGoodTable},
         //   sortable: true,
         //   sortFn: this.sortFn,
         //   formatFn: this.formatFn,
-        // },   
-        // {
-        // label: 'Action',
-        // field: 'action_buttons',
-        // sortable: false,
         // },
+        
+        { 
+            label: 'Created at',
+            field: 'created_at',
+            type: 'datetime',
+            dateInputFormat: 'yyyy-MM-dd', // expects 2018-03-16
+            dateOutputFormat: 'MMM Do yyyy', // outputs Mar 16th 2018
+            filterOptions: {
+            enabled: true, // enable filter for this column
+            placeholder: 'Date', // placeholder for filter input
+            filterValue: '', // initial populated value for this filter
+            // filterDropdownItems: [  
+            //   { value: 1, text: 'Active' },  
+            //   { value: 0, text: 'Inactive' },
+            // ],  
+            //filterFn: this.columnFilterFn, //custom filter function that
+            trigger: '', //only trigger on enter not on keyup 
+          },
+        },
+
+         {
+        label: 'Link',
+        field: 'link',
+        sortable: false,
+        },
+
+        {
+        label: 'Action',
+        field: 'action_buttons',
+        sortable: false,
+        },
         
         
       ],
@@ -199,9 +246,22 @@ beforeDestroy(){
       return (x < y ? -1 : (x > y ? 1 : 0))
       
     },
+    // sortUser(x, y, col, rowX, rowY) {
+    // },
+    filterUser: function(data, filterString) {
+    var x = parseInt(filterString)
+    return data === 'janek'
+    
+    },
     formatUser: function(value) {
       return value.name+' '+value.last_name;
-    },     
+    },  
+    formatModel: function(value) {        
+      return value.replace("App\\", "");
+    },   
+    modelLink(type){
+    return type.replace("App\\", "").toLowerCase()+'s/';
+    },
     onChangeQuery(queryParams) {
         this.queryParams = queryParams;
         console.log(this.queryParams.filters)

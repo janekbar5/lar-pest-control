@@ -12,7 +12,7 @@
                     <div class="card">
 
                         <div class="card-header">
-                            <h3 class="card-title">Quick Example {{ editMode }} </h3>
+                            <h3 class="card-title">User Edit </h3>
                         </div>
                                             
 
@@ -72,7 +72,7 @@
                                  <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Password</label>
-                                        <input v-model="form.password" type="text" name="password" class="form-control" :class="{ 'is-invalid': errors.password }" >
+                                        <input v-model="form.password" type="password" name="password" class="form-control" :class="{ 'is-invalid': errors.password }" >
                                          <div class="alert alert-danger" v-if="errors.password"> {{errors.password[0]}}</div>
                                     </div>  
                                 </div> 
@@ -80,7 +80,7 @@
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>Confirm Password</label>
-                                        <input v-model="form.confirm_password" type="text" name="confirm_password" class="form-control" :class="{ 'is-invalid': errors.confirm_password }" >
+                                        <input v-model="form.confirm_password" type="password" name="confirm_password" class="form-control" :class="{ 'is-invalid': errors.confirm_password }" >
                                          <div class="alert alert-danger" v-if="errors.confirm_password"> {{errors.confirm_password[0]}}</div>
                                     </div>  
                                 </div>   
@@ -89,7 +89,7 @@
                             </div>
                                     
                        </div> 
-                        ...{{apiUpdate}}
+                       
 
                         <div class="card-footer">
                             <div>                               
