@@ -12,4 +12,12 @@ class History extends Model
     {
         return $this->belongsTo('App\User', 'user_id');		
     }
+	
+	protected $appends = ['user'];	
+	
+	function getUserAttribute() {
+		return $this->users->name.' '.$this->users->last_name;
+	}
+	
+	
 }

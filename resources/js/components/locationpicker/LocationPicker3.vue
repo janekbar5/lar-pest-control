@@ -56,7 +56,7 @@ export default {
             this.$emit('update-location', costam)
         },
         searchLocation2(text) {            
-            axios.get('http://nominatim.openstreetmap.org/search?format=json&q='+text)
+            axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+text)
             .then((res) => {   
             this.mapSetView(res);   
             }, (error) => {

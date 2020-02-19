@@ -7,7 +7,21 @@ use Illuminate\Support\Facades\Validator;
 class ValidationRepository
 {
 
-
+     /////////////////////////////////////////////////////////////////////////////////////////////////CLIENTS
+    public function todoUpdate()
+     {        
+         $rules = array(
+            //'company_name' => 'required',
+            'title' => 'required',
+			'user_id' => 'required',
+			//'phone' => 'required|email|unique:clients,email',
+			//'is_company' => 'required',
+			
+			
+			
+         );        
+         return $rules;
+     }
     /////////////////////////////////////////////////////////////////////////////////////////////////CLIENTS
     public function clientUpdate()
      {        
@@ -48,7 +62,7 @@ class ValidationRepository
 			'end' => 'required|date|after:start',
 			'location_id' => 'required',
 			'status_id' => 'required',
-			//'users' => 'required',
+			'users' => 'required',
 			
          );        
          return $rules;

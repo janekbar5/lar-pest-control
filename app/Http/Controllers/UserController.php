@@ -20,10 +20,12 @@ class UserController extends Controller
 
     function __construct(ValidationRepository $vr, BackendRepositoryInterface $br, ImageController $im)
     {       
-        $this->middleware('permission:user-list');
+        $this->middleware('permission:user-list',['only' => ['index']]);
         $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:user-delete', ['only' => ['destroy']]); 
+		$this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+		$this->middleware('permission:user-delete', ['only' => ['destroy']]); 		
+		$this->middleware('permission:user-usersettings', ['only' => ['userSettings','updateSettings']]);
+		
         $this->br = $br;
         $this->vr = $vr;
         $this->im = $im;
@@ -73,16 +75,20 @@ class UserController extends Controller
     $this->validate($request,[
         'name' => 'required|string|max:191',           
         'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-        'password' => 'sometimes|min:6',
+        'password' => 'min:6|required_with:confirm_password|same:confirm_password',
+		'confirm_password' => 'min:6',
         'roles' => 'required'
     ]);
-    $user->update($request->all());
+    //$user->update($request->all());
+	$user->update(array_merge($request->all(), ['password' => bcrypt($request->input('password'))]));
+	
     DB::table('model_has_roles')->where('model_id', $id)->delete();       
     foreach($request->input('roles') as $role){ 
         $user->assignRole($role['name']);
     }      
-    return ['saved' => 'Saved the user info','id' => $user->id];
-}
+		return ['saved' => 'Saved the user info','id' => $user->id];
+	}
+	
    /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   
    public function destroy($id)
    {
@@ -121,6 +127,36 @@ class UserController extends Controller
 			   'results' => $users,			   
 			   ]);
     }
+	/////////////////////////////////////////////////////////////////////////////////////////////////////// userSettings
+	
+	public function userSettings()
+    {     		
+		$user = User::with('roles','photos')->where('id','=',\Auth::user()->id)->first();
+		return response()
+               ->json([ 
+			   'results' => $user,			   
+			   ]);
+    }
+	public function updateSettings(Request $request, $id){
+    $user = User::findOrFail($id);
+    $this->validate($request,[
+        'name' => 'required|string|max:191',           
+        'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+        //'password' => 'sometimes|min:6',
+		//'password' => 'required|confirm_password|min:6',
+		'password' => 'min:6|required_with:confirm_password|same:confirm_password',
+		'confirm_password' => 'min:6',
+        'roles' => 'required'
+    ]);
+    //$user->update($request->all());
+	$user->update(array_merge($request->all(), ['password' => bcrypt($request->input('password'))]));
+	
+    DB::table('model_has_roles')->where('model_id', $id)->delete();       
+    foreach($request->input('roles') as $role){ 
+        $user->assignRole($role['name']);
+    }      
+		return ['saved' => 'Saved the user info','id' => $user->id];
+	}
 
     
 

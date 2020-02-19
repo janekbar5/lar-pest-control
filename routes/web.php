@@ -27,7 +27,9 @@ Route::get('/v1/api/home/globalsettings', 'HomeController@globalsettings');
 Route::get('/v1/api/home/loadstatistics', 'HomeController@loadStatistics');
 Route::get('v1/api/home/admincalendar', 'HomeController@adminCalendar'); //list
 ///////////////////////////////////////////////////////////////////////////////////////////////////////USERS
-//Route::get('user/index', 'UserController@index');
+Route::get('v1/api/users/usersettings', 'UserController@userSettings');
+Route::post('v1/api/users/updatesettings/{id}', 'UserController@updateSettings'); //update  post
+
 Route::get('v1/api/users/filterusers', 'UserController@filterUsers');
 Route::get('v1/api/users/searchusers', 'UserController@searchUsers');
 Route::get('v1/api/users/index', 'UserController@index');
@@ -109,6 +111,14 @@ Route::post('v1/api/clients/create', 'ClientController@store'); //create post
 Route::post('v1/api/clients/update/{id}', 'ClientController@update'); //update  post
 Route::put('v1/api/clients/update/{id}', 'ClientController@update'); //update  post 
 Route::delete('v1/api/clients/delete/{id}', 'ClientController@destroy'); //update  post 
+///////////////////////////////////////////////////////////////////////////////////////////////////////TODO
+Route::get('v1/api/todos/index', 'TodoController@index'); //list    
+Route::get('v1/api/todos/{id}/edit', 'TodoController@edit'); //edit
+Route::get('v1/api/todos/create', 'TodoController@create'); //create     
+Route::post('v1/api/todos/create', 'TodoController@store'); //create post
+Route::post('v1/api/todos/update/{id}', 'TodoController@update'); //update  post
+Route::put('v1/api/todos/update/{id}', 'TodoController@update'); //update  post 
+Route::delete('v1/api/todos/delete/{id}', 'TodoController@destroy'); //update  post 
 
 });    
     

@@ -23,7 +23,8 @@ class HistoryController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()
     {       
-        $users = $this->br->getHistory();       
+        //$users = $this->br->getHistory(); 
+		$users = History::all();
         return response()->json([
 		'rows' => $users
 		]);

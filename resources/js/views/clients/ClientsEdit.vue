@@ -29,18 +29,21 @@
                             </div>    
                             <div class="row">
                                 <div class="col-md-2">   
-                                    <div class="form-group">                                       
-                                        <div class="custom-control custom-checkbox">
-                                        <input v-model="form.is_company" class="custom-control-input" type="checkbox" id="customCheckbox"  :class="{ 'is-invalid': errors.is_company }">
-                                        <label for="customCheckbox2" class="custom-control-label">Is Company</label>
-                                         <div class="alert alert-danger" v-if="errors.is_company"> {{errors.is_company[0]}}</div>
-                                        </div>                                        
-                                    </div>
+                                  <div class="form-group">
+                                        <label>Client Type</label>                                       
+                                        
+                                        <select v-model="form.client_type" name="client_type" class="form-control" :class="{ 'is-invalid': errors.client_type }">
+                                            <option v-for="client in clienttypes" :value="client.id">
+                                            {{client.name}}
+                                            </option>
+                                        </select>                                        
+                                       <div class="alert alert-danger" v-if="errors.client_type"> {{errors.client_type[0]}}</div>
+                                    </div>  
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>Company Name</label>
-                                        <input v-model="form.company_name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
+                                        <label>Name</label>
+                                        <input v-model="form.name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
                                          <div class="alert alert-danger" v-if="errors.company_name"> {{errors.company_name[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -92,7 +95,11 @@
                                          <div class="alert alert-danger" v-if="errors.person_name"> {{errors.person_name[0]}}</div>
                                     </div>  
                                 </div> 
-                                <div class="col-md-2">                                   
+                                                                 
+                            </div>
+
+                            <div class="row">  
+                            <div class="col-md-3">                                   
                                     <div class="form-group">
                                         <label>Contract Start</label>
                                         <Datepicker format="YYYY-MM-DD" v-model="form.contract_start" class=""  />
@@ -100,7 +107,7 @@
                                          <div class="alert alert-danger" v-if="errors.contract_start"> {{errors.contract_start[0]}}</div>
                                     </div>  
                                 </div> 
-                                <div class="col-md-2">                                   
+                                <div class="col-md-3">                                   
                                     <div class="form-group">
                                         <label>Contract End</label>                                       
                                         <!-- <input v-model="form.contract_end" type="text" name="contract_end" class="form-control" :class="{ 'is-invalid': errors.contract_end }" > -->
@@ -108,7 +115,7 @@
                                         <div class="alert alert-danger" v-if="errors.contract_end"> {{errors.contract_end[0]}}</div>
                                     </div>  
                                 </div> 
-                                <div class="col-md-4">                                   
+                                <div class="col-md-3">                                   
                                     <div class="form-group">
                                         <label>Reccurence</label>                                       
                                         <!-- <input v-model="form.reccurence" type="text" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }" >  -->
@@ -119,8 +126,9 @@
                                         </select>                                        
                                         <div class="alert alert-danger" v-if="errors.reccurence"> {{errors.reccurence[0]}}</div>
                                     </div>  
-                                </div>                                    
-                            </div>
+                                </div>   
+
+                            </div>        
                             <div class="row">                               
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
@@ -226,14 +234,19 @@
                 apiUpdate:'/v1/api/clients/update/',     
                 apiDelete:'/v1/api/clients/delete/',
                 reccurences: [
-                {id: 1,name: 'Requested' },
-                {id: 2,name: 'Bi-monthly' },
-                {id: 3,name: 'Monthly' },
-                {id: 4,name: '2 Months' },
-                {id: 5,name: '3 Months' },
-                {id: 6,name: '6 Months' },
-                {id: 7,name: 'Yearly' },
-                {id: 8,name: 'Custom' },             
+                    {id: 1,name: 'Requested' },
+                    {id: 2,name: 'Bi-monthly' },
+                    {id: 3,name: 'Monthly' },
+                    {id: 4,name: '2 Months' },
+                    {id: 5,name: '3 Months' },
+                    {id: 6,name: '6 Months' },
+                    {id: 7,name: 'Yearly' },
+                    {id: 8,name: 'Custom' },             
+                ],
+                clienttype:'',
+                clienttypes:[
+                    {id: 1,name: 'Private' },
+                    {id: 2,name: 'Company' },                            
                 ],
             }
         },

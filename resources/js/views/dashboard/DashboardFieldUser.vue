@@ -1,7 +1,27 @@
 <template>
   <div>
 
-
+          <div class="row">      
+                        <div class="col-md-12">
+                           
+                            <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                              <div class="card">
+                                <div class="card-header">
+                                  <h3 class="card-title">Bordered Table</h3>
+                                </div>
+                                
+                                <div class="card-body">                  
+                                <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
+                                </div>
+                                  <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
+                               
+                                <div class="card-footer clearfix">
+                                 
+                                </div>
+                              </div>
+                        </div>   
+                             
+                  </div>
 
 
                  <div class="row">    
@@ -20,35 +40,8 @@
                           </div>
                           <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
-                      </div>
-                      
-                      <!-- <div class="col-lg-2 col-6">                        
-                        <div class="small-box">
-                          <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-                            <p>Done Dasks</p>
-                          </div>
-                          <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                          </div>
-                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                      </div>
-                       <div class="col-lg-2 col-6">                        
-                        <div class="small-box">
-                          <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-                            <p>Done Dasks</p>
-                          </div>
-                          <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                          </div>
-                          <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                      </div> -->
-                    
-                    
-                      
+                      </div>                      
+                                               
                       <div class="col-lg-6 col-6"> 
                          <div class="small-box">
                           <div class="inner">
@@ -68,11 +61,16 @@
                                 <td>{{todo.id}}</td>
                                 <td>{{todo.title}}</td>
                               
-                                <td><span class="badge ">
-                                    <i aria-hidden="true" class="fa fa-pen" @click="showModal()"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                                  <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(todo)"></i> 
-                                    </span>
-                                    </td>
+                                <td>    
+                                <a href="#" @click="editTodo(todo)">
+                                    <i class="fa fa-edit black"></i>
+                                </a>
+                                /
+                              <a href="#" @click="deleteRecord(todo,model='todos')">
+                                    <i class="fa fa-trash black"></i>
+                                </a>
+                                </td>
+
                               </tr>
                             </tbody>
                         </table>       
@@ -95,29 +93,61 @@
                   </div>
                 </div>
 
-      <div class="row">      
-              <div class="col-md-12">
-                 
-                  <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Bordered Table</h3>
-                      </div>
-                      
-                      <div class="card-body">                  
-                      <!--<full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> -->
-                      </div>
-                        <full-calendar id="calendar" :config="config" :events="events" @dateClick="handleDateClick" /> 
-                     
-                      <div class="card-footer clearfix">
-                       sdvsdfv
-                      </div>
-                    </div>
-              </div>   
-                   
-        </div>
       
-      <!-- <Modal /> -->
+      
+      
+        <!----------------------- Modal substatuses ------------------------------------>
+            <div class="modal fade" id="formTodo" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
+                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User's Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form @submit.prevent="editmode ? updateTodo() : createTodo()">
+                <div class="modal-body">
+                     <div class="form-group">
+                        <input v-model="formTodo.title" type="text" name="title"
+                            placeholder="Title"
+                            class="form-control" :class="{ 'is-invalid': formTodo.errors.has('title') }">
+                        <has-error :form="formTodo" field="title"></has-error>
+                    </div>
+
+                     <div class="form-group">
+                        <input v-model="formTodo.description" type="text" name="description"
+                            placeholder="description"
+                            class="form-control" :class="{ 'is-invalid': formTodo.errors.has('description') }">
+                        <has-error :form="formTodo" field="description"></has-error>
+                    </div>
+
+                     
+ 
+                    <!-- <div class="form-group">
+                        <select name="user_id" v-model="formTodo.user_id" id="user_id" class="form-control" :class="{ 'is-invalid': formTodo.errors.has('user_id') }">
+                            <option value="">Select User</option>                           
+                            <option :value="user.id" v-for="user in fieldusers" :key="user.data">{{user.name}} {{user.last_name}}</option>                           
+                        </select>
+                        <has-error :form="formTodo" field="user_id"></has-error>
+                    </div> -->
+
+                   
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger"  @click="formHideReset('formTodo')">Close</button>
+                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                </div>
+
+                </form>
+
+                </div>
+            </div>
+            </div> 
+            <!----------------------- Modal ------------------------------------>
 
    </div>     
  
@@ -136,6 +166,7 @@ export default {
   data() {
     var $this = this;
     return {
+      editmode: false,
       unassignedtasks:[],
       value:'',
       events: {}, 
@@ -205,8 +236,17 @@ export default {
           alert('dayClick')
         }, 
 
-      }
+      },
       //////////config
+      formTodo: new Form({ 
+        id:'',                  
+        title : '',        
+        //user_id : '',
+        description : '',
+                   
+    }),  
+
+
     };
   },
   //data
@@ -215,9 +255,9 @@ export default {
 
   created() { 
     axios.get('/v1/api/tasks/usercalendar').then((res) => {
-     if(res.data) {     
-      this.events = res.data.userstasks
-      this.statuses = res.data.statuses
+     if(res.data) {    
+      
+      this.setData(res)
       }
       })
       .catch((error) => {
@@ -229,16 +269,98 @@ export default {
     
   },
   mounted() {
-    //this.getNotifications()
-    this.todos = [
-      {"id":1,"title":"Lorem ipsum dolor"},
-       {"id":2,"title":"Lorem ipsum dolor 2"},
-        {"id":3,"title":"Lorem ipsum dolor 3 "},
-         {"id":4,"title":"Lorem ipsum dolo  4"},
-    ]
+    //this.getNotifications()   
   },
   //
+
+
+
+
+
+
+
   methods: {
+    ///////////////////////////////////////////////New
+    newTodo(){
+                this.editmode = false;
+                this.formTodo.reset();
+                $('#formTodo').modal('show');
+    },
+    /////////////////////////////////////////////Edit
+    editTodo(todo){
+                this.editmode = true;
+                this.formTodo.reset();
+                $('#formTodo').modal('show');                
+                this.formTodo.fill(todo);
+                //console.log(this.form)
+    },
+    ////////////////////////////////////////////////////////CREATE POST
+    createTodo(){ 
+                this.$Progress.start();
+                this.formTodo.post('/v1/api/todos/create')
+                .then(()=>{
+                    //Fire.$emit('AfterCreate');
+                    $('#formTodo').modal('hide')
+                    this.loadTodo()
+                     toast({
+                        type: 'success',
+                        title: 'User Created in successfully'
+                        })
+                    this.$Progress.finish();
+
+                })
+                .catch(()=>{})
+    },
+ //////////////////////////////////////////////////////// UPDATE  Post     
+    updateTodo(){
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.formTodo.put('/v1/api/todos/update/'+this.formTodo.id)
+                .then(() => {
+                    // success
+                    $('#formTodo').modal('hide');
+                    this.loadTodo()
+                     swal(
+                        'Updated!',
+                        'Information has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                         Fire.$emit('AfterCreate');
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+     },
+    /////////////////////////////////////////////////////////////DELETE
+     deleteRecord(item,model){
+        swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+            byMethod('delete','v1/api/'+model+'/delete/'+item.id).then(()=>{
+            swal.fire('Deleted!','Your file has been deleted.','success')
+             this.loadTodo()
+                                                
+        }).catch(()=> {
+            swal.fire("Failed!", "There was something wronge.", "warning");
+            });
+        }
+        })
+    },
+    setData(res) { 
+     this.events = res.data.userstasks
+     this.statuses = res.data.statuses
+     this.todos = res.data.todos 
+    },
     callModal() {        
       $("#addNew").modal("show")
     }, 

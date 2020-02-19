@@ -2,7 +2,7 @@
   <div>
 
     
-    <router-link :to="{path: this.urlCreate}" class="btn btn-secondary"> New Client </router-link>
+    <router-link :to="{path: this.urlCreate}" class="btn btn-secondary"> New Location </router-link>
     <vue-good-table
       :columns="columns"
       :rows="rows"
@@ -12,7 +12,7 @@
         //{field: 'person_name', type: 'asc'},
        // {field: 'id', type: 'asc'},
         {field: 'id', type: 'asc'},
-        {field: 'active', type: 'desc'},        
+        //{field: 'active', type: 'desc'},        
         ],
       }"
       :pagination-options="{
@@ -73,6 +73,7 @@ components: {VueGoodTable},
         field: 'id',
         type: 'number',        
         }, 
+
         { 
             label: 'Location',
             field: 'title',
@@ -85,27 +86,28 @@ components: {VueGoodTable},
             trigger: '', //only trigger on enter not on keyup 
             },
         },
-        // { 
-        //     label: 'Location',
-        //     field: 'locationscount',
-        //     filterOptions: {
-        //     enabled: true, // enable filter for this column
-        //     placeholder: 'Location...', // placeholder for filter input
-        //     filterValue: '', // initial populated value for this filter
-        //     filterDropdownItems:'',  
-        //     //filterFn: this.columnFilterFn, //custom filter function that
-        //     trigger: '', //only trigger on enter not on keyup 
-        //     },
-        //     width: '150px',
-        // },
+       
          /////////////////////////////////for slots     
-        {
+       /* {
         label: 'Client',
-        field: 'client',
+        field: 'Client',
         sortable: true,
+        },*/
+
+        { 
+        label: 'Client',
+        field: 'id',
+        filterOptions: {
+          enabled: true, // enable filter for this column
+          placeholder: 'Filter This Thing', // placeholder for filter input
+          filterValue: 'Jane', // initial populated value for this filter
+          filterDropdownItems: [], // dropdown (with selected values) instead of text input
+          filterFn: this.columnFilterClient, //custom filter function that
+          trigger: 'enter', //only trigger on enter not on keyup 
         },
+      },
         
-       {
+       /*{
           label: 'Address',
           field: 'address',
           filterOptions: {
@@ -119,8 +121,8 @@ components: {VueGoodTable},
           sortable: true,
           sortFn: this.sortFn,
           formatFn: this.formatAddress,
-        },  
-        { 
+        },  */
+       /* { 
             label: 'VAT no.',
             field: 'vat_number',
             filterOptions: {
@@ -132,35 +134,10 @@ components: {VueGoodTable},
             trigger: '', //only trigger on enter not on keyup 
             },
             //width: '150px',
-        },
+        },*/
         
-        // {
-        //   label: 'Start',
-        //   field: 'contract_start',
-        //   type: 'date',
-        //   dateInputFormat: 'yyyy-MM-dd', // expects 2018-03-16
-        //   dateOutputFormat: 'yyyy-MM-dd', // expects 2018-03-16
-        //   filterOptions: {
-        //     enabled: true,
-        //     placeholder: "test",
-        //     filterFn: this.myColumnFilter
-        //   },
-        //   width: '150px',
-        // },
-        // {
-        //   label: 'End',
-        //   field: 'contract_end',
-        //   type: 'date',
-        //   dateInputFormat: 'yyyy-MM-dd', // expects 2018-03-16
-        //   dateOutputFormat: 'yyyy-MM-dd', // expects 2018-03-16
-        //   filterOptions: {
-        //     enabled: true,
-        //     placeholder: "test",
-        //     filterFn: this.myColumnFilter
-        //   },
-        //   width: '150px',
-        // },
-        { 
+        
+       /* { 
             label: 'Reccurence',
             field: 'reccurence',
             filterOptions: {
@@ -172,8 +149,8 @@ components: {VueGoodTable},
             trigger: '', //only trigger on enter not on keyup 
             },
             //width: '150px',
-        },
-        {
+        },*/
+        /*{
           label: 'Active',
           field: 'active',
           filterOptions: {
@@ -191,7 +168,7 @@ components: {VueGoodTable},
           sortable: true,
           sortFn: this.sortFn,
           formatFn: this.formatFn,
-        },   
+        },   */
         {
         label: 'Action',
         field: 'action_buttons',
@@ -231,6 +208,13 @@ beforeDestroy(){
    this.fetchData()       
  },
   methods: {
+    /*columnFilterClient(data, filterString){
+      return data+filterString;
+    },*/
+    columnFilterClient: function(data, filterString) {
+      var x = parseInt(filterString)
+      return 'ggg';
+    },
     sortFn(x, y, col, rowX, rowY) {
       // x - row1 value for column
       // y - row2 value for column

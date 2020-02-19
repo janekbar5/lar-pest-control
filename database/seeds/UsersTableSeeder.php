@@ -13,16 +13,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
        
-        //    $table->boolean('status');
-        //     $table->string('name');
-        //     $table->string('surname');
-        //     $table->string('email')->unique();
-        //     $table->string('work_phone');
-        //     $table->string('leaves_day');
-        //     $table->string('personal_phone');
-        //     $table->timestamp('email_verified_at')->nullable();
-        //     $table->string('password');
-
+      
+            //////////////////////////////////////////////////////// ID 1
             App\User::create([
                 'status' => 1,
                 'name' => 'jan',
@@ -34,29 +26,43 @@ class UsersTableSeeder extends Seeder
                 'leaves_day'=>'5',
                 'personal_phone'=>'987654321',                 
                 ]);
+			//////////////////////////////////////////////////////// ID 2	
             App\User::create([
                 'status' => 1,
-                'name' => 'janekbar3',
+                'name' => 'janekbar2',
                 'last_name' => 'gmx',
-                'email' => 'janekbar3@gmx.com',
+                'email' => 'janekbar2@gmx.com',
                 'password' => bcrypt('janekbar3@gmx.com'),
                 'email_verified_at'=>'2019-09-17 00:00:00',
                 'work_phone'=>'123456789',
                 'leaves_day'=>'5',
                 'personal_phone'=>'987654321',                 
                 ]);
+			//////////////////////////////////////////////////////// ID 3	
             App\User::create([
                 'status' => 1,
-                'name' => 'janekbar4',
+                'name' => 'janekbar3',
                 'last_name' => 'gmx',
-                'email' => 'janekbar4@gmx.com',
+                'email' => 'janekbar3@gmx.com',
                 'password' => bcrypt('janekbar4@gmx.com'),
                 'email_verified_at'=>'2019-09-17 00:00:00',
                 'work_phone'=>'123456789',
                 'leaves_day'=>'5',
                 'personal_phone'=>'987654321',                 
                 ]);
-
+            //////////////////////////////////////////////////////// ID 4	
+            App\User::create([
+                'status' => 1,
+                'name' => 'janekbar4',
+                'last_name' => 'gmx',
+                'email' => 'janekbar4@gmx.com',
+                'password' => bcrypt('janekbar5@gmx.com'),
+                'email_verified_at'=>'2019-09-17 00:00:00',
+                'work_phone'=>'123456789',
+                'leaves_day'=>'5',
+                'personal_phone'=>'987654321',                 
+                ]);
+			//////////////////////////////////////////////////////// ID 5	
             App\User::create([
                 'status' => 1,
                 'name' => 'janekbar5',
@@ -67,7 +73,7 @@ class UsersTableSeeder extends Seeder
                 'work_phone'=>'123456789',
                 'leaves_day'=>'5',
                 'personal_phone'=>'987654321',                 
-                ]);
+                ]);	
 
 
             $faker = Factory::create();    
@@ -92,9 +98,7 @@ class UsersTableSeeder extends Seeder
                      ]);
              endfor;     
 
-        //App\User::create(['name' => 'jan 1','email' => 'janekbar5@interia.pl','password' => bcrypt('janekbar5@interia.pl'),'email_verified_at'=>'2019-09-17 00:00:00' ]);
-        //App\User::create(['name' => 'jan 2','email' => 'janekbar5@gmx.com','password' => bcrypt('janekbar5@gmx.com'),'email_verified_at'=>'2019-09-17 00:00:00']);
-        //App\User::create(['name' => 'jan 3','email' => 'janekbarski@wp.pl','password' => bcrypt('janekbarski@wp.pl'),'email_verified_at'=>'2019-09-17 00:00:00']);
+       
 
 
     }
