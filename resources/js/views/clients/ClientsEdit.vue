@@ -42,8 +42,8 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label>Company Name</label>
-                                        <input v-model="form.company_name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
+                                        <label>Name</label>
+                                        <input v-model="form.name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
                                          <div class="alert alert-danger" v-if="errors.company_name"> {{errors.company_name[0]}}</div>
                                     </div>                                                                    
                                 </div>

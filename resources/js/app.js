@@ -86,6 +86,8 @@ import TasksEdit from './views/tasks/TasksEdit'
 
 import UserTasksIndex from './views/usertasks/UserTasksIndex'
 import UserTasksEdit from './views/usertasks/UserTasksEdit'
+import UserSettings from './views/usertasks/UserSettings'
+
 
 import TreatmentsIndex from './views/treatments/TreatmentsIndex'
 import TreatmentsShow from './views/treatments/TreatmentsShow'
@@ -136,6 +138,9 @@ let routes = [
     { path: '/usertasks', name: 'UserTasksIndex', component:UserTasksIndex, meta: {mode: 'list'} },
     //{ path: '/usertasks/create', name: 'TasksEdit', component: UserTasksEdit, meta: {mode: 'create'} },
     { path: '/usertasks/:id/edit', name: 'UserTasksEdit', component: UserTasksEdit, meta: {mode: 'edit'} },
+    { path: '/usersettings', name: 'UserSettings', component:UserSettings },
+
+    
      
     
     { path: '/treatments', name: 'TreatmentsIndex', component:TreatmentsIndex, meta: {mode: 'list'} },

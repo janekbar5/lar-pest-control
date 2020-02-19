@@ -84,8 +84,8 @@ components: {VueGoodTable},
         type: 'number',        
         }, 
         { 
-            label: 'Company',
-            field: 'company_name',
+            label: 'Company/Person',
+            field: 'name',
             filterOptions: {
             enabled: true, // enable filter for this column
             placeholder: 'Company...', // placeholder for filter input

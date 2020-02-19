@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
          $this->call(SubStatusesTableSeeder::class);
 		 
 		 $this->call(PivotsTableSeeder::class);
+		 $this->call(TodosTableSeeder::class);
          
 	 
     }

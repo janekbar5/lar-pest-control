@@ -21,8 +21,8 @@
                   <thead>
                     <tr>
                       <th style="width: 10%">#</th>
-                      <th style="width: 70%">Task</th>
-                      <th style="width: 10%">Label</th>
+                      <th style="width: 60%">Task</th>
+                      <th style="width: 20%">Label</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -81,7 +81,7 @@
                 
                 <div class="card-tools">                  
                     <div class="input-group-append">
-                     <button  class="btn btn-secondary" @click="newStatus()" >Add New Statuse</button> 
+                     <button  class="btn btn-secondary" @click="newStatus()" >Add New Status</button> 
                     </div>                 
                 </div>             
               </div>
@@ -91,9 +91,9 @@
                   <thead>
                     <tr>
                       <th style="width: 10%">#</th>
-                      <th style="width: 30%">Task</th>
-                      <th style="width: 30%">Colour</th>
-                      <th style="width: 10%"></th>
+                      <th style="width: 40%">Task</th>
+                      <th style="width: 20%">Colour</th>
+                      <th style="width: 20%"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -139,12 +139,13 @@
             </div>
 
 
-                     <div class="card">
+            <div class="card">
+                
               <div class="card-header">
                 <h3 class="card-title">Subtatuses</h3> 
                  <div class="card-tools">                  
                     <div class="input-group-append">
-                     <button  class="btn btn-secondary" @click="newSubStatus()" >Add New Sub Statuse</button> 
+                     <button  class="btn btn-secondary" @click="newSubStatus()" >Add New Sub Status</button> 
                     </div>                 
                 </div>                
               </div>
@@ -522,9 +523,7 @@ methods: {
                     this.$Progress.finish();
 
                 })
-                .catch(()=>{
-
-                })
+                .catch(()=>{})
     },
     //////////////////////////////////////////////////////// UPDATE  Post     
     updateTreatment(){
