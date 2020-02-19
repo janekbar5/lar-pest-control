@@ -35,7 +35,7 @@
 
                 <span v-if="props.column.field == 'action_buttons'">               
                  <i aria-hidden="true" class="fa fa-pen" @click="recordEdit(props.row.id)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                 <i aria-hidden="true" class="fa fa-trash" v-if="$can('task-delete')" @click="recordDelete(props.row.id)"></i>  
+                 <i aria-hidden="true" class="fa fa-trash" v-if="$can('task-delete')" @click="modelDelete(props.row.id)"></i>  
                 </span>
 
                 <span v-else-if="props.column.field == 'location'">
@@ -66,7 +66,7 @@
 <script>
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
-
+import { get, byMethod } from '../../lib/api'
 
 
 export default {
@@ -295,6 +295,33 @@ beforeDestroy(){
    
     recordEdit(item) {        
         this.$router.push(this.urlList+'/'+item+'/edit')
+    }, 
+    modelDelete(item){
+        swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+        // Send request to the server
+        if (result.value) {
+            byMethod('delete',  this.apiDelete+item).then(()=>{
+            swal.fire('Deleted!','Your file has been deleted.','success')
+            this.getApi('/v1/api/tasks/index')                                         
+        }).catch(()=> {
+            swal.fire("Failed!", "There was something wronge.", "warning");
+            });
+        }
+        })
+    },
+     getApi(url){
+        get(url)
+        .then((res) => {
+            this.setData(res)                   
+        })
     },  
 
     }//met

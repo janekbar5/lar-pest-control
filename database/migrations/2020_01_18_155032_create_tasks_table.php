@@ -26,8 +26,8 @@ class CreateTasksTable extends Migration
             $table->string('title'); //varchar	
             $table->text('description')->nullable(); //TEXT equivalent to the table
             $table->text('comment')->nullable(); //TEXT equivalent to the table
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->dateTime('start')->nullable(); ;
+            $table->dateTime('end')->nullable(); ;
             // reccurence
             // field workers assigned multiple
             // photos
