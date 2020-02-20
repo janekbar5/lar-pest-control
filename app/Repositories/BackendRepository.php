@@ -63,18 +63,56 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations')
+				  ->where('status_id', '=', 1)
+				  ->whereNull('start')
+				  ->whereNull('end')
                   ->with('statuses')
-				  ->whereHas('statuses',function($query) {                
+				  /* ->whereHas('statuses',function($query) {                
 						 $query->where('status_id', '=', 1);                    
-					})
+					}) */
                   //->with('selectedUsers') 
                   ->doesntHave('users')    
                   ->get(); 
     }
-    public function getAssignedTasks(){
+	public function getUnassignedTasksForPeriod($start,$end){
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations')
+				  ->where('status_id', '=', 1)
+				  ->whereNull('start')
+				  ->whereNull('end')
+				  ->where('created_at', '>=', $start)
+                  ->where('created_at', '<', $end)
+                  ->with('statuses')
+				  /* ->whereHas('statuses',function($query) {                
+						 $query->where('status_id', '=', 1);                    
+					}) */
+                  //->with('selectedUsers') 
+                  ->doesntHave('users')    
+                  ->get(); 
+    }
+	public function getAssignedTasksForPeriod($start,$end){
+        return Task::  
+                  //orderBy('created_at', 'desc')
+                  with('locations')
+				  //->where('status_id', '=', 1)
+				  ->whereNotNull('start')
+				  ->whereNotNull('end')
+				  ->where('start', '>=', $start)
+                  ->where('end', '<', $end)
+                  ->with('statuses')
+				  /* ->whereHas('statuses',function($query) {                
+						 $query->where('status_id', '=', 1);                    
+					}) */
+                  //->with('selectedUsers') 
+                  //->doesntHave('users')    
+                  ->get(); 
+    }
+    public function getAssignedTasks(){
+        return Task::  
+                    whereNotNull('start')
+				  ->whereNotNull('end')
+                  ->with('locations')
                   ->with('statuses')
                   ->with('users')  //display users array
                   ->has('users')   //only act as filter   

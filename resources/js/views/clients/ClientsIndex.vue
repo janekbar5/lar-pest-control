@@ -106,12 +106,13 @@ components: {VueGoodTable},
             //filterFn: this.columnFilterFn, //custom filter function that
             trigger: '', //only trigger on enter not on keyup 
             },
-            width: '150px',
+            width: '100px',
         },
               
         {
         label: '',
-        field: 'location'
+        field: 'location',
+        width: '150px',
         },
         { 
             label: 'Contract no.',

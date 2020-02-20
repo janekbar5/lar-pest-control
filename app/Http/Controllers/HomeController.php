@@ -51,7 +51,7 @@ class HomeController extends Controller
 			->registerModel(User::class, ['name', 'email'])
 			->registerModel(Treatment::class, ['title'])
 			->registerModel(Location::class, ['title'])	
-			->registerModel(Client::class, ['company_name','person_name','email','contract_number','vat_number',])	
+			->registerModel(Client::class, ['name'])	
 			->search($input);  
 		}	
 		return response()->json(['results' => $results]);
@@ -60,30 +60,28 @@ class HomeController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////////Load statistics
     public function loadStatistics()
     {        		
-		$dueTasks = Task::where('start', '>=', request('start'))
-                           ->where('end', '<', request('end'))
-                           ->get();	
-       /* $dueTasks = Task::
-        				whereDate('start', '>=', Carbon::parse(request('start'))->toDateString())
-        				->orwhereDate('end', '<=', Carbon::parse(request('end'))->toDateString())
-        				->get();*/
+		
+		$unassignedtasks = $this->br->getUnassignedTasksForPeriod(request('start'),request('end'));				   
+		$assignedtasks = $this->br->getAssignedTasksForPeriod(request('start'),request('end'));					   
+      
 
 		return response()->json([
-			'dueTasksCount' => $dueTasks->count(),
-			'dueTasks' => $dueTasks,
-			'charges' => $dueTasks->sum("price"),
+			//'dueTasksCount' => $dueTasks->count(),
+			'unassignedtasks' => $unassignedtasks,
+			//'unassignedtasksCount' => $unassignedtasks->sum("price"),
+			'unassignedtasksCount' => $unassignedtasks->count(),
+			'assignedtasks' => $assignedtasks,
+			'assignedtasksCount' => $assignedtasks->count(),
 		]);			
     }
     /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
     public function adminCalendar()    {       
-        //$assignedtasks = $this->br->getAssignedTasks();
-        $assignedtasks =  Task::where('start', '>=', request('start'))
+        $assignedtasks = $this->br->getAssignedTasksForPeriod(request('start'),request('end'));	
+        /* $assignedtasks =  Task::where('start', '>=', request('start'))
                   ->where('end', '<', request('end'))
                   ->with('locations')
-                  ->with('statuses')
-                  //->with('selectedUsers')  //display users array
-                  //->has('selectedUsers')   //only act as filter   
-                  ->get(); 
+                  ->with('statuses')                    
+                  ->get();  */
         return response()->json([  
             'assignedtasks' => $assignedtasks, 
         ]);

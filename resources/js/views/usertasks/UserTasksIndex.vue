@@ -22,7 +22,7 @@
             <div class="layout-column"> </div>
              <div class="layout-column">  From {{day.start | formatDate}} To {{day.end | formatDate}} </div>
              <div class="layout-column">  {{day.title}} </div>
-             <div class="layout-column">  {{day.locations.title}}  </div>
+             <div class="layout-column">  {{day.locations}}  </div>
              <div class="layout-column"> <span style="width:100px;" v-bind:style="{ 'background-color': day.statuses.colour }"> {{day.statuses.title}} </span> </div>
              <div class="layout-column">  
                 <div class="field">                   
@@ -34,7 +34,9 @@
                             </div>
                       </div>
                  </div>
+                 <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(day)"></i> 
             </div>
+            
         </div>
 
    </div>
@@ -69,9 +71,14 @@ data () {
 return {
     url:'',
     settings: {},
-    urlList: '',
-    urlEdit: '',
-    apiList: '',
+    urlList:'/usertasks',
+    urlCreate:'/usertasks/create',
+    urlEdit:'/usertasks/',
+    apiList:'/v1/api/usertasks/index',
+    apiCreate:'/v1/api/usertasks/create',
+    apiEdit:'/v1/api/usertasks/edit/',       
+    apiUpdate:'/v1/api/usertasks/update/',     
+    apiDelete:'/v1/api/usertasks/delete/',
     //    
     editMode: this.$route.meta.mode,
     model: {
@@ -109,6 +116,9 @@ mounted(){
 },
 //
 methods: {
+    modelEdit(day) {        
+        this.$router.push(this.urlList+'/'+day.id+'/edit')
+    },   
     changeStatus(taskid,statusid) {
         //console.log(event) 
         //console.log(task) 

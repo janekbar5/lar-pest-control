@@ -190,7 +190,7 @@
                         <has-error :form="form" field="end"></has-error>
                     </div>
 
-                    <div style="display:none">
+                    <div style="display:block">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"

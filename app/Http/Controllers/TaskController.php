@@ -14,10 +14,12 @@ class TaskController extends Controller
     
      function __construct(ValidationRepository $vr, BackendRepositoryInterface $br, ImageController $im)
     {       
-       /*  $this->middleware('permission:task-list');
+        $this->middleware('permission:task-list',['only' => ['index']]);
         $this->middleware('permission:task-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:task-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:task-delete', ['only' => ['destroy']]);  */
+        $this->middleware('permission:task-delete', ['only' => ['destroy']]); 
+		
+		$this->middleware('permission:user-usersettings', ['only' => ['usertasksEdit','indexFieldUser']]);
 		//
 		//$this->middleware('permission:task-delete', ['only' => ['destroy']]);
 		
@@ -35,41 +37,26 @@ class TaskController extends Controller
 	public function index()
     {       
 		$tasks = Task::with('locations.clients')
-						 ->get();
+		               ->whereIn('status_id', array(1, 3))
+					   ->get();
 		return response()
                ->json([ 
 			   'rows' => $tasks,			   
 			   ]);
-		/* $filterAllLocations = $this->br->getAllLocations(); 
-		$filterAllStatuses = $this->br->getAllStatuses2(); 
-						
-		$tasks_pre = Task::select('tasks.*')
-		          ->where('user_id', '=', \Auth::user()->id) 
-                  ->with('locations')
-                  ->with('statuses')
-                  ->with('photos')    
-                  ->with('users');   
-                  	
-								
-	    if (request('loc'))
-        {
-            $tasks_pre = $tasks_pre->where('location_id', '=', request('loc'));			
-        }		
-		if (request('stat'))
-        {
-            $tasks_pre = $tasks_pre->where('status_id', '=', request('stat'));			
-        }
 		
-		$total = $tasks_pre->get()->count();		
+				
 		
-		$tasks_ok = $tasks_pre->paginate(request('perpage'));		
-		
+    }
+	public function taskHistory()
+    {       
+		$tasks = Task::with('locations.clients')
+		               ->whereIn('status_id', array(2))
+					   ->get();
 		return response()
                ->json([ 
-			   'results' => $tasks_ok,
-			   'filterAllLocations'=> $filterAllLocations,
-			   'filterAllStatuses'=> $filterAllStatuses,
-			   ]); */
+			   'rows' => $tasks,			   
+			   ]);
+		
 				
 		
     }
@@ -79,24 +66,57 @@ class TaskController extends Controller
         $task = $this->br->getTaskById($id); 
         $fieldusers = $this->br->getAllFieldUsers(); 
 		$statuses = $this->br->getAllStatuses2();
+		$substatuses = $this->br->getAllSubStatuses();
 		$alltreatments = Treatment::withTrashed()->get();
         return response()->json([
             'form' => $task, 
             'alltreatments' => $alltreatments,
 			'fieldusers' => $fieldusers,
 			'statuses' => $statuses,
+			'substatuses' => $substatuses,
             ]);         
     }
+	public function usertasksEdit($id)
+    {        
+        
+		//get all user tasks id
+		$userstasksid = $this->br->getAllUsersTasks()->pluck('id')->toArray();		
+
+		 if(in_array( $id, $userstasksid)){ 
+		   
+		    $task = $this->br->getTaskById($id); 
+		    //$fieldusers = $this->br->getAllFieldUsers(); 
+			$statuses = $this->br->getAllStatuses2();
+			$substatuses = $this->br->getAllSubStatuses();
+			$alltreatments = Treatment::withTrashed()->get();
+			
+			return response()->json([
+				'form' => $task, 
+				'alltreatments' => $alltreatments,
+				//'fieldusers' => $fieldusers,
+				'statuses' => $statuses,
+				'substatuses' => $substatuses,
+				]);  
+		}else{
+		  //return redirect('usertasks');
+		  return ['created' => 'true'];
+		}	 
+		
+		
+    }
+	
+	
     /**/////////////////////////////////////////////////////////////////////////////////////////////3 CREATE
      public function create()
      {        
         //$fieldusers = User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();  
 		$statuses = $this->br->getAllStatuses2();
 		$alltreatments = Treatment::withTrashed()->get();
+		$substatuses = $this->br->getAllSubStatuses();
         return response()->json([
             'form' => '', 
 			'alltreatments' => $alltreatments,
-			//'fieldusers' => $fieldusers->toArray(['name']),
+			'substatuses' => $substatuses,
 			'statuses' => $statuses,
             ]);
      }
@@ -114,7 +134,7 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST FROM CRUD
     public function update(Request $request, $id)
     {
-        //dd($request->input('selectedTreatments'));       
+        //dd($request->all());       
         $task = $this->br->getTaskById($id);
         $fv = $this->validate($request, $this->vr->taskUpdate()); 
 		$task->update(array_merge($request->all(), ['user_id' => \Auth::user()->id ]));
@@ -185,13 +205,10 @@ class TaskController extends Controller
 	/**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
     public function calendar(Request $request)    { 
 	
-        $unassignedtasks = $this->br->getUnassignedTasks();
-		
-		if($request->input('location')){
-		  $assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));
-		}else{
+          $unassignedtasks = $this->br->getUnassignedTasks();
+		  //$assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));		
 		  $assignedtasks = $this->br->getAssignedTasks();
-		} 
+		
 	    $alllocations = $this->br->getAllLocations(); 
         return response()->json([            
             'unassignedtasks' => $unassignedtasks,
@@ -220,7 +237,7 @@ class TaskController extends Controller
         ]);
     }
     
-    
+    /**///////////////////////////////////////////////////////////////////////////////////////////// indexFieldUser
     public function indexFieldUser()
     {       
 		$statuses = Status::all();

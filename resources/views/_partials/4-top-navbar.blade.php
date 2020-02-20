@@ -11,6 +11,9 @@
         @role('Admin')
         <typeahead2 :url="customerURL" :initialize="form.customer" @input="onCustomer" />
         @endrole  
+        @role('Desk User')
+        <typeahead2 :url="customerURL" :initialize="form.customer" @input="onCustomer" />
+        @endrole  
         
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">

@@ -20,8 +20,8 @@
                                 <div class="col-md-2">   
                                     <div class="form-group">                                       
                                         <div class="custom-control custom-checkbox">
-                                        <input v-model="form.active" class="custom-control-input" type="checkbox" id="customCheckbox2"  :class="{ 'is-invalid': errors.active }">
-                                        <label for="customCheckbox2" class="custom-control-label">Active</label>
+                                        <input v-model="form.active" class="custom-control-input" type="checkbox" id="customCheckbox2" :value="form.active" :class="{ 'is-invalid': errors.active }">
+                                        <label for="customCheckbox2" class="custom-control-label">Active {{form.active }}</label>
                                          <div class="alert alert-danger" v-if="errors.active"> {{errors.active[0]}}</div>
                                         </div>                                        
                                     </div>
@@ -30,9 +30,9 @@
                             <div class="row">
                                 <div class="col-md-2">   
                                   <div class="form-group">
-                                        <label>Client Type</label>                                       
-                                        
+                                        <label>Client Type</label> 
                                         <select v-model="form.client_type" name="client_type" class="form-control" :class="{ 'is-invalid': errors.client_type }">
+                                            <option value="">Select Client Type</option>
                                             <option v-for="client in clienttypes" :value="client.id">
                                             {{client.name}}
                                             </option>
@@ -40,13 +40,16 @@
                                        <div class="alert alert-danger" v-if="errors.client_type"> {{errors.client_type[0]}}</div>
                                     </div>  
                                 </div>
+
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input v-model="form.name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.company_name }" >
-                                         <div class="alert alert-danger" v-if="errors.company_name"> {{errors.company_name[0]}}</div>
+                                        <input v-model="form.name" type="text" name="company_name" class="form-control" :class="{ 'is-invalid': errors.name }" >
+                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
                                     </div>                                                                    
                                 </div>
+
+
                                  <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Phone</label>
@@ -63,6 +66,13 @@
                                     </div>  
                                 </div>
 
+
+                                
+
+                                                              
+                            </div>
+                            <div class="row" v-show="form.client_type == 2">
+
                                 <div class="col-md-2">                                   
                                     <div class="form-group">
                                         <label>Contract Number</label>
@@ -78,9 +88,6 @@
                                     </div>  
                                 </div>
 
-                                                              
-                            </div>
-                            <div class="row">
                                <div class="col-md-2">                                   
                                     <div class="form-group">
                                         <label>Person Title</label>
@@ -198,8 +205,10 @@
                 urlList:'', urlCreate:'', urlEdit:'',              
                 ////////////////////////////////////////////////////////// 
                 editMode: this.$route.meta.mode,
+
+                client_type:'',
                 form: {
-                    //active:false
+                    active:0,
                 },
                 errors: {},                         
                 //////////////////////////////////////////////////////////               

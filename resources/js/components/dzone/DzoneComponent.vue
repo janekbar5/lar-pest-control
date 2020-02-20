@@ -10,9 +10,9 @@
                             
                             <div class="card-body">
                                 <div class="row">
-                        
+                        <!-- updatedPhotosList {{updatedPhotosList}} photosList {{photosList}} -->
 
-                                <div class="col-sm-2" v-for="photo in updatedPhotosList">
+                                <div class="col-sm-2" v-for="photo in photosList">
                                     <a href="#" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
                                     <img v-bind:src="'/images/thumb_mini-'+ photo.path" class="img-fluid mb-2" alt="white sample" width=100>
                                         <span v-if="editMode === 'edit'" @click="deletePhoto(photo.id)">DELETE</span>
@@ -190,7 +190,9 @@ import {get, byMethod } from '../../lib/api'
                 byMethod('delete', `/v1/api/images/delete/${id}`).then(()=>{
                 swal.fire('Deleted!','Your file has been deleted.','success')
                 //this.photosList.splice(id)    
-                this.updatedPhotosList.splice(this.photosList.indexOf(id), 1);    
+                //this.updatedPhotosList.splice(this.photosList.indexOf(id), 1);  
+                this.photosList.splice(this.photosList.indexOf(id), 1);    
+                
                 //this.getApi(this.apiList+'?page='+this.page)
                 //console.log(this.page)                                   
             }).catch(()=> {
@@ -235,7 +237,7 @@ import {get, byMethod } from '../../lib/api'
         },
         enableUpload() {
           //this.$refs.myVueDropzone.enable()          
-          console.log('enableUpload')
+          //console.log('enableUpload')
         },
         defaultUploadMessage(){   
             var message = ''

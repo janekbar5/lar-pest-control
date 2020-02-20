@@ -46,11 +46,11 @@
               <i class="nav-icon fas fa-users orange"></i> <p>Clients </p>
             </router-link>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <router-link to="/clients2" class="nav-link">
               <i class="nav-icon fas fa-users orange"></i> <p>Clients 2 </p>
             </router-link>
-        </li>
+        </li> -->
         @endcan
 
         @can('location-list') 
@@ -59,6 +59,11 @@
               <i class="nav-icon fas fa-map-marker orange"></i> <p>Locations </p>
             </router-link>
           </li>
+          <!-- <li class="nav-item">
+            <router-link to="/locations2" class="nav-link">
+              <i class="nav-icon fas fa-map-marker orange"></i> <p>Locations 2</p>
+            </router-link>
+          </li> -->
          @endcan
 
 
@@ -68,6 +73,12 @@
               <i class="nav-icon fas fa-cogs orange"></i> <p>Task </p>
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/taskshistory" class="nav-link">
+              <i class="nav-icon fas fa-cogs orange"></i> <p>Task History </p>
+            </router-link>
+          </li>
+          
           @endcan
           
                   

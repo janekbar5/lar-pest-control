@@ -35,14 +35,14 @@ module.exports = {
     return {         
       modelSettings: {
         modelPlural: 'tasks', modelSingular: 'Task', 
-        urlList:'/tasks',
-        urlCreate:'/tasks/create',
-        urlEdit:'/tasks/',
-        apiList:'/v1/api/tasks/index',
-        apiCreate:'/v1/api/tasks/create',
-        apiEdit:'/v1/api/tasks/edit/',       
-        apiUpdate:'/v1/api/tasks/update/',     
-        apiDelete:'/v1/api/tasks/delete/'
+                urlList:'/usertasks',
+                urlCreate:'/usertasks/create',
+                urlEdit:'/usertasks/',
+                apiList:'/v1/api/usertasks/index',
+                apiCreate:'/v1/api/usertasks/create',
+                apiEdit:'/v1/api/tasks/edit/',       
+                apiUpdate:'/v1/api/tasks/update/',     
+                apiDelete:'/v1/api/tasks/delete/', 
       },
       modelId: this.$route.params.id,
     }

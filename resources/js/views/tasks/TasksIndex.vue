@@ -82,11 +82,11 @@ components: {VueGoodTable},
         type: 'number',        
         }, 
         { 
-            label: 'Title',
+            label: 'Task',
             field: 'title',
             filterOptions: {
             enabled: true, // enable filter for this column
-            placeholder: 'Company...', // placeholder for filter input
+            placeholder: 'Task...', // placeholder for filter input
             filterValue: '', // initial populated value for this filter
             filterDropdownItems:'',  
             //filterFn: this.columnFilterFn, //custom filter function that
@@ -130,7 +130,25 @@ components: {VueGoodTable},
           sortable: true,
           sortFn: this.sortFn,
           formatFn: this.formatClients,
-        },     
+        },
+        {
+          label: 'Last service',
+          field: 'last_service',
+          filterOptions: {
+            enabled: true, // enable filter for this column
+            placeholder: 'Last service...', // placeholder for filter input
+            filterValue: '', // initial populated value for this filter
+            // filterDropdownItems: [  
+            //   { value: 1, text: 'Active' },  
+            //   { value: 0, text: 'Inactive' },  
+               
+            // ],  
+            //filterFn: this.columnFilterFn, //custom filter function that
+            trigger: '', //only trigger on enter not on keyup 
+          },
+          sortable: true,
+          
+        },       
         // { 
         //     label: 'Location',
         //     field: 'location',

@@ -15,6 +15,13 @@
               <img v-else :src="'images/thumb_medium-' + props.cell_value" style="width:60px;height:50px">
        </template>
 
+       <template slot="active" slot-scope="props">
+              
+              <p v-if="(props.cell_value) == 0"> Inactive </p>
+              <p v-else> Active </p>
+              
+       </template>
+
         <template slot="actions" slot-scope="props"> 
             <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(props.cell_value)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
             <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(props.cell_value)"></i>     
@@ -67,6 +74,7 @@ return {
 						                },						                
 						            ],						            
                                 },
+                                slot_name: "active",
                                 sort: true
 						 },
 
@@ -174,7 +182,7 @@ methods: {
         if (result.value) {
             byMethod('delete',  this.apiDelete+item).then(()=>{
             swal.fire('Deleted!','Your file has been deleted.','success')
-            this.getApi('/v1/api/users/filterusers')                                         
+            this.getApi('/v1/api/clients/index')                                         
         }).catch(()=> {
             swal.fire("Failed!", "There was something wronge.", "warning");
             });

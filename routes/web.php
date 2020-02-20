@@ -60,13 +60,17 @@ Route::post('v1/api/treatments/update/{id}', 'TreatmentController@update'); //up
 Route::put('v1/api/treatments/update/{id}', 'TreatmentController@update'); //update  post 
 Route::delete('v1/api/treatments/delete/{id}', 'TreatmentController@destroy'); //update  post  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////TASKS
+///Field
+Route::get('v1/api/tasks/indexfielduser', 'TaskController@indexFieldUser'); //list 
+Route::get('v1/api/usertasks/{id}/edit', 'TaskController@usertasksEdit'); //edit
 
+Route::get('v1/api/tasks/index', 'TaskController@index'); //list  
+Route::get('v1/api/tasks/history', 'TaskController@taskHistory'); //list  
 Route::get('v1/api/tasks/updatestatus', 'TaskController@updateStatus'); //list 
 Route::get('v1/api/tasks/calendar', 'TaskController@calendar'); //list 
-Route::get('v1/api/tasks/usercalendar', 'TaskController@userCalendar'); //list
-Route::get('v1/api/tasks/index', 'TaskController@index'); //list  
-Route::get('v1/api/tasks/indexfielduser', 'TaskController@indexFieldUser'); //list    
+Route::get('v1/api/tasks/usercalendar', 'TaskController@userCalendar'); //list 
 Route::get('v1/api/tasks/{id}/edit', 'TaskController@edit'); //edit
+
 Route::get('v1/api/tasks/create', 'TaskController@create'); //create     
 Route::post('v1/api/tasks/create', 'TaskController@store'); //create post
 Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post

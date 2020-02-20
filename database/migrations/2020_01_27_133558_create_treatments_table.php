@@ -28,7 +28,7 @@ class CreateTreatmentsTable extends Migration
             //$table->increments('id');	if on error	Multiple primary key defined
 			$table->integer('location_id')->unsigned(); //unsigned only positive val
 			//$table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-			$table->primary(['location_id','treatment_id']); //prevent repeating (1,1  1,2  1,3  1,1)			
+			//$table->primary(['location_id','treatment_id']); //prevent repeating (1,1  1,2  1,3  1,1)			
 			$table->integer('treatment_id')->unsigned();											
             $table->softDeletes();  //add this line 
             $table->timestamps();

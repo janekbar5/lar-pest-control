@@ -24,7 +24,7 @@ class LocationController extends Controller
     public function index(Request $request)
     {       
 		
-	    $locations = Location::with(['address','clients'])->get();
+	    $locations = Location::with(['address','clients','treatments'])->get();
 		return response()
                ->json([ 
 			   'rows' => $locations,			   

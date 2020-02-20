@@ -10,8 +10,8 @@
            
             <div class="small-box">
               <div class="inner">
-                <h3>{{dueTasksCount}}</h3>
-                <p>Unassigned Due Tasks</p>
+                <h3>{{unassignedtasksCount}}</h3>
+                <p>Unassigned Tasks</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -23,8 +23,8 @@
           <div class="col-lg-3 col-6">         
             <div class="small-box">
               <div class="inner">
-                <h3>0</h3>
-                <p>Tasks assigned but not done</p>
+                <h3>{{assignedtasksCount}}</h3>
+                <p>Assigned Tasks</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -273,6 +273,8 @@ export default {
         start:'',
         end:'',
         dueTasksCount:'',
+        unassignedtasksCount:'',
+        assignedtasksCount:'',
         charges:'',
         //
         value: [],
@@ -464,11 +466,15 @@ export default {
     },
     setData(res) { 
       this.unassignedtasks = res.data.unassignedtasks
+      
+      this.assignedtasks = res.data.assignedtasks
       this.events = res.data.assignedtasks              
       this.locations = res.data.alllocations
     },
     setStats(res) { 
-      this.dueTasksCount = res.data.dueTasksCount 
+      this.dueTasksCount = res.data.dueTasksCount
+      this.unassignedtasksCount = res.data.unassignedtasksCount 
+      this.assignedtasksCount = res.data.assignedtasksCount 
       this.charges = res.data.charges   
     },  
     setDataTodo(res) { 

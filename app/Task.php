@@ -62,6 +62,7 @@ class Task extends Model implements Auditable, Searchable
 	    'location_id',
         'user_id', 
 		'status_id',
+		'substatus_id',
 		'price_id',
 		'title',
 		'description',
@@ -70,6 +71,7 @@ class Task extends Model implements Auditable, Searchable
 		'price',
 		'start',
 		'end',
+		'last_service',
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
     // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User

@@ -26,16 +26,17 @@ class ValidationRepository
     public function clientUpdate()
      {        
          $rules = array(
-            //'company_name' => 'required',
+            'name' => 'required',
             'email' => 'required',
 			'phone' => 'required',
+			'client_type' => 'required',
 			//'phone' => 'required|email|unique:clients,email',
 			//'is_company' => 'required',
-			'contract_number' => 'required',
-			'vat_number' => 'required',
+			//'contract_number' => 'required',
+			//'vat_number' => 'required',
 			'contract_start' => 'required',
 			'contract_end' => 'required',
-			'person_name' => 'required',
+			//'person_name' => 'required',
 			'reccurence' => 'required',
 			
 			
@@ -83,8 +84,10 @@ class ValidationRepository
      {        
          $rules = array(
             'title' => 'required',
+			
             'description' => 'required',
 			'surface' => 'required|numeric',
+			'price' => 'required|numeric',
 			//'client_id' => 'required',
 			
 			//'address_line1' => 'required',

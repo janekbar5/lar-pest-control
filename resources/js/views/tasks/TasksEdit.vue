@@ -75,6 +75,14 @@
                                          <div class="alert alert-danger" v-if="errors.end"> {{errors.end[0]}}</div>
                                     </div>  
                                 </div>
+                                <div class="col-md-4">                                   
+                                    <div class="form-group">
+                                        <label>Last Service</label>
+                                        <!-- <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" > -->
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.last_service" class="" :class="{ 'is-invalid': errors.last_service }" />
+                                         <div class="alert alert-danger" v-if="errors.last_service"> {{errors.last_service[0]}}</div>
+                                    </div>  
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">                                   
@@ -109,7 +117,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                     <label>Status</label>
-                                            <select v-model="form.status_id" class="form-control" :class="{ 'is-invalid': errors.status_id}">
+                                            <select v-model="form.status_id" class="form-control"  :class="{ 'is-invalid': errors.status_id}">
                                             <option value="">Select Status</option>
                                             <option v-for="status in statuses" :value="status.id">
                                                 {{status.title}}
@@ -118,16 +126,19 @@
                                             <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
                                     </div>
                                   </div>   
-
-
-
-                                 <div class="col-md-4">                                   
+                                
+                                <div class="col-md-4" v-show="form.status_id == 3">
                                     <div class="form-group">
-                                        <label>Sub Status</label>
-                                        <input v-model="form.substatus_id" type="text" name="substatus_id" class="form-control" :class="{ 'is-invalid': errors.substatus_id }" >
-                                         <div class="alert alert-danger" v-if="errors.substatus_id"> {{errors.substatus_id[0]}}</div>
-                                    </div>  
-                                </div> 
+                                    <label>Sub Status</label>
+                                            <select v-model="form.substatus_id" class="form-control"  :class="{ 'is-invalid': errors.substatus_id}">
+                                            <option value="">Select Sub Status</option>
+                                            <option v-for="substatus in substatuses" :value="substatus.id">
+                                                {{substatus.title}}
+                                            </option>
+                                            </select>                                        
+                                            <div class="alert alert-danger" v-if="errors.substatus_id"> {{errors.substatus_id[0]}}</div>
+                                    </div>
+                                  </div>   
                                
                             </div>
 
@@ -225,7 +236,8 @@
                 //
                 roles: null,
                 allroles: [],
-                statuses:{},
+                statuses:[],
+                substatuses:[],
                 //
                 dataURL: '/v1/api/locations/searchlocations',
                 //fieldusers: [],
@@ -288,6 +300,9 @@
         //     this.$eventHub.$on('settings', this.modelSettings) 
         // },
         methods: {
+            onStatusChange(id){
+
+            },
             Search(){
             if (this.newStart && this.newEnd ) {
                 console.log('value changed from ' + this.newStart + this.newEnd );
@@ -324,6 +339,7 @@
                 //for create get only available users
                 this.allAvvailableFieldUsers =  [] //all roles 
                 this.statuses =  res.data.statuses //all roles
+                this.substatuses =  res.data.substatuses.data //all roles
                 this.allTreatments = res.data.alltreatments
 
                 this.objectToArray();

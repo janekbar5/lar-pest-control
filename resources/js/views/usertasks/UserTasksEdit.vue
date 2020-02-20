@@ -32,9 +32,9 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Location</label>
-                                        <typeahead :url="dataURL" :initialize="form.locations" @input="onLocation" />
+                                        <typeahead :url="dataURL" :initialize="form.locations" @input="onLocation" disabled/>
                                         <!-- <input v-model="form.location_id" type="text" name="location_id" class="form-control" :class="{ 'is-invalid': errors.location_id }" > -->
-                                        <input v-model="form.location_id" type="hidden" name="location" class="form-control" :class="{ 'is-invalid': errors.location_id }" >
+                                        <input v-model="form.location_id" type="hidden" name="location" class="form-control" :class="{ 'is-invalid': errors.location_id }" disabled>
                                          <div class="alert alert-danger" v-if="errors.location_id"> {{errors.location_id[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -42,7 +42,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Title</label>
-                                        <input v-model="form.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
+                                        <input v-model="form.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" disabled >
                                          <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -50,7 +50,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Price</label>
-                                        <input v-model="form.price" type="text" name="price" class="form-control" :class="{ 'is-invalid': errors.price }" >
+                                        <input v-model="form.price" type="text" name="price" class="form-control" :class="{ 'is-invalid': errors.price }" disabled>
                                          <div class="alert alert-danger" v-if="errors.price"> {{errors.price[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -61,8 +61,8 @@
                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Start</label>
-                                        <!-- <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" > -->
-                                        <Datepicker format="YYYY-MM-DD h:i" v-model="form.start" class="" :class="{ 'is-invalid': errors.start }"  />
+                                         <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" disabled > 
+                                        <!-- <Datepicker format="YYYY-MM-DD h:i" v-model="form.start" class="" :class="{ 'is-invalid': errors.start }"  disabled/> -->
                                          <div class="alert alert-danger" v-if="errors.start"> {{errors.start[0]}}</div>
                                     </div>                                                                    
                                 </div>
@@ -70,8 +70,8 @@
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
                                         <label>End</label>
-                                        <!-- <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" > -->
-                                         <Datepicker format="YYYY-MM-DD h:i" v-model="form.end" class=""  />
+                                        <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" disabled>
+                                         <!-- <Datepicker format="YYYY-MM-DD h:i" v-model="form.end" class=""  :disabled-dates="disabled"/> -->
                                          <div class="alert alert-danger" v-if="errors.end"> {{errors.end[0]}}</div>
                                     </div>  
                                 </div>
@@ -101,18 +101,24 @@
                                             </select>                                        
                                             <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
                                     </div>
+                                  </div> 
+
+                                   <div class="col-md-4" v-show="form.status_id == 3">
+                                    <div class="form-group">
+                                    <label>Sub Status</label>
+                                            <select v-model="form.substatus_id" class="form-control"  :class="{ 'is-invalid': errors.substatus_id}">
+                                            <option value="">Select Sub Status</option>
+                                            <option v-for="substatus in substatuses" :value="substatus.id">
+                                                {{substatus.title}}
+                                            </option>
+                                            </select>                                        
+                                            <div class="alert alert-danger" v-if="errors.substatus_id"> {{errors.substatus_id[0]}}</div>
+                                    </div>
                                   </div>   
 
 
 
-                                 <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Sub Status</label>
-                                        <input v-model="form.substatus_id" type="text" name="substatus_id" class="form-control" :class="{ 'is-invalid': errors.substatus_id }" >
-                                         <div class="alert alert-danger" v-if="errors.substatus_id"> {{errors.substatus_id[0]}}</div>
-                                    </div>  
-                                </div> 
-                               
+                             
                             </div>
 
 
@@ -121,7 +127,7 @@
                                     <div class="form-group">
                                         <label>Assigned Users</label>                                                                          
                                         <multiselect 
-                                        v-model="form.selected_users" 
+                                        v-model="form.users" 
                                         :options="allFieldUsers"
                                         :custom-label="nameWithSuename"                                          
                                         placeholder="Select users"
@@ -185,10 +191,15 @@
         data () {
             return {
                
-                modelSingular: '',
-                apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
-                //
-                urlList:'', urlCreate:'', urlEdit:'',              
+                modelPlural: 'tasks', modelSingular: 'Task', 
+                urlList:'/usertasks',
+                urlCreate:'/usertasks/create',
+                urlEdit:'/usertasks/',
+                apiList:'/v1/api/usertasks/index',
+                apiCreate:'/v1/api/usertasks/create',
+                apiEdit:'/v1/api/tasks/edit/',       
+                apiUpdate:'/v1/api/tasks/update/',     
+                apiDelete:'/v1/api/tasks/delete/',            
                 // 
                 editMode: this.$route.meta.mode,
                 form: {
@@ -207,12 +218,13 @@
                 //
                 roles: null,
                 allroles: [],
-                statuses:{},
+                statuses:[],
+                substatuses:[],
                 //
                 dataURL: '/v1/api/locations/searchlocations',
                 //fieldusers: [],
                 //options:[],
-                selected_users:[], //dont need allPermissions in form only selected 
+                users:[], //dont need allPermissions in form only selected 
                 allFieldUsers:[], //dont need allPermissions in form only selected 
                 
                
@@ -227,7 +239,7 @@
         beforeRouteUpdate(to, from, next) {
             this.show = false           
             get('/v1/api'+to.path)
-                .then((res) => {
+                .then((res) => {                    
                     this.setData(res)
                     next()
                 })
@@ -236,7 +248,7 @@
           
         },
         created() {
-            this.$eventHub.$on('settings', this.modelSettings) 
+            //this.$eventHub.$on('settings', this.modelSettings) 
         },
         methods: {
             onLocation(e) {
@@ -245,23 +257,28 @@
                 Vue.set(this.$data.form, 'location_id', locations.id) 
                                                          
             },
-            modelSettings(settings){                
-                //return name
-                this.settings = settings;
-                this.urlList = settings.urlList
-                this.urlEdit = settings.urlEdit
-                this.urlCreate = settings.urlCreate
-                //         
-                this.apiList = settings.apiList
-                this.apiDelete = settings.apiDelete
-                this.apiCreate = settings.apiCreate
-                this.apiEdit = settings.apiEdit
-                this.apiUpdate = settings.apiUpdate
-                //
-                this.modelSingular = settings.modelSingular
-                //console.log(settings)                
-            },
+            // modelSettings(settings){                
+            //     //return name
+            //     this.settings = settings;
+            //     this.urlList = settings.urlList
+            //     this.urlEdit = settings.urlEdit
+            //     this.urlCreate = settings.urlCreate
+            //     //         
+            //     this.apiList = settings.apiList
+            //     this.apiDelete = settings.apiDelete
+            //     this.apiCreate = settings.apiCreate
+            //     this.apiEdit = settings.apiEdit
+            //     this.apiUpdate = settings.apiUpdate
+            //     //
+            //     this.modelSingular = settings.modelSingular
+            //     //console.log(settings)                
+            // },
             setData(res) { 
+                if(res.data && res.data.created) {
+                    this.success(res)
+                    this.loadToast('danger','not allowed to do so');    
+                }
+
                 if(this.$route.meta.mode === 'edit') {
                     Vue.set(this.$data, 'form', res.data.form)
                     this.store = this.apiUpdate + this.$route.params.id
@@ -271,9 +288,10 @@
                     this.photos_List = res.data.form.photos;
                 }
                 this.photos_List = res.data.form.photos;
-                this.allFieldUsers =  res.data.fieldusers //all roles
+                this.allFieldUsers =  [] //all roles
                 this.statuses =  res.data.statuses //all roles
-               //this.allFieldUsers = [{"id":1,"name":"ddddd"}]
+                this.substatuses =  res.data.substatuses.data //all roles
+                this.objectToArray()
             },          
             objectToArray() {                
                 var user_array = [];               

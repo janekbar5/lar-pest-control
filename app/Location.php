@@ -54,10 +54,7 @@ class Location extends Model implements Auditable, Searchable
         //return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
         return $this->belongsToMany(Client::class, 'client_location', 'client_id', 'location_id');
     }
-	
-	
-	
- 
+	 
     ////////////////////////////////////////////////////////////////HASMANY
     // Task-->hasMany-->Location   <==>  Location-->belongsTo-->Task
     public function tasks()
