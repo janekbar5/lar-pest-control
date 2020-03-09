@@ -34,8 +34,8 @@ class TasksTableSeeder extends Seeder
             DB::table('tasks')
                 ->insert([
                     //'location_id' => $faker->numberBetween($min = 1, $max = 4),
-					//'location_id' =>$faker->randomElement($locations),
-					'location_id' =>$i,
+					'location_id' =>$faker->randomElement($locations),
+					//'location_id' =>$i,
                     'user_id' => 1,
                     'status_id-n' => $status_id,
                     'substatus_id-n' => $status_id == 3 ? $faker->numberBetween($min = 3, $max = 5) : null,
@@ -58,8 +58,8 @@ class TasksTableSeeder extends Seeder
             DB::table('tasks')
                 ->insert([
                     //'location_id' => $faker->numberBetween($min = 1, $max = 4),
-					//'location_id' =>$faker->randomElement($locations),
-					'location_id' =>$i,
+					'location_id' =>$faker->randomElement($locations),
+					//'location_id' =>$i,
                     'user_id' => 1,
                     'status_id-n' => 1,
                     'substatus_id-n' => null,

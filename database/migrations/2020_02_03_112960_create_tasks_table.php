@@ -18,8 +18,9 @@ class CreateTasksTable extends Migration
 			$table->integer('user_id')->unsigned(); //unsigned only positive val
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			
-            $table->integer('location_id')->unsigned(); //unsigned only positive val 
-			//$table->foreign('location_id')->references('id')->on('locations');
+            $table->integer('location_id')->unsigned(); //unsigned only positive val 			
+			$table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+			
             $table->integer('status_id-n')->unsigned(); //unsigned only positive val        
             $table->integer('substatus_id-n')->nullable(); //unsigned only positive val        
         

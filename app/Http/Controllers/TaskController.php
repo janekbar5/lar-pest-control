@@ -34,63 +34,39 @@ class TaskController extends Controller
         return response()->json(['results' => $tasks]);
        
     } */
-	public function index()
-    {       
-		//$tasks = Task::query();
-		$tasks = Task::with('locations');
-			
-		/////////////////Own Filter Loop
+	public function index()    {       
+		
+		$tasks = Task::with('photos');
+		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
+		$tasks = $tasks->orderBy(request('field'),request('order'));
+		////////////////////////////////////////////////////////////Own Filter Loop
 		$count = 0;
 		foreach($_GET as $key => $value){
 		$count++;
 			if($count > 2){ //skipping first 2 and last 2 only filters needed
 				if($key=='perPage' || $key=='page'){
-				}else{
-				$tasks = $tasks->where($key,'LIKE', '%'.$value.'%');
-				}
-				
+				}elseif(strpos($key, '-')){
+				$tasks = $tasks->where($key,'LIKE', '%'.$value.'%');				
+				}				
 			}
 		}
-		///////////////////////Foreign Filters
-		/* if(request('location_id')){
-            $tasks = $tasks->whereHas('locations',function($query) { $query->where('title','LIKE', '%Task title 1%');});       
-        } */
-		/*
-		if(request('surface')){
-            $tasks = $tasks->whereHas('cities',function($query) { $query->where('title','LIKE', '%'.request('surface').'%');});       
+		////////////////////////////////////////////////////////////Foreign Filters
+		if(request('location_id')){
+            $tasks = $tasks->whereHas('locations',function($query) { $query->where('title','LIKE', '%'.request('location_id').'%');});       
         }
-		if(request('statuses.title')){
-            $tasks = $tasks->whereHas('statuses',function($query) { $query->where('title','LIKE', '%'.request('statuses.title').'%');});       
-        } 
-		if(request('status2')){
-            $tasks = $tasks->whereHas('statuses',function($query) { $query->where('title','LIKE', '%'.request('status2').'%');});       
-        }  */
-				
-		
-		/* if(request('status_id')){
-            $tasks = $tasks->where('status_id','=', request('status_id'));       
-        }  */
-		
-		
-		
-		/////////////////Own Order ALWAYS EXIST
-		$tasks = $tasks->orderBy(request('field'),request('order'));
-		
-	        
-        //////////////Foreign Order
+        /////////////////////////////////////////////////////////////Foreign Order
         if(request('field')=='location_id'){
             $tasks = $tasks
             ->join('locations','locations.id','=','tasks.location_id')->select('locations.title as regionName','tasks.*')
             ->orderBy('regionName',request('order'));
-        }
-		
-        
+        }	
         $tasks = $tasks->paginate(request('perPage'));  
-        return response()->json(['rows' => $tasks]);
-		
-				
-		
+        return response()->json(['rows' => $tasks]);		
     }
+	
+	
+	
+	
 	public function taskHistory()
     {       
 		$tasks = Task::with('locations.clients')

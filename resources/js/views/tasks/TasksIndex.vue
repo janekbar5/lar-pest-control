@@ -4,7 +4,10 @@
                               :columns="columns"
                               :config="config"
                               @on-change-query="onChangeQuery"
-                              :total-rows="total_rows">
+                              :total-rows="total_rows"
+                              :actions="actions"
+                              @on-download="newRecord"
+                              >
 
                               
           <template slot="photos" slot-scope="props">  
@@ -60,7 +63,8 @@
                      },sort: true },    
                      {label: "Actions",name: "id",slot_name: "actions"},              
                 ],
-                config: { server_mode: true,per_page: 20,per_page_options: [20, 40, 60, 80], },
+                actions: [ { btn_text: "New Task", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],
+                config: { server_mode: true,show_reset_button: true,show_refresh_button: true,global_search: {visibility: false,},per_page: 20,per_page_options: [20, 40, 60, 80], },
                 queryParams: {sort: [],filters: [],global_search: "",per_page: 20,page: 1,},
                 total_rows: 0,
                 //////
@@ -76,6 +80,9 @@
             }, 
             loadSubstatuses(props){
                return props.row.statuses.title               
+            },
+            newRecord() {        
+                this.$router.push(this.model+'/create')
             },
             editRecord(id) {        
                 this.$router.push(this.model+'/'+id+'/edit')

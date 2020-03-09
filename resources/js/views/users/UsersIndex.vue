@@ -52,16 +52,7 @@ return {
                         {label: "Role",name: "roles[0].name",filter: {type: "simple",placeholder: "Enter Role"},sort: true,},
                         {label: "Actions",name: "id",slot_name: "actions"}, 
                    ],
-                   actions: [
-                    {
-                        btn_text: "New User",
-                        event_name: "on-download",
-                        class: "btn btn-secondary",
-                        event_payload: {
-                            msg: "my custom msg"
-                        }
-                    }
-                   ],                    
+                   actions: [ { btn_text: "New User", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],                    
                     config: {
                         checkbox_rows: false,
                         rows_selectable: true,
@@ -113,7 +104,7 @@ methods: {
     //     //console.log(settings)  
     // },
     newUser(){
-       this.$router.push(this.urlCreate) 
+       //this.$router.push(this.urlCreate) 
     },
    
     modelEdit(item) {        
