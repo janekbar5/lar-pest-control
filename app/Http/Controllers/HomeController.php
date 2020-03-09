@@ -77,11 +77,6 @@ class HomeController extends Controller
     /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
     public function adminCalendar()    {       
         $assignedtasks = $this->br->getAssignedTasksForPeriod(request('start'),request('end'));	
-        /* $assignedtasks =  Task::where('start', '>=', request('start'))
-                  ->where('end', '<', request('end'))
-                  ->with('locations')
-                  ->with('statuses')                    
-                  ->get();  */
         return response()->json([  
             'assignedtasks' => $assignedtasks, 
         ]);

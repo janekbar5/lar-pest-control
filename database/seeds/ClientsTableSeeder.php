@@ -30,7 +30,8 @@ public function run()
 		
             DB::table('clients')
                 ->insert([ 
-				    'active' => $faker->numberBetween($min = 0, $max = 1),					
+				    'active' => $faker->numberBetween($min = 1, $max = 2),
+					'reccurence_id' => $faker->numberBetween($min = 1, $max = 8),
                     'person_title' => $faker->randomElement($titles),
 					'client_type' => $client_types_ok,
 					'name' => $name,
@@ -43,7 +44,7 @@ public function run()
                     'vat_number' => 'vat-651651'.$i,                    
                     'contract_end' => '2021-'.$faker->randomElement($months).'-01',
                     'description' => $faker->text,
-					'reccurence' => $faker->numberBetween($min = 1, $max = 8),
+					
                     //'address'
                     //'lat' => 51.483,
                     //'lng' => -0.132,

@@ -106,8 +106,8 @@ import SubStatusesIndex from './views/substatuses/SubStatusesIndex'
 import SubStatusesShow from './views/substatuses/SubStatusesShow'
 import SubStatusesEdit from './views/substatuses/SubStatusesEdit'
 
+
 import ClientsIndex from './views/clients/ClientsIndex'
-import ClientsIndex2 from './views/clients/ClientsIndex2'
 import ClientsEdit from './views/clients/ClientsEdit'
 
 import HistoryIndex from './views/history/HistoryIndex'
@@ -168,7 +168,7 @@ let routes = [
     { path: '/substatuses/:id',  name: 'SubStatusesShow', component: SubStatusesShow, meta: {mode: 'view'} },
 
     //{ path: '/clients', name: 'ClientsIndex', component:ClientsIndex, meta: {mode: 'list'} },
-    { path: '/clients', name: 'ClientsIndex2', component:ClientsIndex2, meta: {mode: 'list'} },
+    { path: '/clients', name: 'ClientsIndex', component:ClientsIndex, meta: {mode: 'list'} },
     { path: '/clients/create', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'create'} },
     { path: '/clients/:id/edit', name: 'ClientsEdit', component: ClientsEdit, meta: {mode: 'edit'} },
 

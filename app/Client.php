@@ -28,7 +28,7 @@ class Client extends Model implements Auditable, Searchable
 		
     ];
     /////////////////////////////////////////////////////////////For typehead search
-    protected $appends = ['text','locationscount'];
+    protected $appends = ['text','locationscount','reccurence'];
     public function getTextAttribute()
     {
         return $this->attributes['name']. ' - '
@@ -50,6 +50,9 @@ class Client extends Model implements Auditable, Searchable
 	function getLocationscountAttribute() {
 		return $this->locations->count();
 	}
+	function getReccurenceAttribute() {
+		return $this->reccurences->title;
+	}
 	
 	
 	
@@ -58,13 +61,10 @@ class Client extends Model implements Auditable, Searchable
         //return $this->belongsToMany(Task::class, 'task_user', 'task_id', 'user_id');
         return $this->belongsToMany(Location::class,'client_location', 'client_id', 'location_id');
     }
-	
+	////////////////////////////////////////////////////////////////belongsTo
     
-    ////////////////////////////////////////////////////////////////HASMANY
-    // Location-->belongsTo-->Client   <==>  Client-->hasMany-->Location
-    /* public function locations()
+    public function reccurences()
     {
-        return $this->hasMany('App\Location');		
+        return $this->belongsTo('App\Reccurence', 'reccurence_id');		
     }
- */
 }

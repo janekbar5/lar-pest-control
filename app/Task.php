@@ -30,9 +30,9 @@ class Task extends Model implements Auditable, Searchable
     //////////////////////////////////////////
     protected $appends = [
         //'color','firstPhoto','extendedProps','textColor',
+		//'color','firstPhoto','location'
 		'color','firstPhoto',
-    ];
-	
+    ];	
     function getColorAttribute() {
         return $this->statuses->colour;   
     }
@@ -40,38 +40,24 @@ class Task extends Model implements Auditable, Searchable
     {        
         return $this->photos->first();	  
     }
-	
-	
-	
-	
-	/* function getextendedPropsAttribute()
-    {        
-        return [            
-            'department' => 'BioChemistry',            
-        ];	  
+	/* function getLocationAttribute() {
+        return $this->locations->title;
     } */
-	
-	
-	/* function gettextColorAttribute()
-    {        
-        return '#ffffff';	  
-    } */
-
-    
+		    
     protected $fillable = [
 	    'location_id',
         'user_id', 
-		'status_id',
-		'substatus_id',
-		'price_id',
-		'title',
+		'status_id-n',
+		'substatus_id-n',
+		'price_id-n',
+		'title-t',
 		'description',
         'comment',		
-        'deadline',
-		'price',
-		'start',
-		'end',
-		'last_service',
+        //'deadline',
+		'price-n',
+		'start-t',
+		'end-t',
+		'last_service-t',
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
     // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User
@@ -90,7 +76,7 @@ class Task extends Model implements Auditable, Searchable
     }
     public function statuses()
     {
-        return $this->belongsTo('App\Status', 'status_id');		
+        return $this->belongsTo('App\Status', 'status_id-n');		
     }
     /////////////////////////////////////////////////////////////////HASMANY    //    
     public function photos()

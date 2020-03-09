@@ -104,7 +104,7 @@ class BackendRepository implements BackendRepositoryInterface
 				  /* ->whereHas('statuses',function($query) {                
 						 $query->where('status_id', '=', 1);                    
 					}) */
-                  //->with('selectedUsers') 
+                  ->with('users') 
                   //->doesntHave('users')    
                   ->get(); 
     }

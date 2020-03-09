@@ -10,7 +10,7 @@
       @on-download="newUser"                               
       >
 
-        <template slot="photo" slot-scope="props">
+       <template slot="photo" slot-scope="props">           
               <img v-if="(props.cell_value) == null" :src="'https://dummyimage.com/60x50/807c80/fff'" style="width:60px;height:50px">
               <img v-else :src="'images/thumb_medium-' + props.cell_value" style="width:60px;height:50px">
        </template>

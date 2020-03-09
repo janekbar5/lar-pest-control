@@ -15,8 +15,9 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
-			$table->boolean('active');
+			$table->integer('active');
 			$table->integer('client_type');
+			$table->integer('reccurence_id');
 			$table->string('name');
             $table->string('email'); 
 			$table->string('phone');
@@ -29,7 +30,7 @@ class CreateClientsTable extends Migration
 			$table->date('contract_start');
             $table->date('contract_end');            
             $table->text('description')->nullable();
-			$table->string('reccurence');
+			
             //recurrence
 			$table->softDeletes();  //add this line
             $table->timestamps();

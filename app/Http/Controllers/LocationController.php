@@ -24,11 +24,63 @@ class LocationController extends Controller
     public function index(Request $request)
     {       
 		
-	    $locations = Location::with(['address','clients','treatments'])->get();
-		return response()
-               ->json([ 
-			   'rows' => $locations,			   
-			   ]);	   
+	    $location = Location::query();
+		///////////////////////Foreighn Filters
+		if(request('locations')){
+            $location = $location->whereHas('locations',function($query) { $query->where('title','LIKE', '%'.request('locations.title').'%');});       
+        }
+		/* if(request('surface')){
+            $location = $location->whereHas('cities',function($query) { $query->where('title','LIKE', '%'.request('surface').'%');});       
+        }
+		if(request('price')){
+            $location = $location->whereHas('attractiontypes',function($query) { $query->where('title','LIKE', '%'.request('price').'%');});       
+        }  */
+		
+		/////////////////Own Filter
+		if(request('title')){
+            $location = $location->where('title','LIKE', '%'.request('title').'%');       
+        }
+		if(request('surface')){
+            $location = $location->where('surface','LIKE', '%'.request('surface').'%');       
+        }
+		if(request('price')){
+            $location = $location->where('price','LIKE', '%'.request('price').'%');       
+        }
+		
+		/////////////////Own Order
+		if(request('field')=='id'){
+            $location = $location->orderBy(request('field'),request('order'));           
+        }
+        if(request('field')=='title'){
+            $location = $location->orderBy(request('field'),request('order'));           
+        }
+        if(request('field')=='surface'){
+            $location = $location->orderBy(request('field'),request('order'));           
+        }
+        if(request('field')=='price'){
+            $location = $location->orderBy(request('field'),request('order'));           
+        }
+		
+        
+        //////////////
+        if(request('field')=='country'){
+            $location = $location
+            ->join('countries','countries.id','=','location.country_id')->select('countries.title as regionName','location.*')
+            ->orderBy('regionName',request('sort'));
+        }
+        if(request('field')=='city'){
+            $location = $location
+            ->join('cities','cities.id','=','location.city_id')->select('cities.title as regionName','location.*')
+            ->orderBy('regionName',request('sort'));
+        }
+        if(request('field')=='attractiontype'){
+            $location = $location
+            ->join('attraction_types','attraction_types.id','=','location.attractiontype_id')->select('attraction_types.title as regionName','attractions.*')
+            ->orderBy('regionName',request('sort'));
+        }
+        
+        $location = $location->paginate(request('perPage'));  
+        return response()->json(['rows' => $location]);   
 				
 		
     }

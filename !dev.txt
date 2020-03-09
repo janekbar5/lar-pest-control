@@ -98,8 +98,14 @@ https://rubanraj54.gitbook.io/vue-bootstrap4-table/
 
 // https://github.com/Wanderxx/vue-fullcalendar/blob/master/demo/app.vue
 // https://fullcalendar.io/docs#toc
+
 GANTT
 https://jsbin.com/zocurejupa/1/edit?js,output
+https://codesandbox.io/s/fullcalendar-vue-w-resources-oqzcg
+
+
+
+
 
 
 https://github.com/CroudTech/vue-fullcalendar#methods

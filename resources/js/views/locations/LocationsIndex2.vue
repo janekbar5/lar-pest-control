@@ -1,216 +1,110 @@
 <template>
-    <div>
-        <!-- <Buttons :editMode="editMode" style="display:none"></Buttons> -->
-  
-      <vue-bootstrap4-table 
-      :rows="rows"
-      :columns="columns"
-      :config="config"
-      :actions="actions"
-      @on-download="newUser"                               
-      >
-
-        <template slot="photo" slot-scope="props">
-              <img v-if="(props.cell_value) == null" :src="'https://dummyimage.com/60x50/807c80/fff'" style="width:60px;height:50px">
-              <img v-else :src="'images/thumb_medium-' + props.cell_value" style="width:60px;height:50px">
-       </template>
-
-        <template slot="treatments" slot-scope="props">           
-             <span v-for="treat in props.cell_value" :key="treat.data" class="badge badge-info right">{{ treat.title }}</span>
-       </template>
-
-        <template slot="actions" slot-scope="props"> 
-            <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(props.cell_value)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-            <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(props.cell_value)"></i>     
-       </template>
-
+    <div id="app">
+        <vue-bootstrap4-table :rows="rows"
+                              :columns="columns"
+                              :config="config"
+                              @on-change-query="onChangeQuery"
+                              :total-rows="total_rows">
         </vue-bootstrap4-table>
     </div>
 </template>
 
-
-<script type="text/javascript">
-import Vue from 'vue'
-import { get, byMethod } from '../../lib/api'
-// import {isEmpty} from "lodash"
-import Buttons from './Buttons'
-// import {Typeahead } from '../../components/typeahead'
-import VueBootstrap4Table from 'vue-bootstrap4-table'
-
-export default {
-    components: { VueBootstrap4Table, Buttons },
-data () {
-return {
-    rows: [],
+<script>
+    import VueBootstrap4Table from 'vue-bootstrap4-table'
+    import Repository from "../../repositories/RepositoryFactory";
+    const RecordsRepository = Repository.get("records");
+    export default {
+        name: 'App',
+        components: {VueBootstrap4Table},
+        data: function() {
+            return {
+                model:'locations',
+                rows: [],
                 columns: [
-                        {label: "id", name: "id",},
-                        //{label: "Location",name: "photos[0].path",slot_name: "photo"},
-                        {label: "Location", name: "title",filter: {type: "simple",placeholder: "Location"},sort: true,},
-                        {label: "Company", name: "clients[0].name",filter: {type: "simple",placeholder: "Company"},sort: true,},
-                       
-                        {label: "City", name: "address.city",filter: {type: "simple",placeholder: "City"},sort: true,},
-                        {label: "Contract", name: "clients[0].person_name",filter: {type: "simple",placeholder: "Contract"},sort: true,},
-                        {label: "Phone", name: "clients[0].phone",filter: {type: "simple",placeholder: "Phone"},sort: true,},
-                        {label: "Email", name: "clients[0].email",filter: {type: "simple",placeholder: "Email"},sort: true,},
-                        {label: "Treatments",name: "treatments",slot_name: "treatments"},
-                       // {label: "Reccurence", name: "reccurence",filter: {type: "simple",placeholder: "Reccurence"},sort: true,},
-                        
-                        // {
-						//         label: "Active",
-						//         name: "active", // access nested objects properties with "."
-						//         filter: {
-						//             type: "select",
-						//             mode: "single",
-						//             closeDropdownOnSelection: true,
-						//             placeholder: "Select options",
-						//             options: [{
-						//                     "name": "Active",
-						//                     "value": 1
-						//                 },
-						//                 {
-						//                     "name": "Inactive",
-						//                     "value": 0
-						//                 },						                
-						//             ],						            
-                        //         },
-                        //         sort: true
-						//  },
-
-                        {label: "Actions",name: "id",slot_name: "actions"}, 
-                   ],
-                   actions: [
-                    {
-                        btn_text: "New Location",
-                        event_name: "on-download",
-                        class: "btn btn-secondary",
-                        event_payload: {
-                            msg: "my custom msg"
-                        }
-                    }
-                   ],                    
-                    config: {
-                        checkbox_rows: false,
-                        rows_selectable: true,
-                        card_title: "Locations"
-                    },
-    ////
-    // url:'',
-       // settings: {},
-        modelPlural: 'locations', modelSingular: 'Location', 
-        urlList:'/locations',
-        urlCreate:'/locations/create',
-        urlEdit:'/locations/',
-        apiList:'/v1/api/locations/index',
-        apiCreate:'/v1/api/locations/create',
-        apiEdit:'/v1/api/locations/edit/',       
-        apiUpdate:'/v1/api/locations/update/',     
-        apiDelete:'/v1/api/locations/delete/',
-    //    
-    editMode: this.$route.meta.mode,
-    model: {
-        // urlList:'',
-        // data: []
-    },
-    dataUser:'/v1/api/locations/searchusers',
-    perpage:10,
-    
-}
-},
-created() {
-    //this.$eventHub.$on('settings', this.modelSettings) 
-},
-beforeDestroy(){
-   //this.$eventHub.$off('settings');
-},
-//
-mounted() {   
-    this.onFilter() 
-},          
-methods: {
-    // modelSettings(settings){
-    //     //return name
-    //     this.settings = settings;
-    //     this.urlList = settings.urlList
-    //     this.urlEdit = settings.urlEdit
-    //     this.urlCreate = settings.urlCreate
-    //     //
-    //     this.apiList = settings.apiList
-    //     this.apiDelete = settings.apiDelete
-    //     //console.log(settings)  
-    // },
-    newUser(){
-       this.$router.push(this.urlCreate) 
-    },
-   
-    modelEdit(item) {        
-        this.$router.push(this.urlList+'/'+item+'/edit')
-    },   
-    onFilter() {      
-         axios    
-            .get('/v1/api/locations/index')
-                .then((res) => {
-                    this.setData(res)                   
-            })
-            .catch(error => {				
-					this.errored = true
-					})
-			.finally(() => this.loading = false)                   
+                     {label: "Id",name: "id",filter: {type: "simple",placeholder: "id"},sort: true,initial_sort: true, initial_sort_order: "asc", },
+                     {label: "Title",name: "title",filter: {type: "simple",placeholder: "title"},sort: true },
+                     {label: "Surface",name: "surface",filter: {type: "simple",placeholder: "surface"},sort: true },
+                     {label: "Price",name: "price",filter: {type: "simple",placeholder: "price"},sort: true },                
+                ],
+                config: { server_mode: true },
+                queryParams: {sort: [],filters: [],global_search: "",per_page: 10,page: 1,},
+                total_rows: 0,
+                //////
+                serverParams:[],querySorting:[],queryFilters:[]
+            }
         },
-        setData(res) {            
-            this.rows = res.data.rows
-            //this.$bar.finish()
+        mounted() {
+            this.fetchData();
         },
-    getApi(url){
-        get(url)
-        .then((res) => {
-            this.setData(res)                   
-        })
-    },
-    modelDelete(item){
-        swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-        // Send request to the server
-        if (result.value) {
-            byMethod('delete',  this.apiDelete+item).then(()=>{
-            swal.fire('Deleted!','Your file has been deleted.','success')
-            this.getApi('/v1/api/locations/index')                                         
-        }).catch(()=> {
-            swal.fire("Failed!", "There was something wronge.", "warning");
-            });
-        }
-        })
-    },
+        methods: {
+            onChangeQuery(queryParams) {
+                this.queryParams = queryParams
+                //this.querySorting = Object.keys(params).map(key => key + '=' + params[key]).join('&')                      
+                this.fetchData();                   
+            },
+            fetchData: async function() {
+                let self = this;
+                this.serverParams = Object.assign({}, this.serverParams, this.queryParams)                
+                //sorting params   
+                var params = { field: this.serverParams.sort[0].name,order: this.serverParams.sort[0].order }                       
+                this.querySorting = Object.keys(params).map(key => key + '=' + params[key]).join('&')
+                // filter params
+                var costam = []
+                this.serverParams.filters.forEach(element => {
+                    costam.push(element.name+'='+element.text)                   
+                });
+                //per page
+                var perpage = { perPage: this.serverParams.perPage };
+                var queryPer = Object.keys(params2).map(key => key + '=' + params2[key]).join('&'); 
+                
 
+                const { data } = await RecordsRepository.sortFilter(this.model,this.querySorting+'&'+costam.join('&')); 
+                self.rows = data.rows.data;
+                self.total_rows = data.rows.total;      
+            }
 
-
+        }//meth
+        
+        
     }
-}
 </script>
-<style>
-/* .fa-pen:hover {
-    color: red;
-} */
-.fa-trash:hover,.fa-pen:hover {
-    color: red;
-    cursor:pointer;
-}
-.table-active {
-    background-color:white;    
-}
-.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
-color: #fff;
-background-color:grey;
-border-color:grey;
-}
-.page-item.active .page-link {
-    background-color:grey; 
-}   
-</style>
 
+<style>
+/* .table form-control {
+    display: none;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color:
+    #fff;
+    background-clip: padding-box;
+    border: 1px solid
+    #ced4da;
+    border-radius: 0.25rem;
+    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.table th, .table td {
+    font-size:12px;
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid 
+    #dee2e6;
+}
+.table th, .table td {
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.table th, .table td {
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+} */
+</style>

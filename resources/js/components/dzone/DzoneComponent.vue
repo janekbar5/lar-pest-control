@@ -1,37 +1,26 @@
-<template>
- 
+<template> 
             <div>
-
-                <!------------------------------->
-               
+                <!------------------------------->               
                  <div class="row">
                     <div class="col-12">
-                            <div class="card card-primary">
-                            
-                            <div class="card-body">
-                                <div class="row">
-                        <!-- updatedPhotosList {{updatedPhotosList}} photosList {{photosList}} -->
-
-                                <div class="col-sm-2" v-for="photo in photosList">
-                                    <a href="#" data-toggle="lightbox" data-title="sample 1 - white" data-gallery="gallery">
-                                    <img v-bind:src="'/images/thumb_mini-'+ photo.path" class="img-fluid mb-2" alt="white sample" width=100>
-                                        <span v-if="editMode === 'edit'" @click="deletePhoto(photo.id)">DELETE</span>
-                                    </a>
+                            <div class="card card-primary">                            
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- updatedPhotosList {{updatedPhotosList}}  -->                            
+                                        <!-- photosList {{photosList}} -->
+                                        <div class="col-sm-2" v-for="photo in updatedPhotosList">
+                                            <a href="#" data-toggle="lightbox" data-title="" data-gallery="gallery">
+                                            <img v-bind:src="'/images/thumb_mini-'+ photo.path" class="img-fluid mb-2" alt="white sample" width=100>
+                                                <span v-if="editMode === 'edit'" @click="deletePhoto(photo.id)">DELETE</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-
-                            
-
-                                </div>
-                            </div>
                             </div>
                     </div>
-                </div>
-                    
-
+                </div>  
                 <!-- updatedPhotosList  {{updatedPhotosList}} photosList {{photosList}} -->
-
-                <div class="card" v-if="editMode === 'edit'" >
-                  
+                <div class="card" v-if="editMode === 'edit'" >                  
                     <div class="card-body" >  {{ editMode }}    
                         <vue-dropzone ref="myVueDropzone" id="dropzone"
                         @vdropzone-file-added="vfileAdded"
@@ -54,8 +43,6 @@
                         :options="dropzoneOptions"
                         :duplicateCheck="true">
                         </vue-dropzone>
-
-
                     </div>
                 </div>
             </div>
@@ -69,15 +56,8 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import {get, byMethod } from '../../lib/api'
     
     export default {
-     components: {
-        vueDropzone: vue2Dropzone
-      },
-      props: {
-            photableId: { required: true  },
-            photableType: { required: true },
-            photosList:{ required: true },
-            editMode:{ required: true }           
-        },
+     components: { vueDropzone: vue2Dropzone },
+      props: {  photableId: { required: true  }, photableType: { required: true },  photosList:{ required: true },  editMode:{ required: true }  },
       computed: {
             selectedText() {
                  this.text = this.initialize.text  
@@ -88,7 +68,7 @@ import {get, byMethod } from '../../lib/api'
         return {
             updatedPhotosList:'',
             text:this.text,
-            uploadMessage:'123',            
+            uploadMessage:this.photosList,            
             dropzoneOptions: {
                 url: '/images/post',                
                 headers: {
@@ -124,6 +104,14 @@ import {get, byMethod } from '../../lib/api'
       },
       ///////////////////////
       methods: {
+        vmounted() { this.isMounted = true },
+        vddrop() { this.dDrop = true },
+        vdstart() { this.dStarted = true },
+        vdend() { this.dEnded = true },
+        vdenter() { this.dEntered = true },
+        vdover() { this.dOver = true },
+        vdleave() { this.dLeave = true },
+        vdduplicate() { this.dDuplicate = true },  
         vfileAdded(file) {
         this.fileAdded = true
         // window.toastr.info('', 'Event : vdropzone-file-added')
@@ -165,36 +153,16 @@ import {get, byMethod } from '../../lib/api'
          this.photosUpdate()
         },
 
-        photosUpdate() {            
-            var params = {
-                photoable_type: this.photableType,
-                photoable_id: this.$route.params.id,
-            }            
-            axios.post('/v1/api/images/index',params).then(res => {
-              //this.photosList = res.data;
-              this.updatedPhotosList = res.data;
-            })  
-        },
+        
         deletePhoto(id){
-            swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            swal.fire({ title: 'Are you sure?',text: "You won't be able to revert this!",type: 'warning',
+            showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
             // Send request to the server
             if (result.value) {
                 byMethod('delete', `/v1/api/images/delete/${id}`).then(()=>{
-                swal.fire('Deleted!','Your file has been deleted.','success')
-                //this.photosList.splice(id)    
-                //this.updatedPhotosList.splice(this.photosList.indexOf(id), 1);  
-                this.photosList.splice(this.photosList.indexOf(id), 1);    
-                
-                //this.getApi(this.apiList+'?page='+this.page)
-                //console.log(this.page)                                   
+                swal.fire('Deleted!','Your file has been deleted.','success')                  
+                this.photosList.splice(this.photosList.indexOf(id), 1)
             }).catch(()=> {
                 swal.fire("Failed!", "There was something wronge.", "warning");
                 });
@@ -206,30 +174,7 @@ import {get, byMethod } from '../../lib/api'
         this.myProgress = Math.floor(totalProgress)
          //console.log('', 'Event : vdropzone-sending')
         },
-        vmounted() {
-        this.isMounted = true
-        },
-        vddrop() {
-        this.dDrop = true
-        },
-        vdstart() {
-        this.dStarted = true
-        },
-        vdend() {
-        this.dEnded = true
-        },
-        vdenter() {
-        this.dEntered = true
-        },
-        vdover() {
-        this.dOver = true
-        },
-        vdleave() {
-        this.dLeave = true
-        },
-        vdduplicate() {
-        this.dDuplicate = true
-        },
+        
         ///////////////////////////
         disableUpload() {
           //this.$refs.myVueDropzone.disable()         
@@ -243,23 +188,43 @@ import {get, byMethod } from '../../lib/api'
             var message = ''
             if(this.editMode === 'edit') {
                 message = 'Upload Images'              
-            }else if(this.editMode === 'view'){
+            }else if(this.editMode === 'create'){
                 message = 'View Images'
             }else{
                 message = 'You  must save record to upload image'               
             }
             return message
-        }
+        },
+        photosUpdate() {            
+            var params = { photoable_type: this.photableType,photoable_id: this.$route.params.id }            
+            axios.post('/v1/api/images/index',params).then(res => {
+              //this.photosList = res.data;
+              this.updatedPhotosList = res.data;
+            })  
+        },
+      },
+      watch: {  
+            photosList: function () {
+            console.log('watch-photosList')   
+             this.updatedPhotosList = this.photosList
+             //console.log(this.updatedPhotosList)
+            }  
       },    
       ///////////////////////
+      created() {
+          //console.log('created')
+          //console.log('photosList created'+this.photosList)
+      },
       mounted() {         
-          if(this.editMode === 'edit') {
+            if(this.editMode === 'edit') {
                this.enableUpload()
             }else{
                this.disableUpload()
             }   
             //console.log('mounted-child')
-            this.updatedPhotosList = this.photosList      
+            //this.updatedPhotosList = this.photosList 
+            //console.log('updatedPhotosList'+this.updatedPhotosList)
+            //console.log('uploadMessage'+this.uploadMessage)     
       }
     }
 </script>

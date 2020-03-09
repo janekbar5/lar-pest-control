@@ -268,6 +268,18 @@ export default {
         //allDayText: "All Day Events",        
         allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
+        eventRender(event, element) {  
+            if(event.end){
+              element.find('.fc-content').append('<b> '+event.end.format('HH:mm')+'</b>'); 
+            }
+
+            if(event.users) {             
+               event.users.forEach(function (item) {                   
+                  element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
+              });   
+            }           
+         },
+        //////////////////////////////////////////////////////////////////////
       },        
       //////////config
         start:'',

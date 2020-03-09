@@ -126,12 +126,12 @@
                                     <div class="form-group">
                                         <label>Reccurence</label>                                       
                                         <!-- <input v-model="form.reccurence" type="text" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }" >  -->
-                                        <select v-model="form.reccurence" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence }">
+                                        <select v-model="form.reccurence_id" name="reccurence" class="form-control" :class="{ 'is-invalid': errors.reccurence_id }">
                                             <option v-for="rec in reccurences" :value="rec.id">
-                                            {{rec.name}}
+                                            {{rec.title}}
                                             </option>
                                         </select>                                        
-                                        <div class="alert alert-danger" v-if="errors.reccurence"> {{errors.reccurence[0]}}</div>
+                                        <div class="alert alert-danger" v-if="errors.reccurence_id"> {{errors.reccurence_id[0]}}</div>
                                     </div>  
                                 </div>   
 
@@ -242,16 +242,7 @@
                 apiEdit:'/v1/api/clients/edit/',       
                 apiUpdate:'/v1/api/clients/update/',     
                 apiDelete:'/v1/api/clients/delete/',
-                reccurences: [
-                    {id: 1,name: 'Requested' },
-                    {id: 2,name: 'Bi-monthly' },
-                    {id: 3,name: 'Monthly' },
-                    {id: 4,name: '2 Months' },
-                    {id: 5,name: '3 Months' },
-                    {id: 6,name: '6 Months' },
-                    {id: 7,name: 'Yearly' },
-                    {id: 8,name: 'Custom' },             
-                ],
+                reccurences: [],
                 clienttype:'',
                 clienttypes:[
                     {id: 1,name: 'Private' },
@@ -280,33 +271,11 @@
             //this.$eventHub.$on('settings', this.modelSettings) 
         },
         methods: {
-            // addTag(newTag) {
-            // const tag = {
-            //     name: newTag,
-            //     code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-            // }
-            // this.options.push(tag)
-            // this.value.push(tag)
-            // },
+           
             nameWithNameLastName ({ title }) {
                 return `${title}`
             },
-            // modelSettings(settings){                
-            //     //return name
-            //     this.settings = settings;
-            //     this.urlList = settings.urlList
-            //     this.urlEdit = settings.urlEdit
-            //     this.urlCreate = settings.urlCreate
-            //     //         
-            //     this.apiList = settings.apiList
-            //     this.apiDelete = settings.apiDelete
-            //     this.apiCreate = settings.apiCreate
-            //     this.apiEdit = settings.apiEdit
-            //     this.apiUpdate = settings.apiUpdate
-            //     //
-            //     this.modelSingular = settings.modelSingular
-            //     //console.log(settings)                
-            // },
+           
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
                     Vue.set(this.$data, 'form', res.data.form)                     
@@ -315,7 +284,7 @@
                     this.method = 'PUT'
                     this.title = 'Edit'    
                 } 
-               
+                this.reccurences =  res.data.reccurences
                 this.alllocations =  res.data.alllocations //alllocations            
             }, 
             onSave() {

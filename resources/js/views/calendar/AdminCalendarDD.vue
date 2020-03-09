@@ -153,7 +153,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     
-                    <h5 class="modal-title"  id="addNewLabel">Update Status</h5>
+                    <h5 class="modal-title"  id="addNewLabel">Assign Users</h5>
                     <button type="button" class="close" @click="clear()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -162,35 +162,40 @@
 
                 <form @submit.prevent="updateAssignment()">
                 <div class="modal-body">
+
+                    <div class="form-group">
+                        <input v-model="form.title" type="text" name="title" id="title" ref="title"
+                            placeholder="title"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }" disabled>
+                        <has-error :form="form" field="title"></has-error>
+                    </div> 
+
+                     <div class="row">
+                                <div class="col-md-6">                                   
+                                    <div class="form-group">
+                                        <label>Start</label>     
+                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start"  :class="{ 'is-invalid': form.errors.has('start') }" />   
+                                        <!--  <datetime type="datetime" v-model="form.start" format="yyyy-MM-dd HH:mm" class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"></datetime>   -->
+                                        <has-error :form="form" field="start"></has-error>
+                                         
+                                     </div>  
+                                </div> 
+                                <div class="col-md-6">                                   
+                                    <div class="form-group">
+                                        <label>End</label>     
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': form.errors.has('end') }" />   
+                                         <has-error :form="form" field="end"></has-error>
+                                         
+                                     </div>  
+                                </div>                                  
+                            </div>
+
+
+                    <div class="form-group">
                      
-                    <div class="form-group">
-                        <!-- <input v-model="form.start" type="text" name="start" 
-                            placeholder="start"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"> -->
-                          <Datepicker format="YYYY-MM-DD H:i" v-model="form.start"  :class="{ 'is-invalid': form.errors.has('start') }" />   
-                        <!--  <datetime type="datetime" v-model="form.start" format="yyyy-MM-dd HH:mm" class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"></datetime>   -->
-                        <has-error :form="form" field="start"></has-error>
                     </div>
 
-
-
-
-                    <!-- <datetime type="time" v-model="time"></datetime> -->
-
-                    
-                   
-
-                    <div class="form-group">
-                      <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': form.errors.has('end') }" />
-                      <!-- <datetime type="datetime" v-model="form.end" format="yyyy-MM-dd HH:mm" class="form-control"></datetime> -->
-                        <!-- <input v-model="form.end" type="text" name="end" id="end" ref="end"
-                            placeholder="end"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('end') }"> -->
-                            
-                        <has-error :form="form" field="end"></has-error>
-                    </div>
-
-                    <div style="display:block">
+                    <div style="display:none">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
@@ -199,13 +204,7 @@
                         <has-error :form="form" field="itemid"></has-error>
                     </div>
 
-                    <div class="form-group">
-                        <input v-model="form.title" type="text" name="title" id="title" ref="title"
-                            placeholder="title"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }">
-                        <has-error :form="form" field="title"></has-error>
-                    </div>
-
+                    
                         <div class="form-group">
                             <input v-model="form.price" type="text" name="price" id="price" ref="price"
                                 placeholder="price"
@@ -225,8 +224,8 @@
                             <has-error :form="form" field="location_id"></has-error>
                         </div>
                     </div>
-
-
+                    <small v-show="loading == true" class="badge badge-success"><i class="far fa-clock"></i> Loading...</small>
+                                         
                     <multiselect 
                     v-show="usersMultiselectBox"
                     v-model="form.users" 
@@ -318,75 +317,12 @@ export default {
               element.find('.fc-content').append('<b> '+event.end.format('HH:mm')+'</b>'); 
             }
 
-
             if(event.users) {             
               event.users.forEach(function (item) {                   
                   element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
               });   
-            }
-
-           
-            
-            //element.find(".delete").click(function() {
-            //console.log(event._id)                    
-            //$('#calendar').fullCalendar('removeEvents', event._id);
-                        // swal.fire({
-                        //     title: 'Weet je het zeker?',
-                        //     text: "Je staat op het punt dit item te verwijderen",
-                        //     type: 'warning',
-                        //     showCancelButton: true,
-                        //     confirmButtonColor: '#3085d6',
-                        //     cancelButtonColor: '#d33',
-                        //     confirmButtonText: 'Ja, verwijderen'
-                        //     }).then((result) => {
-                        //         if (result.value) {
-                        //             console.log(event._id)
-                        //             $('#calendar').fullCalendar('removeEvents', event._id);
-
-                        //             axios.delete('/agenda_items/'+ event.id)
-                        //             swal.fire(
-                        //             'Verwijderd!',
-                        //             'De afspraak is verwijderd.',
-                        //             'success'
-                        //             )
-                        //         }
-                        //     })
-                    //});
+            }           
          },
-        //////////////////////////////////////////////////////////////////////
-        //drop(calEvent, jsEvent, view) {
-        //drop(date, jsEvent, view) {  
-        // drop22(info) {
-        //             // remove the element from the "Draggable Events" list
-        //             $(this).remove();
-        //             console.log($(this))
-        //             //this.collapse()
-        // },
-       // drop(date,jsEvent) {
-
-
-
-        // drop(date, jsEvent, resource){  
-        //     this.janek = 'franek'           
-        //   if ($("#drop-remove").is(":checked")) {            
-        //     $(this).remove();    
-        //     $("#assignTaskToUserModal").modal("show")  
-        //     ///////////////////////////////////////////////////taken from calendar
-        //     $('#start').val(date.format('YYYY-MM-DD hh:mm'));
-        //     $('#end').val(date.format('YYYY-MM-DD hh:mm'));                      
-        //     //$('#start').val($(this).data("start"));
-        //     //$('#end').val($(this).data("end"));
-        //     $('#itemid').val($(this).attr("id"));             
-        //     $('#title').val($(this).data("title"));
-        //     $('#price').val($(this).data("price"));
-        //     $('#status_id').val($(this).data("status_id"));
-        //     $('#location_id').val($(this).data("location_id"));               
-        //   }              
-        //    console.log(vm.$children[6]) 
-        //    methods.callbackFunction()
-          
-        // },
-
     
         //////////////////////////////////////////////////////////////////////
         //eventDragStop: function(event, jsEvent, ui, view) {
@@ -423,6 +359,8 @@ export default {
       //
       counter: 0,
       freefieldusers:[], //dont need allPermissions in form only selected
+      //
+      loading:true,
 
     };
   },
@@ -442,12 +380,12 @@ export default {
   watch: {
             'form.start': function(newVal1) {              
                 this.newStart = newVal1
-                this.fillForm()  
+                this.getFreeUsers()  
                 console.log(newVal1)
             },
             'form.end': function(newVal2) { 
                 this.newEnd = newVal2
-                this.fillForm() 
+                this.getFreeUsers() 
                 console.log(newVal2)                          
             }, 
                    
@@ -485,15 +423,15 @@ export default {
     this.$refs.calendar.fireMethod('refetchEventSources')
     this.$refs.calendar.fireMethod('changeView', 'month')
     },
-    Search(){
-      if (this.newStart && this.newEnd ) {
-        //console.log('value changed from ' + this.newStart + this.newEnd );
-         axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+this.newStart+'&end='+this.newEnd)
-            .then((res) => {                        
-            //this.setFreeUser(res) 
-        })   
-      }
-    },
+    // Search(){
+    //   if (this.newStart && this.newEnd ) {
+    //     //console.log('value changed from ' + this.newStart + this.newEnd );
+    //      axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+this.newStart+'&end='+this.newEnd)
+    //         .then((res) => {                        
+    //         //this.setFreeUser(res) 
+    //     })   
+    //   }
+    // },
     nameWithNameLastName ({ name, last_name }) {
         return `${name} ${last_name}`
     },
@@ -506,18 +444,15 @@ export default {
       this.form.reset()
       this.loadCalendar()           
     },  
-    fillForm(){    
-      this.getValues()
-    },  
-    getValues(){ 
-      this.counter++        
-      //if(this.counter == 1){
-      console.log('getValues') 
-        //axios.get('/v1/api/tasks/gettasksbydate?date='+this.day)
+    // fillForm(){    
+    //   this.getValues()
+    // },  
+    getFreeUsers(){ 
+        this.loading = true //the loading begin        
         axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+ this.form.start+'&end='+this.form.end)        
         .then((res) => {            
             this.setTasksByDate(res)
-             //console.log(res)    
+            this.loading = false   
         })
     // }  
     },
