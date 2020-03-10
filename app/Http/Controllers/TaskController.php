@@ -225,9 +225,8 @@ class TaskController extends Controller
 	/**///////////////////////////////////////////////////////////////////////////////////////////// CALENDAR
     public function calendar(Request $request)    { 
 	
-          $unassignedtasks = $this->br->getUnassignedTasks();
-		  //$assignedtasks = $this->br->getAssignedFilteredTasks($request->input('location'));		
-		  $assignedtasks = $this->br->getAssignedTasks();
+        $unassignedtasks = $this->br->getUnassignedTasks();		  		
+		$assignedtasks = $this->br->getAssignedTasks();
 		
 	    $alllocations = $this->br->getAllLocations(); 
         return response()->json([            
@@ -312,29 +311,23 @@ class TaskController extends Controller
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//  http://www.lar-pest-control.test/v1/api/tasks/getfreefieldusersfordate?start=2020-02-17 07:21&end=2020-02-17 15:21
 	public function getFreeFieldUsersForDate(){ 
-	      $startTime = request('start');
-		  $endTime = request('end');
-		 
-		   $allAvailableFieldUsers =	User::with('tasks')
-		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
-				       /* ->WhereDoesntHave('tasks', function($q) {
-					   $q->where('start','>=', request('start'))->where('end','<=', request('end'));					   
-				       }) */
+	       $startTime = request('start-t');
+		   $endTime = request('end-t');		 
+		   $allAvailableFieldUsers = User::with('tasks')
+		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })
 					   ->WhereDoesntHave('tasks', function ($q) use ( $startTime, $endTime) {
 						$q
-						->whereRaw("start >= '$startTime' AND start < '$endTime'")
-						->orwhereRaw("start <= '$startTime' AND end > '$endTime'")
-						->orwhereRaw("end > '$startTime' AND end <= '$endTime'")
-						->orwhereRaw("start >= '$startTime' AND end <= '$endTime'")
+						->whereRaw("start-t >= '$startTime' AND start-t < '$endTime'")
+						->orwhereRaw("start-t <= '$startTime' AND end-t > '$endTime'")
+						->orwhereRaw("end-t > '$startTime' AND end-t <= '$endTime'")
+						->orwhereRaw("start-t >= '$startTime' AND end-t <= '$endTime'")
 						;
 					})
 				   ->get(); 
 			return response()
                ->json([ 
 			   'count'=> $allAvailableFieldUsers->count(),
-               'allAvailableFieldUsers' => $allAvailableFieldUsers,
-               //'statuses'=> $statuses,
-               //'filterAllStatuses'=> $filterAllStatuses,
+               'allAvailableFieldUsers' => $allAvailableFieldUsers,               
                ]);	   
 
     }

@@ -22,8 +22,32 @@ class TreatmentController extends Controller
 
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()    {       
-        $treatments = $this->br->getAllTreatments();       
-        return response()->json(['results' => $treatments]);
+       $treatments = Treatment::query();
+		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
+		$treatments = $treatments->orderBy(request('field'),request('order'));
+		////////////////////////////////////////////////////////////Own Filter Loop
+		/* $count = 0;
+		foreach($_GET as $key => $value){
+		$count++;
+			if($count > 2){ //skipping first 2 and last 2 only filters needed
+				if($key=='perPage' || $key=='page'){
+				}elseif(strpos($key, '-')){
+				$statuses = $statuses->where($key,'LIKE', '%'.$value.'%');				
+				}				
+			}
+		} */
+		////////////////////////////////////////////////////////////Foreign Filters
+		/* if(request('location_id')){
+            $statuses = $statuses->whereHas('locations',function($query) { $query->where('title','LIKE', '%'.request('location_id').'%');});       
+        } */
+        /////////////////////////////////////////////////////////////Foreign Order
+       /*  if(request('field')=='location_id'){
+            $statuses = $statuses
+            ->join('locations','locations.id','=','statuses.location_id')->select('locations.title as regionName','statuses.*')
+            ->orderBy('regionName',request('order'));
+        }	 */
+        $treatments = $treatments->paginate(request('perPage'));  
+        return response()->json(['rows' => $treatments]);
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)

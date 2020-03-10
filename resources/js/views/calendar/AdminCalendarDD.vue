@@ -449,7 +449,7 @@ export default {
     // },  
     getFreeUsers(){ 
         this.loading = true //the loading begin        
-        axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+ this.form.start+'&end='+this.form.end)        
+        axios.get('/v1/api/tasks/getfreefieldusersfordate?start-t='+ this.form.start+'&end-t='+this.form.end)        
         .then((res) => {            
             this.setTasksByDate(res)
             this.loading = false   

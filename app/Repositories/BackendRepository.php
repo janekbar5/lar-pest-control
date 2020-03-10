@@ -63,9 +63,9 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations')
-				  ->where('status_id', '=', 1)
-				  ->whereNull('start')
-				  ->whereNull('end')
+				  ->where('status_id-n', '=', 1)
+				  ->whereNull('start-t')
+				  ->whereNull('end-t')
                   ->with('statuses')
 				  /* ->whereHas('statuses',function($query) {                
 						 $query->where('status_id', '=', 1);                    
@@ -78,9 +78,9 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations')
-				  ->where('status_id', '=', 1)
-				  ->whereNull('start')
-				  ->whereNull('end')
+				  ->where('status_id-n', '=', 1)
+				  ->whereNull('start-t')
+				  ->whereNull('end-t')
 				  ->where('created_at', '>=', $start)
                   ->where('created_at', '<', $end)
                   ->with('statuses')
@@ -96,11 +96,11 @@ class BackendRepository implements BackendRepositoryInterface
                   //orderBy('created_at', 'desc')
                   with('locations')
 				  //->where('status_id', '=', 1)
-				  ->whereNotNull('start')
-				  ->whereNotNull('end')
-				  ->where('start', '>=', $start)
-                  ->where('end', '<', $end)
-                  ->with('statuses')
+				  ->whereNotNull('start-t')
+				  ->whereNotNull('end-t')
+				  ->where('start-t', '>=', $start)
+                  ->where('end-t', '<', $end)
+                  //->with('statuses')
 				  /* ->whereHas('statuses',function($query) {                
 						 $query->where('status_id', '=', 1);                    
 					}) */
@@ -110,8 +110,8 @@ class BackendRepository implements BackendRepositoryInterface
     }
     public function getAssignedTasks(){
         return Task::  
-                    whereNotNull('start')
-				  ->whereNotNull('end')
+                    whereNotNull('start-t')
+				  ->whereNotNull('end-t')
                   ->with('locations')
                   ->with('statuses')
                   ->with('users')  //display users array
@@ -149,7 +149,7 @@ class BackendRepository implements BackendRepositoryInterface
 		return	Task::with(['users'])                        
             ->whereHas('users',function($query) use($id){                
                  $query->where('user_id', '=', \Auth::user()->id);
-				 $query->where('status_id', '=', $id);
+				 $query->where('status_id-n', '=', $id);
             })            
             ->get();
     }
@@ -201,7 +201,7 @@ class BackendRepository implements BackendRepositoryInterface
                   ->paginate(10); 
     }
     public function getSubStatusesByStatus(){
-        return SubStatus::where('status_id', '=', $id)   
+        return SubStatus::where('status_id-n', '=', $id)   
                   ->orderBy('created_at', 'desc')
                   ->paginate(10); 
     }
@@ -214,7 +214,7 @@ class BackendRepository implements BackendRepositoryInterface
 		 return	User::with('selectedTasks')
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
 				       ->WhereDoesntHave('selectedTasks', function($q) use($date) {				   
-				       $q->where('start','LIKE', '%'.$date.'%'); 
+				       $q->where('start-t','LIKE', '%'.$date.'%'); 
 				   })				
 				   ->get(); 
 

@@ -61,9 +61,8 @@ class HomeController extends Controller
     public function loadStatistics()
     {        		
 		
-		$unassignedtasks = $this->br->getUnassignedTasksForPeriod(request('start'),request('end'));				   
-		$assignedtasks = $this->br->getAssignedTasksForPeriod(request('start'),request('end'));					   
-      
+		$unassignedtasks = $this->br->getUnassignedTasksForPeriod(request('start-t'),request('end-t'));				   
+		$assignedtasks = $this->br->getAssignedTasksForPeriod(request('start-t'),request('end-t'));	
 
 		return response()->json([
 			//'dueTasksCount' => $dueTasks->count(),
@@ -76,7 +75,7 @@ class HomeController extends Controller
     }
     /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
     public function adminCalendar()    {       
-        $assignedtasks = $this->br->getAssignedTasksForPeriod(request('start'),request('end'));	
+        $assignedtasks = $this->br->getAssignedTasksForPeriod(request('start-t'),request('end-t'));	
         return response()->json([  
             'assignedtasks' => $assignedtasks, 
         ]);

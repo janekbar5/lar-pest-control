@@ -5,271 +5,112 @@
         <div class="row">         
           <div class="col-md-6">
 
-            <div class="card">
-
-              <div class="card-header">
-                <h3 class="card-title">Treatments</h3> 
-                <div class="card-tools">                  
-                    <div class="input-group-append">
-                     <button  class="btn btn-secondary" @click="newTreatment()" >Add New Treatment</button> 
-                    </div>                 
-                </div>
-              </div>
-              
-              <div class="card-body p-0">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th style="width: 10%">#</th>
-                      <th style="width: 60%">Task</th>
-                      <th style="width: 20%">Label</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="treat in treatments" :key="treat.data"> 
-                      <td>{{treat.id}}</td>
-                       <td>{{treat.title}}</td>
-                     
-                      <!-- <td><span class="badge ">
-                          <i aria-hidden="true" class="fa fa-pen" @click="showModal()"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                         <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(treat)"></i> 
-                          </span>
-                        </td> -->
-                        <td>
-                        <a href="#" @click="editTreatment(treat)">
-                            <i class="fa fa-edit black"></i>
-                        </a>
-                        /
-                        <a href="#" @click="deleteRecord(treat,model='treatments')">
-                            <i class="fa fa-trash black"></i>
-                        </a>
-
-                    </td>
-                    </tr>
+              <vue-bootstrap4-table 
+                :rows="treatments"        
+                :columns="columns_formTreatment"
+                :config="config"
+                @on-change-query="onChange_formTreatment"
+                :total-rows="total_rows"
+                :actions="actions_treatments"
+                @on-download="newRecord(model='formTreatment')"
+                >
+                <template slot="actions" slot-scope="props"> 
                    
-
-                 
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="card-tools">
-                  <!-- <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                  </ul> -->
-                </div>
-            
-            </div>
-          
-          </div>
-       
+                    <a href="#" @click="editPopup(model='treatments',form='formTreatment',props.row)"><i class="fa fa-edit black"></i></a>
+                    /
+                    <a href="#" @click="deleteRecord(model='treatments',props.cell_value)"><i class="fa fa-trash black"></i></a>   
+                </template>       
 
 
-        <!-- <ModalTreatment  /> -->
+                </vue-bootstrap4-table>
+                <!----------------------- Modal treatmentModal ------------------------------------>
+                <div class="modal fade" id="formTreatment" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New {{currentModel}}</h5>
+                        <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update {{currentModel}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form @submit.prevent="editmode ? updateModel(currentModel,currentForm) : createModel(model='treatments',form='formTreatment')">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input v-model="formTreatment.title" type="text" name="title"
+                                placeholder="Title"
+                                class="form-control" :class="{ 'is-invalid': formTreatment.errors.has('title') }">
+                            <has-error :form="formTreatment" field="title"></has-error>
+                        </div>
 
-
-
-         <div class="col-md-6">
-            <div class="card">
-
-              <div class="card-header">
-                <h3 class="card-title">Task Statuses</h3>  
-                
-                <div class="card-tools">                  
-                    <div class="input-group-append">
-                     <button  class="btn btn-secondary" @click="newStatus()" >Add New Status</button> 
-                    </div>                 
-                </div>             
-              </div>
-              
-              <div class="card-body p-0">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th style="width: 10%">#</th>
-                      <th style="width: 40%">Task</th>
-                      <th style="width: 20%">Colour</th>
-                      <th style="width: 20%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr v-for="status in statuses" :key="status.data"> 
-                      <td>{{status.id}}</td>
-                      <td>{{status.title}}</td>
-                      <td><span v-bind:style="{ 'background-color': status.colour }">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
-                      <!-- <td><span class="badge ">
-                         <i aria-hidden="true" class="fa fa-pen" ></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                         <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(item)"></i> 
-                          </span>
-                          </td>
-                        <td> -->
-                        <td>    
-                        <a href="#" @click="editStatus(status)">
-                            <i class="fa fa-edit black"></i>
-                        </a>
-                        /
-                        <a href="#" @click="deleteRecord(status,model='statuses')">
-                            <i class="fa fa-trash black"></i>
-                        </a>
-                        </td>
-
-                    </tr>
-                   
-                   
-
-                 
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="card-tools">
-                  <!-- <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                  </ul> -->
-                </div>
-              
-            </div>
-
-
-            <div class="card">
-                
-              <div class="card-header">
-                <h3 class="card-title">Subtatuses</h3> 
-                 <div class="card-tools">                  
-                    <div class="input-group-append">
-                     <button  class="btn btn-secondary" @click="newSubStatus()" >Add New Sub Status</button> 
-                    </div>                 
-                </div>                
-              </div>
-              
-              <div class="card-body p-0">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th style="width: 10%">#</th>
-                      
-                      <th style="width: 30%">Substatus</th>
-                      <th style="width: 20%">Parent Status</th>
-                      <th style="width: 10%">Colour</th>
-                      <th style="width: 15%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <tr v-for="sub in substatuses" :key="sub.data"> 
-                      <td>{{sub.id}}</td>
-                       <td>{{sub.title}}</td>
-                      <td>{{sub.status.title}}</td>
-                      <td><span v-bind:style="{ 'background-color': sub.colour }">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>                                          
-                      <!-- <td><span class="badge ">
-                         <i aria-hidden="true" class="fa fa-pen" ></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-                         <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(item)"></i> 
-                          </span>
-                      </td> -->
-                      <td>    
-                        <a href="#" @click="editSubStatus(sub)">
-                            <i class="fa fa-edit black"></i>
-                        </a>
-                        /
-                       <a href="#" @click="deleteRecord(sub,model='substatuses')">
-                            <i class="fa fa-trash black"></i>
-                        </a>
-                        </td>
-                    </tr>
-                           
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="card-tools">
-                  <!-- <ul class="pagination pagination-sm float-right">
-                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                  </ul> -->
-                </div>
-              
-            </div>
-           
-         
-          </div>
-        </div>
-       
-
-
-            <!----------------------- Modal treatmentModal ------------------------------------>
-            <div class="modal fade" id="formTreatment" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New Treatment</h5>
-                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User's Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form @submit.prevent="editmode ? updateTreatment() : createTreatment()">
-                <div class="modal-body">
-                     <div class="form-group">
-                        <input v-model="formTreatment.title" type="text" name="title"
-                            placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': formTreatment.errors.has('title') }">
-                        <has-error :form="formTreatment" field="title"></has-error>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="formHideReset('formTreatment')">Close</button>
+                        <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                        <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
                     </div>
 
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" @click="formHideReset('formTreatment')">Close</button>
-                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
-                </div>
+                    </form>
 
-                </form>
-
+                    </div>
                 </div>
-            </div>
-            </div> 
+                </div> 
             <!----------------------- Modal ------------------------------------>
+              
+          </div>
 
 
+          <div class="col-md-6">
+              <vue-bootstrap4-table 
+                :rows="statuses"        
+                :columns="columns_formStatus"
+                :config="config"
+                @on-change-query="onChange_formStatus"
+                :total-rows="total_rows"
+                :actions="actions_statuses"
+                @on-download="newRecord(model='formStatus')"
+                >
+                <template slot="actions" slot-scope="props">
+                    <a href="#" @click="editPopup(model='statuses',form='formStatus',props.row)"><i class="fa fa-edit black"></i></a>
+                    /
+                    <a href="#" @click="deleteRecord(model='statuses',props.cell_value)"><i class="fa fa-trash black"></i></a>   
+                </template>       
 
 
-
-              <!----------------------- Modal statusesModal------------------------------------>
+                </vue-bootstrap4-table>
+          </div>
+           <!----------------------- Modal statusesModal------------------------------------>
              <div class="modal fade" id="formStatus" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New Status</h5>
-                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update Status</h5>
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New {{currentModel}}</h5>
+                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update {{currentModel}}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form @submit.prevent="editmode ? updateStatus() : createStatus()">
+                {{ currentForm }}{{ currentModel }}
+                <form @submit.prevent="editmode ? updateModel(currentModel,currentForm) : createModel(model='statuses',form='formStatus')">
                 <div class="modal-body">
 
                     <div class="form-group">
                         <input v-model="formStatus.title" type="text" name="title"
                             placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': formStatus.errors.has('title') }">
-                        <has-error :form="formStatus" field="title"></has-error>
+                            class="form-control"                            
+                            :class="{ 'is-invalid': errors.title }"
+                            >
+                             <!-- :class="{ 'is-invalid': formStatus.errors.has('title') }" -->
+                        <!-- <has-error :form="formStatus" field="title"></has-error> -->
+                        <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
                     </div>
                      <div class="form-group">
                         <input v-model="formStatus.colour" type="text" name="colour"
                             placeholder="Colour"
-                            class="form-control" :class="{ 'is-invalid': formStatus.errors.has('colour') }">
-                        <has-error :form="formStatus" field="colour"></has-error>
+                            class="form-control" :class="{ 'is-invalid': errors.colour }">
+                        <!-- <has-error :form="formStatus" field="colour"></has-error> -->
+                        <div class="alert alert-danger" v-if="errors.colour"> {{errors.colour[0]}}</div>
                     </div>
 
                    
@@ -288,421 +129,235 @@
               <!----------------------- Modal end statusesModal------------------------------------>
 
 
-
-
-
-            <!----------------------- Modal substatuses ------------------------------------>
-            <div class="modal fade" id="formSubStatus" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
-                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update User's Info</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form @submit.prevent="editmode ? updateSubStatus() : createSubStatus()">
-                <div class="modal-body">
-                     <div class="form-group">
-                        <input v-model="formSubStatus.title" type="text" name="title"
-                            placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': formSubStatus.errors.has('title') }">
-                        <has-error :form="formSubStatus" field="title"></has-error>
-                    </div>
-
-                     <div class="form-group">
-                        <input v-model="formSubStatus.colour" type="text" name="colour"
-                            placeholder="colour"
-                            class="form-control" :class="{ 'is-invalid': formSubStatus.errors.has('colour') }">
-                        <has-error :form="formSubStatus" field="colour"></has-error>
-                    </div>
-
-                     
- 
-                    <div class="form-group">
-                        <select name="status_id" v-model="formSubStatus.status_id" id="status_id" class="form-control" :class="{ 'is-invalid': formSubStatus.errors.has('status_id') }">
-                            <option value="">Select Parent Status</option>                           
-                            <option :value="status.id" v-for="status in statuses" :key="status.data">{{status.title}}</option>                           
-                        </select>
-                        <has-error :form="formSubStatus" field="status_id"></has-error>
-                    </div>
-
-                   
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"  @click="formHideReset('formSubStatus')">Close</button>
-                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
-                </div>
-
-                </form>
-
-                </div>
-            </div>
-            </div> 
-            <!----------------------- Modal ------------------------------------>
        
-        
-        
-       
+         
+      </div>
       </div>
     </section>
         
     </div>
 </template>
 
+<script>
+    import VueBootstrap4Table from 'vue-bootstrap4-table'
+    import Repository from "../../repositories/RepositoryFactory";
 
-<script type="text/javascript">
-import Vue from 'vue'
-import { get, byMethod } from '../../lib/api'
-import {isEmpty} from "lodash"
-import Buttons from './Buttons'
-//import ModalTreatment from './ModalTreatment.vue' 
+    const RecordsRepository = Repository.get("records");
+    export default {
+        name: 'Global',
+        components: { VueBootstrap4Table },
+        data: function() {
+            return {
+                editmode: false,
+                ///////////
+                currentModel:'', currentForm:'',
+                treatments: [],statuses: [],
+                columns_formTreatment: [
+                     {label: "Id",name: "id",filter: {},sort: true,column_classes: "my_id",initial_sort: true, initial_sort_order: "asc" },                      
+                     //Own Text                     
+                     {label: "Title",name: "title",filter: {type: "simple",placeholder: "Title",},sort: true,column_classes: "my_title" },                    
+                     {label: "Actions",name: "id",slot_name: "actions"},              
+                ],
+                columns_formStatus:[
+                     {label: "Id",name: "id",filter: {},sort: true,column_classes: "my_id",initial_sort: true, initial_sort_order: "asc" },                      
+                     //Own Text                     
+                     {label: "Title",name: "title",filter: {type: "simple",placeholder: "Title",},sort: true,column_classes: "my_title" },                    
+                     {label: "Actions",name: "id",slot_name: "actions"},              
+                ],
 
-export default {
-    components: { Buttons },
-data () {
-return {
-    editmode: false,
-    url:'',
-    settings: {},
-    urlList: '',
-    urlEdit: '',
-    apiList: '',
-    //    
-    //editMode: this.$route.meta.mode,
-    treatments:{},statuses:{},substatuses:{},
-    model: {
-        // urlList:'',
-        // data: []
-    },
-    // form: {
-    //     errors:''        
-    // },
-    formTreatment: new Form({
-                    id:'',
-                    title : '',
-                    user_id: '',
-                    password: '',
-                    type: '',
-                    bio: '',
-                    photo: ''
-    }),
-    formStatus: new Form({ 
-        id:'',                  
-        title : '',
-        colour : '',
-                   
-    }),
-    formSubStatus: new Form({ 
-        id:'',                  
-        title : '',
-        colour : '',
-        status_id : '',
-                   
-    }),
-    
-   
-    
-}
-},
-
-created() {
-    this.$eventHub.$on('settings', this.modelSettings) 
-     this.loadData()
-},
-beforeDestroy(){
-    //this.$eventHub.$off('settings');
-},
-//
-methods: {
-    loadData(){
-        get('/v1/api/home/globalsettings')
-        .then((res) => {
-            this.setData(res)
-        })
-    },
-    formHideReset(form){ 
-        this.formTreatment.reset();
-        this.formStatus.reset();
-        this.formSubStatus.reset();
-        //this.errors = ''
-        //this.errors.clear();
-        //this.formStatus.errors = ''
-        //this.formSubStatus.errors = ''
-        $('#'+form).modal('hide');
-    },
-    ///////////////////////////////////////////////New
-    newTreatment(){
+                actions_treatments: [ { btn_text: "New Treatment", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],
+                actions_statuses: [ { btn_text: "New Status", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],
+                config: { server_mode: true,show_reset_button: true,show_refresh_button: false,global_search: {visibility: false,},per_page: 10,per_page_options: [10, 20], },
+                queryParams: {sort: [],filters: [],global_search: "",page: 1,},
+                total_rows: 0,
+                //////
+                serverParams:[],querySorting:[],queryFilters:[],
+                //////
+                formTreatment: new Form({id:'',title : ''}),
+                formStatus: new Form({id:'',title : '',colour : '',}),
+                errors:'',
+                // formStatus: {
+                //     errors:''        
+                // },
+            }
+        },       
+        mounted() {
+            let model = 'treatments'
+            //this.fetchData(model='treatments')
+            //this.test(model)
+        },
+        methods: { 
+            ///////////////////////////////////////      
+            loadSubstatuses(props){
+               return props.row.statuses.title               
+            },
+            newRecord(model,form) {        
                 this.editmode = false;
-                this.formTreatment.reset();
-                $('#formTreatment').modal('show');
-    },
-    newStatus(){
-                this.editmode = false;
-                this.formStatus.reset();
-                $('#formStatus').modal('show');
-    },
-    newSubStatus(){
-                this.editmode = false;
-                this.formSubStatus.reset();
-                $('#formSubStatus').modal('show');
-    },
-    
-    /////////////////////////////////////////////Edit
-    editTreatment(treat){
-                this.editmode = true;
-                this.formTreatment.reset();
-                $('#formTreatment').modal('show');                
-                this.formTreatment.fill(treat);
-                //console.log(this.form)
-    },
-    editStatus(stat){
-                this.editmode = true;
-                this.formStatus.reset();
-                $('#formStatus').modal('show');                
-                this.formStatus.fill(stat);
-                //console.log(this.form)
-    },
-    editSubStatus(sub){
-       this.editmode = true;
-       this.formSubStatus.reset();
-       $('#formSubStatus').modal('show');                
-       this.formSubStatus.fill(sub);   
-    },
-    ///////////////CREATE
-    createTreatment(){
-                this.$Progress.start();
-                this.formTreatment.post('/v1/api/treatments/create')
-                .then(()=>{
-                    Fire.$emit('AfterCreate');
-                    $('#formTreatment').modal('hide')
-                     this.loadData()
-                    toast({
-                        type: 'success',
-                        title: 'User Created in successfully'
+                this[model].reset()           
+                $('#'+model).modal('show') 
+                this.currentModel = model
+                this.currentForm = form
+            },
+            editPopup(model,form,row){
+                this.editmode = true  
+                this[form].reset()           
+                $('#'+form).modal('show')                 
+                this[form].fill(row)  
+                this.currentModel = model
+                this.currentForm = form                
+            },
+            updateModel(model,form){              
+                RecordsRepository.updatePost(model,this[form].id,this[form]).then((res) => {
+                        if(res.data.saved) {
+                            this.fetchData(model)
+                            $('#'+form).modal('hide')
+                            this[form].reset()  
+                            this.loadToast('success',''+model+' updated successfully');   
+                        }                                  
                         })
-                    this.$Progress.finish();
-
-                })
-                .catch(()=>{
-
-                })
-    },
-    createStatus(){
-                this.$Progress.start();
-                this.formStatus.post('/v1/api/statuses/create')
-                .then(()=>{
-                    //Fire.$emit('AfterCreate');
-                    $('#formStatus').modal('hide')
-                     this.loadData()
-                    toast({
-                        type: 'success',
-                        title: 'User Created in successfully'
+                        .catch((error) => { 
+                          this.errors = error.response.data.errors                       
+                          if(error.response.status === 422) {                                
+                                this.errors = error.response.data.errors
+                                this.loadToast('error','Check the forms'); 
+                           }         
+                        })                  
+            },
+            createModel(model,form){                
+                RecordsRepository.createPost(model,this[form]).then((res) => {                        
+                        if(res.data.created) {                            
+                            this.fetchData(model)
+                            $('#'+form).modal('hide')
+                            this[form].reset()  
+                            this.loadToast('success',''+model+' created successfully');   
+                        }                                  
                         })
-                    this.$Progress.finish();
+                        .catch((error) => {                           
+                          this.errors = error.response.data.errors                       
+                          if(error.response.status === 422) {                                
+                                this.errors = error.response.data.errors
+                                this.loadToast('error','Check the forms'); 
+                           }         
+                        })    
+            },
+            deleteRecord(model,id){
+                swal.fire({title: 'Are you sure?',text: "You won't be able to revert this!",type: 'warning',showCancelButton: true,
+                confirmButtonColor: '#3085d6',cancelButtonColor: '#d33',confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                    RecordsRepository.delete(model,id).then(()=>{
+                    swal.fire('Deleted!','Your '+model+' has been deleted.','success')
+                    this.fetchData(model)                                         
+                }).catch(()=> {
+                    swal.fire("Failed!", "There was something wronge.", "warning");
+                    });
+                }
+                })        
+            },
+            loadToast(icon,text){ toast.fire({icon: icon,title: text }) }, 
 
-                })
-                .catch(()=>{
-
-                })
-    },
-    createSubStatus(){
-                this.$Progress.start();
-                this.formSubStatus.post('/v1/api/substatuses/create')
-                .then(()=>{
-                    //Fire.$emit('AfterCreate');
-                    $('#formSubStatus').modal('hide')
-                     this.loadData()
-                    toast({
-                        type: 'success',
-                        title: 'User Created in successfully'
-                        })
-                    this.$Progress.finish();
-
-                })
-                .catch(()=>{})
-    },
-    //////////////////////////////////////////////////////// UPDATE  Post     
-    updateTreatment(){
-                this.$Progress.start();
-                // console.log('Editing data');
-                this.formTreatment.put('/v1/api/treatments/update/'+this.formTreatment.id)
-                .then(() => {
-                    // success
-                    $('#formTreatment').modal('hide');
-                    this.loadData()
-                     swal(
-                        'Updated!',
-                        'Information has been updated.',
-                        'success'
-                        )
-                        this.$Progress.finish();
-                         Fire.$emit('AfterCreate');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////TABLE
+            test(model){
+              //let self = this;  
+              //var costam = self.rows_[model]
+              //console.log('costam'+model)
+              //console.log('costam'+this.model)
+            },
+            onChange_formTreatment(queryParams) {
+                var model1
+                this.queryParams = queryParams                                   
+                this.fetchData(model1='treatments');                   
+            },
+            onChange_formStatus(queryParams) {
+                var model2
+                this.queryParams = queryParams                                   
+                this.fetchData(model2='statuses');                   
+            },
+                    
+            fetchData: async function(model) {
+                //console.log('ddd'+model)
+                let self = this;
+                this.serverParams = Object.assign({}, this.serverParams, this.queryParams) 
+                //console.log(this.serverParams)                        
+                //sorting params   
+                var params = { field: this.serverParams.sort[0].name,order: this.serverParams.sort[0].order }                       
+                this.querySorting = Object.keys(params).map(key => key + '=' + params[key]).join('&')
+                // filter params
+                var filterParams = []
+                this.serverParams.filters.forEach(element => {                   
+                    if(element.type==='simple'){
+                    filterParams.push(element.name+'='+ element.text)
+                    }else{
+                    filterParams.push(element.name+'='+ element.selected_options)    
+                    }                   
                 });
+                //per page
+                var perpage = { perPage: this.serverParams.per_page };
+                var queryPer = Object.keys(perpage).map(key => key + '=' + perpage[key]).join('&'); 
+                //which page
+                var pageparams = { page: this.serverParams.page };
+                var page = Object.keys(pageparams).map(key => key + '=' + pageparams[key]).join('&'); 
 
-     },
-     updateStatus(){
-                this.$Progress.start();
-                // console.log('Editing data');
-                this.formStatus.put('/v1/api/statuses/update/'+this.formStatus.id)
-                .then(() => {
-                    // success
-                    $('#formStatus').modal('hide');
-                    this.loadData()
-                     swal(
-                        'Updated!',
-                        'Information has been updated.',
-                        'success'
-                        )
-                        this.$Progress.finish();
-                         Fire.$emit('AfterCreate');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
+                const { data } = await RecordsRepository.sortFilter(model,this.querySorting+'&'+filterParams.join('&')+'&'+queryPer+'&'+page); 
+                //self.rows_[model] = data.rows.data;
+                this[model] = data.rows.data;
+                self.total_rows = data.rows.total; 
+              
+            },
+           
 
-     },
-     
-     updateSubStatus(){
-                this.$Progress.start();
-                // console.log('Editing data');
-                this.formSubStatus.put('/v1/api/substatuses/update/'+this.formSubStatus.id)
-                .then(() => {
-                    // success
-                    $('#formSubStatus').modal('hide');
-                    this.loadData()
-                     swal(
-                        'Updated!',
-                        'Information has been updated.',
-                        'success'
-                        )
-                        this.$Progress.finish();
-                         Fire.$emit('AfterCreate');
-                })
-                .catch(() => {
-                    this.$Progress.fail();
-                });
-
-     },
-     /////////////////////////////////////////////////////////////DELETE
-     deleteRecord(item,model){
-        swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-        // Send request to the server
-        if (result.value) {
-            byMethod('delete','v1/api/'+model+'/delete/'+item.id).then(()=>{
-            swal.fire('Deleted!','Your file has been deleted.','success')
-            //this.getApi('this.apiList+'?page='+this.page')  
-            //this.$router.push('/globalsettings') 
-             this.loadData()
-                                                
-        }).catch(()=> {
-            swal.fire("Failed!", "There was something wronge.", "warning");
-            });
-        }
-        })
-    },
-
-    /////////////////////////////////////////////////////
-
-
-
-
-    modelSettings(settings){
-        //return name
-        this.settings = settings;
-        this.urlList = settings.urlList
-        this.urlEdit = settings.urlEdit
-        //
-        this.apiList = settings.apiList
-        this.apiDelete = settings.apiDelete
-        //console.log(settings)  
-    },
-    showModal() {
-         //$("#tasksModal").modal("show")
-         $("#addNew2").modal("show")    
-         
-        //this.$router.push(this.urlList+'/'+item.id+'/edit')
-    },
-    newModal(){
-        //this.editmode = false;
-        this.form.reset();
-        $('#addNew2').modal('show');
-    },
-
-
-    hideModal(per){
-      $("#tasksModal").modal("hide")
-    //    $('#calendar').fullCalendar('removeEvents', per.itemid)     
-    //   this.unassignedtasks.push({
-    //     title: per.content,
-    //     start: '2015-11-20T08:30:00',
-    //     end: '2015-11-20T08:30:00',
-    //     statuses:'',
-    //     color: '#C2185B',
-    //     locations:'',
-    //   });
-    },
-    modelView(item) {        
-        this.$router.push(this.urlList+'/'+item.id)
-    },
-   
-    setData(res) {
-        //Vue.set(this.$data, 'model', res.data)
-        this.treatments = res.data.treatments
-        this.statuses = res.data.statuses.data
-        this.substatuses = res.data.substatuses.data
-        //console.log(res.data)
-    },
-    // nextPage() {
-    //     if(this.model.next_page_url) {
-    //         //console.log(this.model.next_page_url)
-    //         const query = Object.assign({}, this.$route.query)
-    //         query.page = query.page ? (Number(query.page) + 1) : 2
-
-    //         this.$router.push({
-    //             path: this.urlList,
-    //             query: query
-    //         })
-    //     }
-    // },
-    // prevPage () {
-    //     if(this.model.prev_page_url) {
-    //         const query = Object.assign({}, this.$route.query)
-    //         query.page = query.page ? (Number(query.page) - 1) : 1
-
-    //         this.$router.push({
-    //             path: this.urlList,
-    //             query: query
-    //         })
-    //     }
-    // },
-    checkThis(cos) {
-    return photo
-    },
-    getApi(url){
-        get(url)
-        .then((res) => {
-            this.setData(res)                   
-        })
-    },
-    
-
-
-
+        }//meth
+        
     }
-}
 </script>
+
+<style>
+.my_id{
+    width:10%
+}
+.my_title{
+    width:50%
+}
+
+.table-active .form-control{
+display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 200;
+    line-height: 1.2;
+    color: #495057;
+    background-color:#fff;
+    background-clip: padding-box;
+    border: 1px solid  #ced4da;
+    border-radius: 0.25rem;
+    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.table{
+    font-size:14px;
+}
+.table th, .table td {
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid 
+    #dee2e6;
+}
+.table th, .table td {
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.table th, .table td {
+    padding: 0.5rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.text-center {
+    text-align: center !important;
+}
+</style>

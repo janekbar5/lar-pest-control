@@ -30,12 +30,12 @@ class Task extends Model implements Auditable, Searchable
     //////////////////////////////////////////
     protected $appends = [
         //'color','firstPhoto','extendedProps','textColor',
-		'color','firstPhoto','location'
+		'firstPhoto','location'
 		//'color','firstPhoto',
     ];	
-    function getColorAttribute() {
+    /* function getColourAttribute() {
         return $this->statuses->colour;   
-    }
+    } */
     function getfirstPhotoAttribute()
     {        
         return $this->photos->first();	  

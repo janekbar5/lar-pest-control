@@ -1,26 +1,28 @@
 <template>
     <div id="app">
-        <vue-bootstrap4-table :rows="rows"
-                              :columns="columns"
-                              :config="config"
-                              @on-change-query="onChangeQuery"
-                              :total-rows="total_rows"
-                              :actions="actions"
-                              @on-download="newRecord"
-                              >
+        <vue-bootstrap4-table 
+        :rows="rows"        
+        :columns="columns"
+        :config="config"
+        @on-change-query="onChangeQuery"
+        :total-rows="total_rows"
+        :actions="actions"
+        @on-download="newRecord"
+        >
 
                               
           <template slot="photos" slot-scope="props">  
-           <img v-if="props.row.photos[0] == null" src="https://dummyimage.com/60x50/807c80/fff" style="width:60px;height:50px">
-           <img v-else :src="'images/thumb_medium-' + props.row.photos[0].path" style="width:60px;height:50px" /> 
+           <img v-if="props.row.photos[0] == null" src="https://dummyimage.com/50x40/807c80/fff" style="width:50px;height:40px">
+           <img v-else :src="'images/thumb_medium-' + props.row.photos[0].path" style="width:50px;height:40px" /> 
          </template> 
 
           <template slot="locations" slot-scope="props">          
            {{ props.row.locations.title }}        
          </template>
 
-         <template slot="substatuses" slot-scope="props">          
-           {{ loadSubstatuses(props)}}        
+         <template slot="statuses" slot-scope="props">          
+           <!-- {{ loadStatuses(props)}}  -->             
+           <small class="badge" v-bind:style="{ 'background-color': props.row.statuses.colour }"><i class="fa fa-clock"></i> {{props.row.statuses.title}}</small>     
          </template> 
 
         <template slot="actions" slot-scope="props"> 
@@ -48,13 +50,13 @@
                      {label: "Id",name: "id",filter: {},sort: true,column_classes: "my_id",initial_sort: true, initial_sort_order: "asc" }, 
                      {label: "Photo",name: "id",slot_name: "photos"}, 
                      //Own Text                     
-                     {label: "Title",name: "title-t",filter: {type: "simple",placeholder: "title",},sort: true },   
+                     {label: "Title",name: "title-t",filter: {type: "simple",placeholder: "Title",},sort: true },   
                      {label: "Location",name: "location_id",slot_name: "locations",filter: {type: "simple",placeholder: "Location"},sort: true},                   
-                     {label: "Start",name: "start-t",filter: {type: "simple",placeholder: "start"},sort: true },
-                     {label: "End",name: "end-t",filter: {type: "simple",placeholder: "end"},sort: true },
+                     {label: "Start",name: "start-t",filter: {type: "simple",placeholder: "Start"},sort: true },
+                     {label: "End",name: "end-t",filter: {type: "simple",placeholder: "End"},sort: true },
                      //Own Number
-                     {label: "Price",name: "price-n",filter: {type: "simple",placeholder: "price"},sort: true },
-                     {label: "Status",name: "status_id-n",slot_name: "substatuses", filter: {type: "select", mode: "single",closeDropdownOnSelection: true,placeholder: "Status",options: [
+                     {label: "Price",name: "price-n",filter: {type: "simple",placeholder: "Price"},sort: true },
+                     {label: "Status",name: "status_id-n",slot_name: "statuses", filter: {type: "select", mode: "single",closeDropdownOnSelection: true,placeholder: "Status",options: [
                         {"name": "New","value": 1},
                         {"name": "Done","value": 2},
                         {"name": "Not Done","value": 3},
@@ -64,7 +66,7 @@
                      {label: "Actions",name: "id",slot_name: "actions"},              
                 ],
                 actions: [ { btn_text: "New Task", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],
-                config: { server_mode: true,show_reset_button: true,show_refresh_button: true,global_search: {visibility: false,},per_page: 20,per_page_options: [20, 40, 60, 80], },
+                config: { server_mode: true,show_reset_button: true,show_refresh_button: false,global_search: {visibility: false,},per_page: 20,per_page_options: [20, 40, 60, 80], },
                 queryParams: {sort: [],filters: [],global_search: "",per_page: 20,page: 1,},
                 total_rows: 0,
                 //////
@@ -74,12 +76,10 @@
         mounted() {
             this.fetchData();
         },
-        methods: {
-            getPhotos(props) {
-                //return props.row.photos[0] == null ? <img src="https://dummyimage.com/60x50/807c80/fff" style="width:60px;height:50px"> : <img v-else src=images/thumb_medium-' + props.row.photos[0].path+' style="width:60px;height:50px" />       
-            }, 
-            loadSubstatuses(props){
-               return props.row.statuses.title               
+        methods: {            
+            loadStatuses(props){
+               //return props.row.statuses.title      
+               //return '<span class="badge badge-info right">2</span>'         
             },
             newRecord() {        
                 this.$router.push(this.model+'/create')
@@ -146,5 +146,46 @@
 <style>
 .my_id{
     width:5%
+}
+
+.table-active .form-control{
+display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 200;
+    line-height: 1.2;
+    color: #495057;
+    background-color:#fff;
+    background-clip: padding-box;
+    border: 1px solid  #ced4da;
+    border-radius: 0.25rem;
+    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.table{
+    font-size:14px;
+}
+.table th, .table td {
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid 
+    #dee2e6;
+}
+.table th, .table td {
+    padding: 0rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.table th, .table td {
+    padding: 0.5rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.text-center {
+    text-align: center !important;
 }
 </style>

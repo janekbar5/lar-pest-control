@@ -1,13 +1,14 @@
 <template>
   <div>
-      
-                 <section  class="content"> 
+      unassignedtasks {{ unassignedtasks }}
+      <!-- assignedtasks {{ assignedtasks }} -->
+      events {{ events }}
+    <!-- <section  class="content"> 
 
-      <div class="container-fluid">      
-        <div class="row">
-          
-          <div class="col-lg-3 col-6">
-           
+     <div class="container-fluid">      
+        <div class="row">     
+
+          <div class="col-lg-3 col-6">           
             <div class="small-box">
               <div class="inner">
                 <h3>{{unassignedtasksCount}}</h3>
@@ -65,7 +66,9 @@
         </div>
          
       </div>
-    </section> 
+    </section>  -->
+
+
       <div class="row">
               <div class="col-md-12">  
                     <div class="card">
@@ -239,7 +242,7 @@ export default {
     var $this = this;
     return {
       editmode: false,
-      unassignedtasks:[],
+      unassignedtasks:[],assignedtasks:[],
       value:'',
       events: [],
       location:'',
@@ -254,8 +257,8 @@ export default {
       //
       //start:'',     
       config: {          
-        defaultView: "agendaWeek",
-        //defaultView: "month",
+        //defaultView: "agendaWeek",
+        defaultView: "month",
         editable: true,
         droppable: true,
         eventLimit: true,
@@ -441,7 +444,7 @@ export default {
       console.log(currentMonthStartDate); // the start date of the current month after changing month by clicking the '<'(previous) or '>'(next) button
     },
     loadStatistics(){
-      axios.get('/v1/api/home/loadstatistics?start='+this.start+'&end='+this.end).then((res) => {
+      axios.get('/v1/api/home/loadstatistics?start-t='+this.start+'&end-t='+this.end).then((res) => {
       if(res.data) {       
           this.setStats(res)
       }})
@@ -452,7 +455,7 @@ export default {
     })
     },
     loadCalendar(){
-      axios.get('/v1/api/home/admincalendar?start='+this.start+'&end='+this.end).then((res) => {
+      axios.get('/v1/api/home/admincalendar?start-t='+this.start+'&end-t='+this.end).then((res) => {
       if(res.data) {       
           this.setData(res)
       }})
@@ -477,8 +480,7 @@ export default {
     dayClick(date, jsEvent, view){ 
     },
     setData(res) { 
-      this.unassignedtasks = res.data.unassignedtasks
-      
+      this.unassignedtasks = res.data.unassignedtasks      
       this.assignedtasks = res.data.assignedtasks
       this.events = res.data.assignedtasks              
       this.locations = res.data.alllocations
