@@ -41,11 +41,8 @@ class BackendRepository implements BackendRepositoryInterface
                    ->first(); 
     }    
     public function getAllTreatments(){  //Admin only
-        return Treatment::
-		//where('user_id', '=', $user_id)  
-                  orderBy('created_at', 'desc')
-                  //->withTrashed()
-                  //->paginate(10);
+        return Treatment::		  
+                  orderBy('created_at', 'desc')                  
 				  ->get();
     }
 	
@@ -63,14 +60,10 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations')
-				  ->where('status_id-n', '=', 1)
-				  ->whereNull('start-t')
-				  ->whereNull('end-t')
-                  ->with('statuses')
-				  /* ->whereHas('statuses',function($query) {                
-						 $query->where('status_id', '=', 1);                    
-					}) */
-                  //->with('selectedUsers') 
+				  ->where('status_id_n', '=', 1)
+				  ->whereNull('start_t')
+				  ->whereNull('end_t')
+                  ->with('statuses')				 
                   ->doesntHave('users')    
                   ->get(); 
     }
@@ -78,9 +71,9 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations')
-				  ->where('status_id-n', '=', 1)
-				  ->whereNull('start-t')
-				  ->whereNull('end-t')
+				  ->where('status_id_n', '=', 1)
+				  ->whereNull('start_t')
+				  ->whereNull('end_t')
 				  ->where('created_at', '>=', $start)
                   ->where('created_at', '<', $end)
                   ->with('statuses')
@@ -96,10 +89,10 @@ class BackendRepository implements BackendRepositoryInterface
                   //orderBy('created_at', 'desc')
                   with('locations')
 				  //->where('status_id', '=', 1)
-				  ->whereNotNull('start-t')
-				  ->whereNotNull('end-t')
-				  ->where('start-t', '>=', $start)
-                  ->where('end-t', '<', $end)
+				  ->whereNotNull('start_t')
+				  ->whereNotNull('end_t')
+				  ->where('start_t', '>=', $start)
+                  ->where('end_t', '<', $end)
                   //->with('statuses')
 				  /* ->whereHas('statuses',function($query) {                
 						 $query->where('status_id', '=', 1);                    
@@ -110,8 +103,8 @@ class BackendRepository implements BackendRepositoryInterface
     }
     public function getAssignedTasks(){
         return Task::  
-                    whereNotNull('start-t')
-				  ->whereNotNull('end-t')
+                    whereNotNull('start_t')
+				  ->whereNotNull('end_t')
                   ->with('locations')
                   ->with('statuses')
                   ->with('users')  //display users array
@@ -149,7 +142,7 @@ class BackendRepository implements BackendRepositoryInterface
 		return	Task::with(['users'])                        
             ->whereHas('users',function($query) use($id){                
                  $query->where('user_id', '=', \Auth::user()->id);
-				 $query->where('status_id-n', '=', $id);
+				 $query->where('status_id_n', '=', $id);
             })            
             ->get();
     }
@@ -201,7 +194,7 @@ class BackendRepository implements BackendRepositoryInterface
                   ->paginate(10); 
     }
     public function getSubStatusesByStatus(){
-        return SubStatus::where('status_id-n', '=', $id)   
+        return SubStatus::where('status_id_n', '=', $id)   
                   ->orderBy('created_at', 'desc')
                   ->paginate(10); 
     }
@@ -214,7 +207,7 @@ class BackendRepository implements BackendRepositoryInterface
 		 return	User::with('selectedTasks')
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
 				       ->WhereDoesntHave('selectedTasks', function($q) use($date) {				   
-				       $q->where('start-t','LIKE', '%'.$date.'%'); 
+				       $q->where('start_t','LIKE', '%'.$date.'%'); 
 				   })				
 				   ->get(); 
 

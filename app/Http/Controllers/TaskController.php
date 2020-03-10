@@ -28,30 +28,24 @@ class TaskController extends Controller
         $this->im = $im;
     }    
     	
-    /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    /* public function index()    {       
-        $tasks = $this->br->getAllTasks();       
-        return response()->json(['results' => $tasks]);
-       
-    } */
+    /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX    
 	public function index()    {       
 		
-		$tasks = Task::with('photos');
+		$tasks = Task::with('photos','statuses');
 		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
 		$tasks = $tasks->orderBy(request('field'),request('order'));
 		////////////////////////////////////////////////////////////Own Filter Loop
 		$count = 0;
 		foreach($_GET as $key => $value){
 		$count++;
-			if($count > 2){ //skipping first 2 and last 2 only filters needed
-				if($key=='perPage' || $key=='page'){
-				}elseif(strpos($key, '-')){
+			if($count > 4){ //skipping first 4 				
+				if(strpos($key, '_t') || strpos($key, '_n') ){
 				$tasks = $tasks->where($key,'LIKE', '%'.$value.'%');				
 				}				
 			}
 		}
-		////////////////////////////////////////////////////////////Foreign Filters
-		if(request('location_id')){
+		////////////////////////////////////////////////////////////Foreign Filters NO -
+		if(request('location_id')){ //foreach $_GET if contain _id
             $tasks = $tasks->whereHas('locations',function($query) { $query->where('title','LIKE', '%'.request('location_id').'%');});       
         }
         /////////////////////////////////////////////////////////////Foreign Order
@@ -70,7 +64,7 @@ class TaskController extends Controller
 	public function taskHistory()
     {       
 		$tasks = Task::with('locations.clients')
-		               ->whereIn('status_id', array(2))
+		               ->whereIn('status-id', array(2))
 					   ->get();
 		return response()
                ->json([ 
@@ -146,7 +140,7 @@ class TaskController extends Controller
         //dd( $request->all() );
         $fv = $this->validate($request, $this->vr->taskUpdate());        
         $task = Task::create(array_merge($request->all(), [
-		'user_id' => \Auth::user()->id,		
+		'user-id' => \Auth::user()->id,		
 		]));    
 		
         return ['created' => 'true','id' => $task->id];
@@ -209,7 +203,7 @@ class TaskController extends Controller
                             //->doesnthave('tasks')
                             //->whereDoesntHave('tasks')
                             ->whereDoesntHave('tasks', function($q) use($date) {                   
-                               $q->where('start','LIKE', '%'.$date.'%'); 
+                               $q->where('start_t','LIKE', '%'.$date.'%'); 
                             })
                             ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
                             ->get();
@@ -265,12 +259,12 @@ class TaskController extends Controller
          ->whereHas('users',function($query) {                
             $query->where('user_id', '=', \Auth::user()->id);                    
          })
-		->whereBetween('start', [now(), now()->addDays(60)])
-		->orderBy('start','asc')		 
+		->whereBetween('start_t', [now(), now()->addDays(60)])
+		->orderBy('start_t','asc')		 
 		//->get(['status_id','title','start','end'])
 		->get()		
 		->groupBy(function($date) {
-			return Carbon::parse($date->start)->format('yy-m-d'); // grouping by years			
+			return Carbon::parse($date->start-t)->format('yy-m-d'); // grouping by years			
 		});  
 		
 		
@@ -289,8 +283,7 @@ class TaskController extends Controller
     {
 	 //dd($request->input('taskid'));
 	 
-	 if($request->has('taskid') && $request->has('statusid')){
-	    
+	 if($request->has('taskid') && $request->has('statusid')){	    
 		 $task = Task::where('id','=',$request->input('taskid'))->first();
 		 //dd($task);
 		 $task->status_id = request('statusid');
@@ -302,9 +295,7 @@ class TaskController extends Controller
 	 
 	 return response()
                ->json([ 
-               'saved' => $saved,
-               //'statuses'=> $statuses,
-               //'filterAllStatuses'=> $filterAllStatuses,
+               'saved' => $saved,              
                ]);
 	 
 	}
@@ -312,18 +303,28 @@ class TaskController extends Controller
 	//  http://www.lar-pest-control.test/v1/api/tasks/getfreefieldusersfordate?start=2020-02-17 07:21&end=2020-02-17 15:21
 	public function getFreeFieldUsersForDate(){ 
 	       $startTime = request('start-t');
-		   $endTime = request('end-t');		 
+		   $endTime = request('end-t');	
+           //dd($startTime);
 		   $allAvailableFieldUsers = User::with('tasks')
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })
 					   ->WhereDoesntHave('tasks', function ($q) use ( $startTime, $endTime) {
 						$q
-						->whereRaw("start-t >= '$startTime' AND start-t < '$endTime'")
-						->orwhereRaw("start-t <= '$startTime' AND end-t > '$endTime'")
-						->orwhereRaw("end-t > '$startTime' AND end-t <= '$endTime'")
-						->orwhereRaw("start-t >= '$startTime' AND end-t <= '$endTime'")
-						;
+						  /*->whereRaw("start_t >= '$startTime' AND start_t < '$endTime'")
+						->orwhereRaw("start_t <= '$startTime' AND end_t > '$endTime'")
+						->orwhereRaw("end_t > '$startTime' AND end_t <= '$endTime'")
+						->orwhereRaw("start_t >= '$startTime' AND end_t <= '$endTime'");*/
+                          ->where('start_t', '>=', $startTime)->orwhere('start_t', '<', $endTime)
+                        ->orwhere('start_t', '<=', $startTime)->orwhere('end_t', '>', $endTime)
+                        ->orwhere('end_t'   ,'>' , $startTime)->orwhere('end_t', '<=', $endTime)    
+                        ->orwhere('start_t', '>=', $startTime)->orwhere('end_t', '<=', $endTime); 
+                            
+                            
+						/*->orwhere("start_t <= '$startTime' AND end_t > '$endTime'")
+						->orwhere("end_t > '$startTime' AND end_t <= '$endTime'")
+						->orwhere("start_t >= '$startTime' AND end_t <= '$endTime'");*/
 					})
 				   ->get(); 
+       
 			return response()
                ->json([ 
 			   'count'=> $allAvailableFieldUsers->count(),

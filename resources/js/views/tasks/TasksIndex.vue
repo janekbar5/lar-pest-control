@@ -50,13 +50,14 @@
                      {label: "Id",name: "id",filter: {},sort: true,column_classes: "my_id",initial_sort: true, initial_sort_order: "asc" }, 
                      {label: "Photo",name: "id",slot_name: "photos"}, 
                      //Own Text                     
-                     {label: "Title",name: "title-t",filter: {type: "simple",placeholder: "Title",},sort: true },   
+                     {label: "Title",name: "title_t",filter: {type: "simple",placeholder: "Title",},sort: true },   
                      {label: "Location",name: "location_id",slot_name: "locations",filter: {type: "simple",placeholder: "Location"},sort: true},                   
-                     {label: "Start",name: "start-t",filter: {type: "simple",placeholder: "Start"},sort: true },
-                     {label: "End",name: "end-t",filter: {type: "simple",placeholder: "End"},sort: true },
+                     {label: "Start",name: "start_t",filter: {type: "simple",placeholder: "Start"},sort: true },
+                     {label: "End",name: "end_t",filter: {type: "simple",placeholder: "End"},sort: true },
                      //Own Number
-                     {label: "Price",name: "price-n",filter: {type: "simple",placeholder: "Price"},sort: true },
-                     {label: "Status",name: "status_id-n",slot_name: "statuses", filter: {type: "select", mode: "single",closeDropdownOnSelection: true,placeholder: "Status",options: [
+                     {label: "Price",name: "price_n",filter: {type: "simple",placeholder: "Price"},sort: true },
+                     {label: "Status",name: "status_id_n",slot_name: "statuses", filter: {type: "select", mode: "single",closeDropdownOnSelection: true,placeholder: "Status",options: [
+                        {"name": "All","value": null},
                         {"name": "New","value": 1},
                         {"name": "Done","value": 2},
                         {"name": "Not Done","value": 3},
@@ -112,6 +113,7 @@
             },
             fetchData: async function() {
                 let self = this;
+                this.$Progress.start()
                 this.serverParams = Object.assign({}, this.serverParams, this.queryParams) 
                 //console.log(this.serverParams)                        
                 //sorting params   
@@ -133,8 +135,9 @@
                 var pageparams = { page: this.serverParams.page };
                 var page = Object.keys(pageparams).map(key => key + '=' + pageparams[key]).join('&'); 
 
-                const { data } = await RecordsRepository.sortFilter(this.model,this.querySorting+'&'+filterParams.join('&')+'&'+queryPer+'&'+page); 
+                const { data } = await RecordsRepository.sortFilter(this.model,this.querySorting+'&'+queryPer+'&'+page+'&'+filterParams.join('&')); 
                 self.rows = data.rows.data;
+                this.$Progress.finish()
                 self.total_rows = data.rows.total;      
             }
 

@@ -13,17 +13,18 @@
                     :class="per.price"
                     :alt="per.location_id"
                     :data-title="per.title"
-                    :data-price="per.price" 
-                    :data-start="per.start|formatDateNoSeconds" 
-                    :data-end="per.end|formatDateNoSeconds" 
-                    :data-status_id="per.status_id" 
+                    :data-price="per.price_n" 
+                    :data-start="per.start_t|formatDateNoSeconds" 
+                    :data-end="per.end_t|formatDateNoSeconds" 
+                    :data-status_id="per.status_id_n" 
                     :data-location_id="per.location_id" 
                     v-bind:style="{ 'background-color': per.statuses.colour }" 
                     class="fc-event" v-for="(per, idx) in unassignedtasks" 
                     v-bind:key="idx" v-bind:id="per.id">
 
                     {{ per.title }} </br>
-                    {{ per.locations.title }} {{ per.start | formatDayOnly }} {{ per.start | formatDate }} {{ per.end | formatDate }}  
+                    {{ per.locations.title }} {{ per.start | formatDayOnly }} {{ per.start_t | formatDate }} {{ per.end_t | formatDate }} </br>
+                    per.status_id {{per.status_id_n}} location_id {{per.location_id}}  
                     </div>
                     </div>
                       
@@ -164,7 +165,7 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <input v-model="form.title" type="text" name="title" id="title" ref="title"
+                        <input v-model="form.title_t" type="text" name="title" id="title" ref="title"
                             placeholder="title"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('title') }" disabled>
                         <has-error :form="form" field="title"></has-error>
@@ -174,17 +175,16 @@
                                 <div class="col-md-6">                                   
                                     <div class="form-group">
                                         <label>Start</label>     
-                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start"  :class="{ 'is-invalid': form.errors.has('start') }" />   
-                                        <!--  <datetime type="datetime" v-model="form.start" format="yyyy-MM-dd HH:mm" class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"></datetime>   -->
-                                        <has-error :form="form" field="start"></has-error>
+                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start_t"  :class="{ 'is-invalid': form.errors.has('start_t') }" />                                           <!-
+                                        <has-error :form="form" field="start_t"></has-error>
                                          
                                      </div>  
                                 </div> 
                                 <div class="col-md-6">                                   
                                     <div class="form-group">
                                         <label>End</label>     
-                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': form.errors.has('end') }" />   
-                                         <has-error :form="form" field="end"></has-error>
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end_t" class="" :class="{ 'is-invalid': form.errors.has('end_t') }" />   
+                                         <has-error :form="form" field="end_t"></has-error>
                                          
                                      </div>  
                                 </div>                                  
@@ -195,7 +195,7 @@
                      
                     </div>
 
-                    <div style="display:none">
+                    <div style="display:block">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
@@ -206,16 +206,16 @@
 
                     
                         <div class="form-group">
-                            <input v-model="form.price" type="text" name="price" id="price" ref="price"
+                            <input v-model="form.price_n" type="text" name="price_n" id="price_n" 
                                 placeholder="price"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('price') }">
-                            <has-error :form="form" field="price"></has-error>
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('price_n') }">
+                            <has-error :form="form" field="price_n"></has-error>
                         </div>
                         <div class="form-group">
-                            <input v-model="form.status_id" type="text" name="status_id" id="status_id" ref="status_id"
+                            <input v-model="form.status_id_n" type="text" name="status_id" id="status_id_n" 
                                 placeholder="status_id"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('status_id') }">
-                            <has-error :form="form" field="status_id"></has-error>
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('status_id_n') }">
+                            <has-error :form="form" field="status_id_n"></has-error>
                         </div>
                         <div class="form-group">
                             <input v-model="form.location_id" type="text" name="location_id" id="location_id" ref="location_id"
@@ -331,9 +331,9 @@ export default {
             $("#calendar").fullCalendar("removeEvents", event._id);
             var el = $("<div class='fc-event'>")
               .appendTo("#external-events-listing")
-              .text(event.title)
-              .text(event.start)
-              .text(event.end);
+              .text(event.title_t)
+              .text(event.start_t)
+              .text(event.end_t);
               el.draggable({
               zIndex: 999,
               revert: true,

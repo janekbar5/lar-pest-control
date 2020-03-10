@@ -30,12 +30,12 @@ class Task extends Model implements Auditable, Searchable
     //////////////////////////////////////////
     protected $appends = [
         //'color','firstPhoto','extendedProps','textColor',
-		'firstPhoto','location'
+		'colour','firstPhoto','location'
 		//'color','firstPhoto',
     ];	
-    /* function getColourAttribute() {
+    function getColourAttribute() {
         return $this->statuses->colour;   
-    } */
+    } 
     function getfirstPhotoAttribute()
     {        
         return $this->photos->first();	  
@@ -47,17 +47,16 @@ class Task extends Model implements Auditable, Searchable
     protected $fillable = [
 	    'location_id',
         'user_id', 
-		'status_id-n',
-		'substatus_id-n',
-		'price_id-n',
-		'title-t',
+		'status_id_n',
+		'substatus_id_n',
+		'price_id_n',
+		'title_t',
 		'description',
-        'comment',		
-        //'deadline',
-		'price-n',
-		'start-t',
-		'end-t',
-		'last_service-t',
+        'comment',
+		'price_n',
+		'start_t',
+		'end_t',
+		'last_service_t',
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT
     // User-->belongsToMany-->Task   <==>  Task-->belongsToMany-->User
@@ -76,7 +75,7 @@ class Task extends Model implements Auditable, Searchable
     }
     public function statuses()
     {
-        return $this->belongsTo('App\Status', 'status_id-n');		
+        return $this->belongsTo('App\Status', 'status_id_n');		
     }
     /////////////////////////////////////////////////////////////////HASMANY    //    
     public function photos()
