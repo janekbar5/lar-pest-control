@@ -58,47 +58,34 @@ class BackendRepository implements BackendRepositoryInterface
     }
     public function getUnassignedTasks(){
         return Task::  
-                  //orderBy('created_at', 'desc')
-                  with('locations')
+                  with('locations','statuses','users') 
 				  ->where('status_id_n', '=', 1)
-				  ->whereNull('start_t')
-				  ->whereNull('end_t')
-                  ->with('statuses')				 
+				  //->whereNull('start_t')
+				  //->whereNull('end_t')                 				 
                   ->doesntHave('users')    
                   ->get(); 
     }
 	public function getUnassignedTasksForPeriod($start,$end){
         return Task::  
                   //orderBy('created_at', 'desc')
-                  with('locations')
+                  with('locations','statuses','users')
 				  ->where('status_id_n', '=', 1)
-				  ->whereNull('start_t')
-				  ->whereNull('end_t')
+				  //->whereNull('start_t')
+				  //->whereNull('end_t')
 				  ->where('created_at', '>=', $start)
                   ->where('created_at', '<', $end)
-                  ->with('statuses')
-				  /* ->whereHas('statuses',function($query) {                
-						 $query->where('status_id', '=', 1);                    
-					}) */
-                  //->with('selectedUsers') 
+                  ->with('statuses')				 
                   ->doesntHave('users')    
                   ->get(); 
     }
 	public function getAssignedTasksForPeriod($start,$end){
-        return Task::  
-                  //orderBy('created_at', 'desc')
-                  with('locations')
-				  //->where('status_id', '=', 1)
+        return Task::
+                  with('locations')				 
 				  ->whereNotNull('start_t')
 				  ->whereNotNull('end_t')
 				  ->where('start_t', '>=', $start)
-                  ->where('end_t', '<', $end)
-                  //->with('statuses')
-				  /* ->whereHas('statuses',function($query) {                
-						 $query->where('status_id', '=', 1);                    
-					}) */
-                  ->with('users') 
-                  //->doesntHave('users')    
+                  ->where('end_t', '<', $end)                  
+                  ->with('users')                     
                   ->get(); 
     }
     public function getAssignedTasks(){

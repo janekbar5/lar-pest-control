@@ -27,13 +27,16 @@ class Task extends Model implements Auditable, Searchable
        $url = route('home.search', $this->id);         
        return new SearchResult($this, $this->company_name, $url);
     }
-    //////////////////////////////////////////
+	//////////////////////////////////////////////////////////
+	
+	
+    //////////////////////////////////////////////////////////
     protected $appends = [
         //'color','firstPhoto','extendedProps','textColor',
-		'colour','firstPhoto','location'
+		'color','firstPhoto','location','start','end','title'
 		//'color','firstPhoto',
     ];	
-    function getColourAttribute() {
+    function getColorAttribute() { // must be US color !!!
         return $this->statuses->colour;   
     } 
     function getfirstPhotoAttribute()
@@ -43,6 +46,15 @@ class Task extends Model implements Auditable, Searchable
 	function getLocationAttribute() {
         return $this->locations->title;
     } 
+	function getTitleAttribute() {
+        return $this->title_t;
+    }
+	function getStartAttribute() {
+        return $this->start_t;
+    }
+	function getEndAttribute() {
+        return $this->end_t;
+    }
 		    
     protected $fillable = [
 	    'location_id',

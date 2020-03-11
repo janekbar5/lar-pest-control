@@ -70,7 +70,7 @@
 
 
       <div class="row">
-              <div class="col-md-12">  
+              <div class="col-md-6">  
                     <div class="card">
                       <div class="card-header">
                         <!-- <h3 class="card-title">Bordered Table</h3> -->
@@ -103,7 +103,7 @@
         </div>
 
         <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-6">
 
  <div class="card">
                 
@@ -478,7 +478,11 @@ export default {
     },
 
     dayClick(date, jsEvent, view){ 
+      console.log(date + jsEvent + view)
     },
+     handleDateClick(arg) {
+      alert(arg.date)
+    }, 
     setData(res) { 
       this.unassignedtasks = res.data.unassignedtasks      
       this.assignedtasks = res.data.assignedtasks
@@ -505,9 +509,7 @@ export default {
     callModal() {        
       $("#addNew").modal("show")
     },   
-    handleDateClick(arg) {
-      alert(arg.date)
-    },  
+    
   },
 
   

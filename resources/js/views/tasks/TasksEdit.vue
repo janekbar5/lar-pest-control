@@ -42,16 +42,16 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Title</label>
-                                        <input v-model="form.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
-                                         <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
+                                        <input v-model="form.title_t" type="text" name="title_t" class="form-control" :class="{ 'is-invalid': errors.title_t }" >
+                                         <div class="alert alert-danger" v-if="errors.title_t"> {{errors.title_t[0]}}</div>
                                     </div>                                                                    
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Price</label>
-                                        <input v-model="form.price" type="text" name="price" class="form-control" :class="{ 'is-invalid': errors.price }" >
-                                         <div class="alert alert-danger" v-if="errors.price"> {{errors.price[0]}}</div>
+                                        <input v-model="form.price_n" type="text" name="price_n" class="form-control" :class="{ 'is-invalid': errors.price_n }" >
+                                         <div class="alert alert-danger" v-if="errors.price_n"> {{errors.price_n[0]}}</div>
                                     </div>                                                                    
                                 </div>
 
@@ -60,27 +60,24 @@
                             <div class="row">
                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Start</label>
-                                        <!-- <input v-model="form.start" type="text" name="start" class="form-control" :class="{ 'is-invalid': errors.start }" > -->
-                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start" class="" :class="{ 'is-invalid': errors.start }"  />
-                                         <div class="alert alert-danger" v-if="errors.start"> {{errors.start[0]}}</div>
+                                        <label>Start</label>                                        
+                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start_t" class="" :class="{ 'is-invalid': errors.start_t }"  />
+                                         <div class="alert alert-danger" v-if="errors.start_t"> {{errors.start_t[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                                            
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
-                                        <label>End</label>
-                                        <!-- <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" > -->
-                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': errors.end }" />
-                                         <div class="alert alert-danger" v-if="errors.end"> {{errors.end[0]}}</div>
+                                        <label>End</label>                                        
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end_t" class="" :class="{ 'is-invalid': errors.end_t }" />
+                                         <div class="alert alert-danger" v-if="errors.end_t"> {{errors.end_t[0]}}</div>
                                     </div>  
                                 </div>
                                 <div class="col-md-4">                                   
                                     <div class="form-group">
-                                        <label>Last Service</label>
-                                        <!-- <input v-model="form.end" type="text" name="end" class="form-control" :class="{ 'is-invalid': errors.end }" > -->
-                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.last_service" class="" :class="{ 'is-invalid': errors.last_service }" />
-                                         <div class="alert alert-danger" v-if="errors.last_service"> {{errors.last_service[0]}}</div>
+                                        <label>Last Service</label>                                      
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.last_service_t" class="" :class="{ 'is-invalid': errors.last_service_t }" />
+                                         <div class="alert alert-danger" v-if="errors.last_service_t"> {{errors.last_service_t[0]}}</div>
                                     </div>  
                                 </div>
                             </div>
@@ -117,26 +114,26 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                     <label>Status</label>
-                                            <select v-model="form.status_id" class="form-control"  :class="{ 'is-invalid': errors.status_id}">
+                                            <select v-model="form.status_id_n" class="form-control"  :class="{ 'is-invalid': errors.status_id_n}">
                                             <option value="">Select Status</option>
                                             <option v-for="status in statuses" :value="status.id">
                                                 {{status.title}}
                                             </option>
                                             </select>                                        
-                                            <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
+                                            <div class="alert alert-danger" v-if="errors.status_id_n"> {{errors.status_id_n[0]}}</div>
                                     </div>
                                   </div>   
                                 
-                                <div class="col-md-4" v-show="form.status_id == 3">
+                                <div class="col-md-4" v-show="form.status_id_n == 3">
                                     <div class="form-group">
                                     <label>Sub Status</label>
-                                            <select v-model="form.substatus_id" class="form-control"  :class="{ 'is-invalid': errors.substatus_id}">
+                                            <select v-model="form.substatus_id_n" class="form-control"  :class="{ 'is-invalid': errors.substatus_id_n}">
                                             <option value="">Select Sub Status</option>
                                             <option v-for="substatus in substatuses" :value="substatus.id">
                                                 {{substatus.title}}
                                             </option>
                                             </select>                                        
-                                            <div class="alert alert-danger" v-if="errors.substatus_id"> {{errors.substatus_id[0]}}</div>
+                                            <div class="alert alert-danger" v-if="errors.substatus_id_n"> {{errors.substatus_id_n[0]}}</div>
                                     </div>
                                   </div>   
                                
@@ -281,12 +278,12 @@
             
         },
         watch: {
-            'form.start': function(newVal1) {
+            'form.start_t': function(newVal1) {
                 //console.log('value changed from ' + newVal1);
                 this.newStart = newVal1
                 this.Search()  
             },
-            'form.end': function(newVal2) {              
+            'form.end_t': function(newVal2) {              
                 //console.log('value changed from ' + newVal2);
                 this.newEnd = newVal2
                 this.Search()            
@@ -306,7 +303,7 @@
             Search(){
             if (this.newStart && this.newEnd ) {
                 console.log('value changed from ' + this.newStart + this.newEnd );
-                axios.get('/v1/api/tasks/getfreefieldusersfordate?start='+this.newStart+'&end='+this.newEnd)
+                axios.get('/v1/api/tasks/getfreefieldusersfordate?start_t='+this.newStart+'&end_t='+this.newEnd)
                     .then((res) => {                        
                     this.setFreeUser(res) 
                 })   

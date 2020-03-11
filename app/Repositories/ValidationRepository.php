@@ -56,13 +56,13 @@ class ValidationRepository
     public function taskUpdate()
      {        
          $rules = array(
-            'title' => 'required',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/', 
+            'title_t' => 'required',
+            'price_n' => 'required|regex:/^\d+(\.\d{1,2})?$/', 
 			//'start' => 'required|date',			
 			//'end' => 'required|date|after:start|date_format:YYYY-MM-DD H:i',
 			//'end' => 'required|date|after:start',
 			'location_id' => 'required',
-			'status_id' => 'required',
+			'status_id_n' => 'required',
 			//'users' => 'required',
 			
          );        

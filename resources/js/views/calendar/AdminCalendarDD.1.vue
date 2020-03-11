@@ -286,11 +286,12 @@ export default {
     return {
       //isModalMounted: false,
       unassignedtasks:[],value:'',location:'',
-      events: [],
-      // events: [ // 
-      //  { title: 'event 1', start: '2020-03-01',end: '2020-03-02' },
-      //  { title: 'event 2', start: '2020-03-04',end: '2020-03-05' }
-      // ],
+      //events: [],
+      events: [ // initial event data
+       { title: 'event 1', start: '2020-03-01',end: '2020-03-02' },
+       { title: 'event 2', start: '2020-03-04',end: '2020-03-05' }
+      ],
+      //location2:'',  
       locations:[],locationdata:[],variableToPass:'',
       //
       tasksbydate:[], tasksbydate_date:'',allAvailableFieldUsers:[],
@@ -306,12 +307,12 @@ export default {
         //allDaySlot: false,
         //////////////////////////////////////////////////////////////////////
         eventRender(event, element) {  
-            if(event.end){
-              element.find('.fc-content').append('<b> '+event.end.format('HH:mm')+'</b>'); 
+            if(event.end_t){
+              element.find('.fc-content').append('<b> '+event.end_t.format('HH:mm')+'</b>'); 
             }
             if(event.users) {             
               event.users.forEach(function (item) {                   
-                  //element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
+                  element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
               });   
             }           
          },
@@ -360,7 +361,7 @@ export default {
  
 
   created() { 
-    this.loadCalendar() 
+    //this.loadCalendar() 
   },
 
   watch: {
@@ -437,7 +438,7 @@ export default {
                     //this.form.reset();                    
                     //this.clear()
                     $('#assignTaskToUserModal').modal('hide')                   
-                    this.loadCalendar()
+                   //this.loadCalendar()
                     toast({type: 'success', title: 'User Created in successfully'})
                    
                 })
@@ -587,7 +588,7 @@ export default {
 </script>
 
 <style>
-/* .fc-more-popover {
+.fc-more-popover {
     z-index: 2;
     width: 300px;
 }
@@ -618,5 +619,5 @@ export default {
 #external-events p input {
   margin: 0;
   vertical-align: middle;
-} */
+}
 </style>

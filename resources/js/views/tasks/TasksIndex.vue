@@ -1,15 +1,14 @@
 <template>
     <div id="app">
-        <vue-bootstrap4-table 
-        :rows="rows"        
-        :columns="columns"
-        :config="config"
-        @on-change-query="onChangeQuery"
-        :total-rows="total_rows"
-        :actions="actions"
-        @on-download="newRecord"
-        >
-
+            <vue-bootstrap4-table 
+            :rows="rows"        
+            :columns="columns"
+            :config="config"
+            @on-change-query="onChangeQuery"
+            :total-rows="total_rows"
+            :actions="actions"
+            @on-download="newRecord"
+            >
                               
           <template slot="photos" slot-scope="props">  
            <img v-if="props.row.photos[0] == null" src="https://dummyimage.com/50x40/807c80/fff" style="width:50px;height:40px">
@@ -20,9 +19,17 @@
            {{ props.row.locations.title }}        
          </template>
 
-         <template slot="statuses" slot-scope="props">          
-           <!-- {{ loadStatuses(props)}}  -->             
+         <template slot="statuses" slot-scope="props"> 
            <small class="badge" v-bind:style="{ 'background-color': props.row.statuses.colour }"><i class="fa fa-clock"></i> {{props.row.statuses.title}}</small>     
+         </template> 
+
+          <template slot="users" slot-scope="props">  
+              
+              <!-- {{ props.row.users.length > 0 ? '' :'' }}  -->
+            <div v-if="props.row.users.length > 0" >            
+            <small v-for="user in props.row.users" :key="user.data" class="badge badge-danger"><i class="fa fa-user"></i> {{user.name}}</small>   
+           </div>  
+           <div v-else ></div>     
          </template> 
 
         <template slot="actions" slot-scope="props"> 
@@ -64,6 +71,7 @@
                      ],
                      //init: {value : 2}
                      },sort: true },    
+                     {label: "User",name: "id",slot_name: "users"}, 
                      {label: "Actions",name: "id",slot_name: "actions"},              
                 ],
                 actions: [ { btn_text: "New Task", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],

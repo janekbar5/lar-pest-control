@@ -31,7 +31,7 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX    
 	public function index()    {       
 		
-		$tasks = Task::with('photos','statuses');
+		$tasks = Task::with('photos','statuses','users');
 		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
 		$tasks = $tasks->orderBy(request('field'),request('order'));
 		////////////////////////////////////////////////////////////Own Filter Loop
@@ -140,7 +140,7 @@ class TaskController extends Controller
         //dd( $request->all() );
         $fv = $this->validate($request, $this->vr->taskUpdate());        
         $task = Task::create(array_merge($request->all(), [
-		'user-id' => \Auth::user()->id,		
+		'user_id' => \Auth::user()->id,		
 		]));    
 		
         return ['created' => 'true','id' => $task->id];
@@ -302,8 +302,8 @@ class TaskController extends Controller
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//  http://www.lar-pest-control.test/v1/api/tasks/getfreefieldusersfordate?start=2020-02-17 07:21&end=2020-02-17 15:21
 	public function getFreeFieldUsersForDate(){ 
-	       $startTime = request('start-t');
-		   $endTime = request('end-t');	
+	       $startTime = request('start_t');
+		   $endTime = request('end_t');	
            //dd($startTime);
 		   $allAvailableFieldUsers = User::with('tasks')
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })
@@ -316,12 +316,7 @@ class TaskController extends Controller
                           ->where('start_t', '>=', $startTime)->orwhere('start_t', '<', $endTime)
                         ->orwhere('start_t', '<=', $startTime)->orwhere('end_t', '>', $endTime)
                         ->orwhere('end_t'   ,'>' , $startTime)->orwhere('end_t', '<=', $endTime)    
-                        ->orwhere('start_t', '>=', $startTime)->orwhere('end_t', '<=', $endTime); 
-                            
-                            
-						/*->orwhere("start_t <= '$startTime' AND end_t > '$endTime'")
-						->orwhere("end_t > '$startTime' AND end_t <= '$endTime'")
-						->orwhere("start_t >= '$startTime' AND end_t <= '$endTime'");*/
+                        ->orwhere('start_t', '>=', $startTime)->orwhere('end_t', '<=', $endTime);                        
 					})
 				   ->get(); 
        
