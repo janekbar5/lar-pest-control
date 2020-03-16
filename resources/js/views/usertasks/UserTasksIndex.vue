@@ -22,7 +22,7 @@
             <div class="layout-column"> </div>
              <div class="layout-column">  From {{day.start | formatDate}} To {{day.end | formatDate}} </div>
              <div class="layout-column">  {{day.title}} </div>
-             <div class="layout-column">  {{day.locations}}  </div>
+             <div class="layout-column">  {{day.locations.title}}  </div>
              <div class="layout-column"> <span style="width:100px;" v-bind:style="{ 'background-color': day.statuses.colour }"> {{day.statuses.title}} </span> </div>
              <div class="layout-column">  
                 <div class="field">                   

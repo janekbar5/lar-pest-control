@@ -21,68 +21,30 @@ class LocationController extends Controller
         $this->im = $im;
     }    
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    public function index(Request $request)
-    {       
+    public function index()    { 
+		$locations = Location::with('clients');			
+		$locations = $locations->orderBy(request('field'),request('order'));/////////////////Own Order ALWAYS EXIST		
+		$count = 0;//////////////////////////////////////////////////////////////////////////Own Filter Loop
+		foreach($_GET as $key => $value){
+		$count++;
+			if($count > 4){ //skipping first 4 				
+				if(strpos($key, '_t') || strpos($key, '_n') ){
+				$locations = $locations->where($key,'LIKE', '%'.$value.'%');				
+				}				
+			}
+		}
 		
-	    $location = Location::query();
-		///////////////////////Foreighn Filters
-		if(request('locations')){
-            $location = $location->whereHas('locations',function($query) { $query->where('title','LIKE', '%'.request('locations.title').'%');});       
-        }
-		/* if(request('surface')){
-            $location = $location->whereHas('cities',function($query) { $query->where('title','LIKE', '%'.request('surface').'%');});       
-        }
-		if(request('price')){
-            $location = $location->whereHas('attractiontypes',function($query) { $query->where('title','LIKE', '%'.request('price').'%');});       
-        }  */
-		
-		/////////////////Own Filter
-		if(request('title')){
-            $location = $location->where('title','LIKE', '%'.request('title').'%');       
-        }
-		if(request('surface')){
-            $location = $location->where('surface','LIKE', '%'.request('surface').'%');       
-        }
-		if(request('price')){
-            $location = $location->where('price','LIKE', '%'.request('price').'%');       
-        }
-		
-		/////////////////Own Order
-		if(request('field')=='id'){
-            $location = $location->orderBy(request('field'),request('order'));           
-        }
-        if(request('field')=='title'){
-            $location = $location->orderBy(request('field'),request('order'));           
-        }
-        if(request('field')=='surface'){
-            $location = $location->orderBy(request('field'),request('order'));           
-        }
-        if(request('field')=='price'){
-            $location = $location->orderBy(request('field'),request('order'));           
-        }
-		
-        
-        //////////////
-        if(request('field')=='country'){
-            $location = $location
-            ->join('countries','countries.id','=','location.country_id')->select('countries.title as regionName','location.*')
-            ->orderBy('regionName',request('sort'));
-        }
-        if(request('field')=='city'){
-            $location = $location
-            ->join('cities','cities.id','=','location.city_id')->select('cities.title as regionName','location.*')
-            ->orderBy('regionName',request('sort'));
-        }
-        if(request('field')=='attractiontype'){
-            $location = $location
-            ->join('attraction_types','attraction_types.id','=','location.attractiontype_id')->select('attraction_types.title as regionName','attractions.*')
-            ->orderBy('regionName',request('sort'));
-        }
-        
-        $location = $location->paginate(request('perPage'));  
-        return response()->json(['rows' => $location]);   
-				
-		
+		/* if(request('location_id')){ //foreach $_GET if contain _id //////////////////////////Foreign Filters NO -
+            $clients = $clients->whereHas('locations',function($query) { $query->where('title_t','LIKE', '%'.request('location_id').'%');});       
+        } */ 
+       
+        /* if(request('field')=='location_id'){ /////////////////////////////////////////////////////////////Foreign Order
+            $clients = $clients
+            ->join('locations','locations.id','=','clients.location_id')->select('locations.title as regionName','clients.*')
+            ->orderBy('regionName',request('order'));
+        }	 */
+        $locations = $locations->paginate(request('perPage'));  
+        return response()->json(['rows' => $locations]);		
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)
@@ -92,8 +54,7 @@ class LocationController extends Controller
         $allclients = $this->br->getAllClients();
         return response()
                ->json([ 
-			   'form' => $location,
-			   'address' => $location->address,
+			   'form' => $location,			   
 			   'alltreatments' => $alltreatments,
 			   'allclients' => $allclients,
 			   ]);   
@@ -187,9 +148,9 @@ class LocationController extends Controller
 	/**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH LOCATIONS
     public function searchLocations()
     {
-        $results = Location::with('treatments')->orderBy('title')		    
+        $results = Location::with('treatments')->orderBy('title_t')		    
             ->when(request('q'), function($query) {
-                $query->where('title', 'like', '%'.request('q').'%')				        
+                $query->where('title_t', 'like', '%'.request('q').'%')				        
 					  //->orWhere('person_name', 'like', '%'.request('q').'%')
                       //->orWhere('email', 'like', '%'.request('q').'%')
 					  ;                   

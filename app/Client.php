@@ -21,8 +21,8 @@ class Client extends Model implements Auditable, Searchable
 	protected $fillable = [  
         //'user_id',
         //'client_id',        
-        'active','phone','name','email','client_type','contract_number','vat_number','person_name','contract_start','contract_end',
-		'description','reccurence',
+        'active_n','phone_n','name_t','email_t','client_type_n','contract_number_n','vat_number_t','person_name_t','contract_start_t','contract_end_t',
+		'description','reccurence_id_n',
 		
 		
 		
@@ -31,11 +31,11 @@ class Client extends Model implements Auditable, Searchable
     protected $appends = ['text','locationscount','reccurence'];
     public function getTextAttribute()
     {
-        return $this->attributes['name']. ' - '
-		.$this->attributes['person_name']. ' - '
-		.$this->attributes['email']. ' - '
-		.$this->attributes['contract_number']. ' - '
-		.$this->attributes['vat_number'];
+        return $this->attributes['name_t']. ' - '
+		.$this->attributes['person_name_t']. ' - '
+		.$this->attributes['email_t']. ' - '
+		.$this->attributes['contract_number_n']. ' - '
+		.$this->attributes['vat_number_t'];
     }
 	//////////////////////////////////////////Soft delete	
     protected $dates = ['deleted_at'];
@@ -65,6 +65,6 @@ class Client extends Model implements Auditable, Searchable
     
     public function reccurences()
     {
-        return $this->belongsTo('App\Reccurence', 'reccurence_id');		
+        return $this->belongsTo('App\Reccurence', 'reccurence_id_n');		
     }
 }

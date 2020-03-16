@@ -1,78 +1,22 @@
-Pytania
-Reccurence???
-Add Clients location przy clientach
-////////////////Users Menu Access
-Admin           Dashboard   Clients(e,d)
-Desktop User    Dashboard   Clients(e)
-Field User      Dashboard   Clients(e)
-
-/////////////// History Log //// Soft Delete  // Searchable
----Users          ok              ok          ok             
----Treatment      ok              ok          ok 
----Location       ok              ok          ok 
----Clients        ok              ok          ok 
----Task
-/////////Crud   AddNew     Validation     Edit     Delete  
----Users        ok            ok          ok        ok
----Clients      
-
-///////////////////Crud Validation
-
-//////////////////Data Grid
+//////////Index/////Edit
 
 
 
-//done
-Global Settings Modals
-Field User Tasks complete
-Popup Locations number
-User Settings
-Drag Drop Assign
-Calendar Unassigned & New Tasks Only
-My Task details Field User Task SUBSTATUS - POLICY!!!!!!!!!!!!!!!!!!
-//////////////////////////
-//////19-02-2020
-TODO
-
-My Task prev next
-Locations Data Table 
-
-//////////////19-02-2020
-Task Photos Upload Field worker only
-
-Task history!!!!!!
-Users Grid table
-Form Validation
+Date Picker:
+https://github.com/mariomka/vue-datetime  
+https://mariomka.github.io/vue-datetime/
+https://github.com/bastienGranger/vue-material-datepicker#readme
 
 
 
-///////////////20-02-2020
-Autorise User to action!!!!!!!!!!!
-Fix calendar Dash vs Admin
-Statuses Correct!!!!!!!!!!!!!!
-Location address validation !!!
 
-//wieczor
-Field User prev next
-Todo change status
-Desktop Dash Calendar
-Task History
 
-////////////21-02-2020
-Users on map
-Api for mobile
-Leaflet users markers
-Field User on Map
 
-/////////////
-PDF
-Tasks Grid table
-Visible Menu!!!
-Is Company
-Task assigned users (Required?? or No)
-Drag Drop click edit
-References on DELETE!!!
-Location if deleted (not selectable)
+
+
+
+
+
 
 
 

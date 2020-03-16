@@ -1,79 +1,17 @@
 <template>
   <div>
-      unassignedtasks {{ unassignedtasks }}
-      <!-- assignedtasks {{ assignedtasks }} -->
-      events {{ events }}
-    <!-- <section  class="content"> 
-
-     <div class="container-fluid">      
-        <div class="row">     
-
-          <div class="col-lg-3 col-6">           
-            <div class="small-box">
-              <div class="inner">
-                <h3>{{unassignedtasksCount}}</h3>
-                <p>Unassigned Tasks</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        
-          <div class="col-lg-3 col-6">         
-            <div class="small-box">
-              <div class="inner">
-                <h3>{{assignedtasksCount}}</h3>
-                <p>Assigned Tasks</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        
-          <div class="col-lg-3 col-6">
-           
-            <div class="small-box">
-              <div class="inner">
-                <h3>0</h3>
-                <p>Total charges for today</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        
-          <div class="col-lg-3 col-6">
-           
-            <div class="small-box ">
-              <div class="inner">
-                <h3>{{charges}}</h3>
-
-                <p>Total charges</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-        
-        </div>
-         
-      </div>
-    </section>  -->
 
 
+      
+
+
+
+      
       <div class="row">
-              <div class="col-md-6">  
+              <div class="col-lg-6">  
                     <div class="card">
                       <div class="card-header">
-                        <!-- <h3 class="card-title">Bordered Table</h3> -->
+                      
                       </div>
                       <div class="card-body">                        
                           <button class="btn btn-secondary" @click="prev"><< Prev</button>
@@ -82,15 +20,11 @@
                         
                           <button class="btn btn-secondary" @click="changeView('month')">Month</button>
                           <button class="btn btn-secondary" @click="changeView('agendaWeek')">Week</button>
-                          <button class="btn btn-secondary" @click="changeView('agendaDay')">Day</button>
-                          
+                          <button class="btn btn-secondary" @click="changeView('agendaDay')">Day</button>                          
                       </div> 
+
                         <full-calendar 
-                        :header="{
-                            left:'',
-                            center: 'title',
-                            right: '',
-                          }"
+                        :header="{left:'',center: 'title',right: ''}"
                         :config="config" 
                         :events="events"                        
                         @day-click="dayClick" 
@@ -99,8 +33,65 @@
                         @changeMonth="changeMonth"                    
                          />            
                     </div>
-              </div>  
-        </div>
+              </div>
+
+              <div class="col-lg-6">
+                 <div class="row">
+                  <div class="col-lg-3 col-6">                   
+                    <div class="small-box bg-info">
+                      <div class="inner">
+                        <p>Tasks number: {{assignedtasks.length}}</p>
+                        <p>Tasks value: {{unassignedtasksCount}}</p>
+                      </div>
+                      <div class="icon">
+                        <i class="ion ion-bag"></i>
+                      </div>
+                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+                 
+                  <div class="col-lg-3 col-6">                   
+                    <div class="small-box bg-success">
+                      <div class="inner">
+                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                        <p>Bounce Rate</p>
+                      </div>
+                      <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                      </div>
+                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-6">                   
+                    <div class="small-box bg-warning">
+                      <div class="inner">
+                        <h3>44</h3>
+                        <p>User Registrations</p>
+                      </div>
+                      <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                      </div>
+                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-6">                   
+                    <div class="small-box bg-danger">
+                      <div class="inner">
+                        <h3>65</h3>
+                        <p>Unique Visitors</p>
+                      </div>
+                      <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                      </div>
+                      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+                
+                </div>
+          </div>          
+      </div>
 
         <div class="row">
               <div class="col-md-6">
@@ -223,7 +214,7 @@
 
 
    </div>     
- 
+</div> 
 </template>
 
 <script>
@@ -444,7 +435,7 @@ export default {
       console.log(currentMonthStartDate); // the start date of the current month after changing month by clicking the '<'(previous) or '>'(next) button
     },
     loadStatistics(){
-      axios.get('/v1/api/home/loadstatistics?start-t='+this.start+'&end-t='+this.end).then((res) => {
+      axios.get('/v1/api/home/loadstatistics?start_t='+this.start+'&end_t='+this.end).then((res) => {
       if(res.data) {       
           this.setStats(res)
       }})
@@ -455,7 +446,7 @@ export default {
     })
     },
     loadCalendar(){
-      axios.get('/v1/api/home/admincalendar?start-t='+this.start+'&end-t='+this.end).then((res) => {
+      axios.get('/v1/api/home/admincalendar?start_t='+this.start+'&end_t='+this.end).then((res) => {
       if(res.data) {       
           this.setData(res)
       }})
@@ -488,12 +479,14 @@ export default {
       this.assignedtasks = res.data.assignedtasks
       this.events = res.data.assignedtasks              
       this.locations = res.data.alllocations
+      this.unassignedtasksCount = this.assignedtasks.reduce(function(prev, cur) { return prev + cur.price_n    }, 0)
     },
     setStats(res) { 
       this.dueTasksCount = res.data.dueTasksCount
-      this.unassignedtasksCount = res.data.unassignedtasksCount 
-      this.assignedtasksCount = res.data.assignedtasksCount 
+      //this.unassignedtasksCount = res.data.unassignedtasksCount 
+      //this.assignedtasksCount = res.data.assignedtasksCount 
       this.charges = res.data.charges   
+      
     },  
     setDataTodo(res) { 
       this.todos = res.data.todos  

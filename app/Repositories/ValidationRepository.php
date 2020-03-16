@@ -26,18 +26,18 @@ class ValidationRepository
     public function clientUpdate()
      {        
          $rules = array(
-            'name' => 'required',
-            'email' => 'required',
-			'phone' => 'required',
-			'client_type' => 'required',
+            'name_t' => 'required',
+            'email_t' => 'required',
+			'phone_n' => 'required',
+			'client_type_n' => 'required',
 			//'phone' => 'required|email|unique:clients,email',
 			//'is_company' => 'required',
 			//'contract_number' => 'required',
 			//'vat_number' => 'required',
-			'contract_start' => 'required',
-			'contract_end' => 'required',
+			'contract_start_t' => 'required',
+			'contract_end_t' => 'required',
 			//'person_name' => 'required',
-			'reccurence' => 'required',
+			'reccurence_id_n' => 'required',
 			
 			
          );        
@@ -74,8 +74,7 @@ class ValidationRepository
 			'start' => 'required',
 			'end' => 'required',
 			'location_id' => 'required',
-			'users' => 'required',
-			
+			'users' => 'required',			
          );        
          return $rules;
      }
@@ -83,14 +82,16 @@ class ValidationRepository
      public function locationUpdate()
      {        
          $rules = array(
-            'title' => 'required',
+            'title_t' => 'required',
+			'surface_n' => 'required|numeric',
+			'price_n' => 'required|numeric',
+			//'description' => 'required',
+			//
+			'address_line1' => 'required',
+			'city' => 'required',			
+			'postcode' => 'required',
 			
-            'description' => 'required',
-			'surface' => 'required|numeric',
-			'price' => 'required|numeric',
-			//'client_id' => 'required',
 			
-			//'address_line1' => 'required',
          );        
          return $rules;
      }

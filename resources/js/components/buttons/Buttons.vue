@@ -1,19 +1,19 @@
 <template>
-<div>
+<div style="position:fixed;z-index:10000">
 
 <!----------------LIST------------------------> 
-<router-link v-show="editMode==='create' || editMode==='view' || editMode==='edit'" :to="{path: this.modelSettings.urlList}" class="btn btn-primary">
+<router-link v-show="editMode==='create' || editMode==='view' || editMode==='edit'" :to="{path: '/'+model}" class="btn btn-primary">
     <i aria-hidden="true" class="fa fa-list"></i> Back to list
 </router-link>
 
 <!----------------EDIT-------------------------> 
-<router-link v-show="editMode==='view'" :to="{path: this.modelSettings.urlEdit+this.modelId+'/edit'}" class="btn btn-info">
+<router-link v-show="editMode==='view'" :to="{path: model+this.modelId+'/edit'}" class="btn btn-info">
      <i aria-hidden="true" class="fa fa-pen"></i> Edit
 </router-link>
 
 
 <!----------------NEW-------------------------> 
-<router-link v-show="editMode==='list'" :to="{path: this.modelSettings.urlCreate}" class="btn btn-primary"> New {{modelSettings.modelSingular}} </router-link>
+<router-link v-show="editMode==='list'" :to="{path: '/'+model+'/create'}" class="btn btn-primary"> <i aria-hidden="true" class="fa fa-pen"></i> New {{model}} </router-link>
 
 <!----------------SAVE-------------------------> 
 <button v-show="editMode==='edit' || editMode==='create'" class="btn btn-success" @click="onSave">Save</button>
@@ -29,21 +29,22 @@
 module.exports = {
   props: {        
         editMode: { required: true },
+        model: { required: true },
   },  
   //
   data: function () {   
     return {         
-      modelSettings: {
-        modelPlural: 'clients', modelSingular: 'Client', 
-        urlList:'/clients',
-        urlCreate:'/clients/create',
-        urlEdit:'/clients/',
-        apiList:'/v1/api/clients/index',
-        apiCreate:'/v1/api/clients/create',
-        apiEdit:'/v1/api/clients/edit/',       
-        apiUpdate:'/v1/api/clients/update/',     
-        apiDelete:'/v1/api/clients/delete/'
-      },
+      // modelSettings: {
+      //   modelPlural: 'tasks', modelSingular: 'Task', 
+      //   urlList:'/tasks',
+      //   urlCreate:'/tasks/create',
+      //   urlEdit:'/tasks/',
+      //   apiList:'/v1/api/tasks/index',
+      //   apiCreate:'/v1/api/tasks/create',
+      //   apiEdit:'/v1/api/tasks/edit/',       
+      //   apiUpdate:'/v1/api/tasks/update/',     
+      //   apiDelete:'/v1/api/tasks/delete/'
+      // },
       modelId: this.$route.params.id,
     }
   },

@@ -1,5 +1,5 @@
 <?php
-
+	
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -23,12 +23,37 @@ class Location extends Model implements Auditable, Searchable
        $url = route('home.search', $this->id);         
        return new SearchResult($this, $this->title, $url);
     }
-    /////////////////////////////////////////////////////////////For typehead search
-    protected $appends = ['text'];
+    /////////////////////////////////////////////////////////////For loocation typehead search
+    protected $appends = [
+	'text','address_line1','address_line2','city','postcode','lat','lng'
+	];
     public function getTextAttribute()
-    {
-        //return $this->attributes['title']. ' - '.$this->attributes['description'];
-		return $this->attributes['title'];
+	{        
+		return $this->title_t;
+    }
+	public function getAddressline1Attribute()
+	{        
+		return $this->address->address_line1;
+    }
+	public function getAddressline2Attribute()
+	{        
+		return $this->address->address_line2;
+    }
+	public function getCityAttribute()
+	{        
+		return $this->address->city;
+    }
+	public function getPostcodeAttribute()
+	{        
+		return $this->address->postcode;
+    }
+	public function getLatAttribute()
+	{        
+		return $this->address->lat;
+    }
+	public function getLngAttribute()
+	{        
+		return $this->address->lng;
     }
 	
 	
@@ -36,10 +61,10 @@ class Location extends Model implements Auditable, Searchable
     protected $fillable = [  
                 'user_id',
                 'client_id',
-                'title',
+                'title_t',
                 'description',
-				'surface',
-				'price',
+				'surface_n',
+				'price_n',
                 
     ];
     ////////////////////////////////////////////////////////////////BELONGSTOMANY PIVOT

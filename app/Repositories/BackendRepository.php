@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client,History,Todo};
+use App\{User,Task,Status,SubStatus,Location,Treatment,Address,Client,History,Todo,Reccurence};
 use Spatie\Permission\Models\Role;
 use App\Repositories\Interfaces\BackendRepositoryInterface;
 use DB;
@@ -10,7 +10,10 @@ use DB;
 class BackendRepository implements BackendRepositoryInterface
 {
 
-
+    /////////////////////////////////////////////////////////////////////////////////Reccurences
+	public function getReccurences(){
+        return Reccurence::all(); 
+    }
     /////////////////////////////////////////////////////////////////////////////////TODO
     public function getTodoById($id){
         return Todo::where('id', '=', $id)
@@ -69,9 +72,7 @@ class BackendRepository implements BackendRepositoryInterface
         return Task::  
                   //orderBy('created_at', 'desc')
                   with('locations','statuses','users')
-				  ->where('status_id_n', '=', 1)
-				  //->whereNull('start_t')
-				  //->whereNull('end_t')
+				  ->where('status_id_n', '=', 1)				 
 				  ->where('created_at', '>=', $start)
                   ->where('created_at', '<', $end)
                   ->with('statuses')				 
@@ -97,8 +98,7 @@ class BackendRepository implements BackendRepositoryInterface
                   ->with('users')  //display users array
                   ->has('users')   //only act as filter   
                   ->get(); 
-    }
-	
+    }	
 	public function getAssignedFilteredTasks($id){
         return Task::where('location_id', '=', $id)
                   ->with('locations')
@@ -106,9 +106,7 @@ class BackendRepository implements BackendRepositoryInterface
 				  ->with('users')  //display users array
                   ->has('users')    
                   ->get(); 
-    }
-	
-	
+    }	
     public function getTaskById($id){
         return Task::where('id', '=', $id) 
                    ->with('locations.treatments')
@@ -117,13 +115,11 @@ class BackendRepository implements BackendRepositoryInterface
                    ->first(); 
     }
 	public function getAllUsersTasks(){ 
-		   return Task::with(['users'])                        
+		return Task::with(['users'])                        
             ->whereHas('users',function($query) {                
                  $query->where('user_id', '=', \Auth::user()->id);                    
             })            
-            ->get(); 
-			
-			
+            ->get();	
     }
 	public function getAllUsersTasksByStatus($id){ 
 		return	Task::with(['users'])                        
@@ -150,7 +146,7 @@ class BackendRepository implements BackendRepositoryInterface
     }
     public function getLocationsById($id){
         return Location::where('id', '=', $id) 
-                   ->with('address')
+                   
                    ->with('clients')
                    ->with(['treatments' => function ($q) {
                     $q->withTrashed();
@@ -190,15 +186,15 @@ class BackendRepository implements BackendRepositoryInterface
                    ->first(); 
     }    
     /////////////////////////////////////////////////////////////////////////////////ADMIN USERS
-	public function getFreeFieldUsersForDate($date){  
-		 return	User::with('selectedTasks')
+	/* public function getFreeFieldUsersForDate($date){  
+		 return	User::with('tasks')
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })   
-				       ->WhereDoesntHave('selectedTasks', function($q) use($date) {				   
-				       $q->where('start_t','LIKE', '%'.$date.'%'); 
+				       ->WhereDoesntHave('tasks', function($q) use($date) {				   
+				         $q->where('start_t','LIKE', '%'.$date.'%'); 						 
 				   })				
 				   ->get(); 
 
-    }
+    } */
 	public function getAllFieldUsers(){
 		return User::whereHas("roles", function($q){ $q->where("name", "Field User"); })->get();
 	}

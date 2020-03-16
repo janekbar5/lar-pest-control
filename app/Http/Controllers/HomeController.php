@@ -23,25 +23,24 @@ class HomeController extends Controller
         $this->vr = $vr;
         $this->im = $im;
     }   
+	public function reccurences()
+	{
+        $reccurences = $this->br->getReccurences();		
+        return response()->json(['reccurences' => $reccurences]);
+    }
 	/////////////////////////////////////////////////////////////////////////////////////////////////GLOBAL SETTINGS
 	public function globalsettings()
     {
         $treatments = $this->br->getAllTreatments();
 		$statuses = $this->br->getAllStatuses();  
-		$substatuses = $this->br->getAllSubStatuses(); 
-		
-        return response()->json([
-		'treatments' => $treatments,
-		'statuses' => $statuses,
-		'substatuses' => $substatuses,
-		]);
+		$substatuses = $this->br->getAllSubStatuses(); 		
+        return response()->json(['treatments' => $treatments,'statuses' => $statuses,'substatuses' => $substatuses]);
     }
    
 	public function index()
     {
         return view('home');
-    }
-	
+    }	
     /////////////////////////////////////////////////////////////////////////////////////////////////MAIN SEARCH BOX
     public function searchBox()
     {
@@ -54,31 +53,23 @@ class HomeController extends Controller
 			->registerModel(Client::class, ['name'])	
 			->search($input);  
 		}	
-		return response()->json(['results' => $results]);
-			
+		return response()->json(['results' => $results]);			
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////Load statistics
     public function loadStatistics()
-    {        		
-		
-		$unassignedtasks = $this->br->getUnassignedTasksForPeriod(request('start-t'),request('end-t'));				   
-		$assignedtasks = $this->br->getAssignedTasksForPeriod(request('start-t'),request('end-t'));	
-
-		return response()->json([
-			//'dueTasksCount' => $dueTasks->count(),
+	{  
+		$unassignedtasks = $this->br->getUnassignedTasksForPeriod(request('start_t'),request('end_t'));				   
+		$assignedtasks = $this->br->getAssignedTasksForPeriod(request('start_t'),request('end_t'));	
+		return response()->json([			
 			'unassignedtasks' => $unassignedtasks,
-			//'unassignedtasksCount' => $unassignedtasks->sum("price"),
-			'unassignedtasksCount' => $unassignedtasks->count(),
-			'assignedtasks' => $assignedtasks,
-			'assignedtasksCount' => $assignedtasks->count(),
+			'assignedtasks' => $assignedtasks,			
 		]);			
     }
-    /**///////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
-    public function adminCalendar()    {       
-        $assignedtasks = $this->br->getAssignedTasksForPeriod(request('start-t'),request('end-t'));	
-        return response()->json([  
-            'assignedtasks' => $assignedtasks, 
-        ]);
+    ////////////////////////////////////////////////////////////////////////////////////////////// ADMINCALENDAR
+    public function adminCalendar()    
+	{       
+        $assignedtasks = $this->br->getAssignedTasksForPeriod(request('start_t'),request('end_t'));	
+        return response()->json(['assignedtasks' => $assignedtasks,]);
     }
     
 }

@@ -82,7 +82,6 @@ import RolesShow from './views/roles/RolesShow'
 import RolesEdit from './views/roles/RolesEdit'
 
 import TasksIndex from './views/tasks/TasksIndex'
-import TasksHistoryIndex from './views/tasks/TasksHistoryIndex'
 import TasksEdit from './views/tasks/TasksEdit'
 
 import UserTasksIndex from './views/usertasks/UserTasksIndex'
@@ -95,7 +94,6 @@ import TreatmentsShow from './views/treatments/TreatmentsShow'
 import TreatmentsEdit from './views/treatments/TreatmentsEdit'
 
 import LocationsIndex from './views/locations/LocationsIndex'
-import LocationsIndex2 from './views/locations/LocationsIndex2'
 import LocationsEdit from './views/locations/LocationsEdit'
 
 import StatusesIndex from './views/statuses/StatusesIndex'
@@ -112,7 +110,6 @@ import ClientsEdit from './views/clients/ClientsEdit'
 
 import HistoryIndex from './views/history/HistoryIndex'
 import GlobalSettingsIndex from './views/globalsettings/GlobalSettingsIndex'
-
 import FiltersIndex from './views/filters/FiltersIndex'
 
 //////////////////////////////////////////////// 2 routers
@@ -134,8 +131,7 @@ let routes = [
     { path: '/roles/:id',  name: 'RolesShow', component: RolesShow, meta: {mode: 'view'} },  
 
     { path: '/tasks', name: 'TasksIndex', component:TasksIndex, meta: {mode: 'list'} },
-    { path: '/taskshistory', name: 'TasksHistoryIndex', component:TasksHistoryIndex },
-    
+     
     { path: '/tasks/create', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'create'} },
     { path: '/tasks/:id/edit', name: 'TasksEdit', component: TasksEdit, meta: {mode: 'edit'} },
      
@@ -151,8 +147,7 @@ let routes = [
     { path: '/treatments/:id/edit', name: 'TreatmentsEdit', component: TreatmentsEdit, meta: {mode: 'edit'} },
     { path: '/treatments/:id',  name: 'TreatmentsShow', component: TreatmentsShow, meta: {mode: 'view'} },
 
-    //{ path: '/locations', name: 'LocationsIndex', component:LocationsIndex, meta: {mode: 'list'} },
-    { path: '/locations', name: 'LocationsIndex2', component:LocationsIndex2, },
+    { path: '/locations', name: 'LocationsIndex', component:LocationsIndex, meta: {mode: 'list'} },   
     { path: '/locations/create', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'create'} },
     { path: '/locations/:id/edit', name: 'LocationsEdit', component: LocationsEdit, meta: {mode: 'edit'} },
     //{ path: '/locations/:id',  name: 'LocationsShow', component: LocationsShow, meta: {mode: 'view'} },

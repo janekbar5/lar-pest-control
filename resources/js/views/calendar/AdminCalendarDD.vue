@@ -170,9 +170,7 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <input v-model="form.title" type="text" name="title" id="title" ref="title"
-                            placeholder="title"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }" disabled>
+                        <input v-model="form.title_t" type="text" name="title" placeholder="title"  class="form-control" :class="{ 'is-invalid': form.errors.has('title_t') }" disabled>
                         <has-error :form="form" field="title"></has-error>
                     </div> 
 
@@ -180,17 +178,16 @@
                                 <div class="col-md-6">                                   
                                     <div class="form-group">
                                         <label>Start</label>     
-                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start"  :class="{ 'is-invalid': form.errors.has('start') }" />   
-                                        <!--  <datetime type="datetime" v-model="form.start" format="yyyy-MM-dd HH:mm" class="form-control" :class="{ 'is-invalid': form.errors.has('start') }"></datetime>   -->
-                                        <has-error :form="form" field="start"></has-error>
+                                        <Datepicker format="YYYY-MM-DD H:i" v-model="form.start_t"  :class="{ 'is-invalid': form.errors.has('start_t') }" />                                          
+                                        <has-error :form="form" field="start_t"></has-error>
                                          
                                      </div>  
                                 </div> 
                                 <div class="col-md-6">                                   
                                     <div class="form-group">
                                         <label>End</label>     
-                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end" class="" :class="{ 'is-invalid': form.errors.has('end') }" />   
-                                         <has-error :form="form" field="end"></has-error>
+                                         <Datepicker format="YYYY-MM-DD H:i" v-model="form.end_t" class="" :class="{ 'is-invalid': form.errors.has('end_t') }" />   
+                                         <has-error :form="form" field="end_t"></has-error>
                                          
                                      </div>  
                                 </div>                                  
@@ -204,23 +201,17 @@
                     <div style="display:block">
 
                      <div class="form-group">
-                        <input v-model="form.itemid" type="text" name="itemid" id="itemid" ref="itemid"
-                            placeholder="itemid"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('itemid') }">
+                        <input v-model="form.itemid" type="text" name="itemid"  placeholder="itemid"  class="form-control" :class="{ 'is-invalid': form.errors.has('itemid') }">
                         <has-error :form="form" field="itemid"></has-error>
                     </div>
 
                     
                         <div class="form-group">
-                            <input v-model="form.price" type="text" name="price" id="price" ref="price"
-                                placeholder="price"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('price') }">
-                            <has-error :form="form" field="price"></has-error>
+                            <input v-model="form.price_n" type="text" name="price" placeholder="price" class="form-control" :class="{ 'is-invalid': form.errors.has('price_n') }">
+                            <has-error :form="form" field="price_n"></has-error>
                         </div>
                         <div class="form-group">
-                            <input v-model="form.status_id" type="text" name="status_id" id="status_id" ref="status_id"
-                                placeholder="status_id"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('status_id') }">
+                            <input v-model="form.status_id_n" type="text" name="status_id_n" placeholder="status_id_n"  class="form-control" :class="{ 'is-invalid': form.errors.has('status_id_n') }">
                             <has-error :form="form" field="status_id"></has-error>
                         </div>
                         <div class="form-group">
@@ -340,12 +331,11 @@ export default {
         
       //////////config
       form: new Form({                   
-        title : '',
-        start: '',
-        end: '',
-        title: '',
-        price: '',
-        status_id: '',
+        title_t : '',
+        start_t: '',
+        end_t: '',        
+        price_n: '',
+        status_id_n: '',
         users: [],
       }),
       //
@@ -364,12 +354,12 @@ export default {
   },
 
   watch: {
-            'form.start': function(newVal1) {              
+            'form.start_t': function(newVal1) {              
                 this.newStart = newVal1
                 this.getFreeUsers()  
                 console.log(newVal1)
             },
-            'form.end': function(newVal2) { 
+            'form.end_t': function(newVal2) { 
                 this.newEnd = newVal2
                 this.getFreeUsers() 
                 console.log(newVal2)                          
@@ -384,13 +374,13 @@ export default {
         $(this).remove();
       }  
       $("#assignTaskToUserModal").modal("show")  ///////////////////////////////////////////////// 1 Modal open fill fields
-      this.form.start = moment(date.start._d).format('YYYY-MM-DD hh:mm')      
-      this.form.end = moment(date.start._d).add(14, 'hours').format('YYYY-MM-DD HH:m') //02
+      this.form.start_t = moment(date.start._d).format('YYYY-MM-DD hh:mm')      
+      this.form.end_t = moment(date.start._d).add(14, 'hours').format('YYYY-MM-DD HH:m') //02
       this.form.itemid = date.id
-      this.form.title = date.className[0].title
+      this.form.title_t = date.className[0].title
       this.form.location_id = date.className[0].location_id
-      this.form.price = date.className[0].price
-      this.form.status_id = date.className[0].status_id
+      this.form.price_n = date.className[0].price
+      this.form.status_id_n = date.className[0].status_id
       //console.log(date)    
     },
 
@@ -414,7 +404,7 @@ export default {
     },   
     getFreeUsers(){ 
         this.loading = true //the loading begin        
-        axios.get('/v1/api/tasks/getfreefieldusersfordate?start_t='+ this.form.start+'&end_t='+this.form.end)        
+        axios.get('/v1/api/tasks/getfreefieldusersfordate?start_t='+ this.form.start_t+'&end_t='+this.form.end_t)        
         .then((res) => {            
             this.setTasksByDate(res)
             this.loading = false   
@@ -432,10 +422,10 @@ export default {
     ///////////////UPDATE
     updateAssignment(){
                 this.$Progress.start();
-                this.form.post('/v1/api/tasks/updatefromcalendar/'+this.form.itemid)
+                this.form.post('/v1/api/tasks/update/'+this.form.itemid)
                 .then(()=>{                   
-                    //this.form.reset();                    
-                    //this.clear()
+                    this.form.reset();                    
+                    this.clear()
                     $('#assignTaskToUserModal').modal('hide')                   
                     this.loadCalendar()
                     toast({type: 'success', title: 'User Created in successfully'})

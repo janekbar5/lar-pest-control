@@ -22,10 +22,10 @@ class CreateLocationsTable extends Migration
             //$table->integer('client_id')->unsigned();
 			//$table->foreign('client_id')->references('id')->on('clients');
             
-            $table->string('title');          
+            $table->string('title_t');          
             $table->text('description'); 
-			$table->string('surface');
-			$table->float('price');
+			$table->string('surface_n');
+			$table->float('price_n');
             $table->softDeletes();  //add this line
             $table->timestamps();     
         });

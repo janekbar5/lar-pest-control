@@ -10,4 +10,16 @@ class Reccurence extends Model
 	    'title',
         //'colour',
     ];
+	////////////////////////////////////////////first photo  Assesors setAttribute
+    /* protected $appends = [
+        'name','value',
+    ];
+    function getNameAttribute()
+    {        
+        return $this->title;	  
+    }
+	function getValueAttribute()
+    {        
+        return $this->id;	  
+    } */
 }

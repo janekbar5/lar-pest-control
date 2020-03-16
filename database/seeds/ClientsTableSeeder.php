@@ -16,7 +16,7 @@ public function run()
 		
 		
 		$reccurence = ['2 months','3 months','4 months','6 months','on request'];
-		
+		$phones = ['4578-0203-555','6546416165','075-656566','5615614114','1451545554','434534534'];
         $titles = ['Miss','Mr','Mrs'];
 		for($i=1; $i<=100; $i++):
 		
@@ -30,19 +30,18 @@ public function run()
 		
             DB::table('clients')
                 ->insert([ 
-				    'active' => $faker->numberBetween($min = 1, $max = 2),
-					'reccurence_id' => $faker->numberBetween($min = 1, $max = 8),
+				    'active_n' => $faker->numberBetween($min = 1, $max = 2),
+					'reccurence_id_n' => $faker->numberBetween($min = 1, $max = 8),
                     'person_title' => $faker->randomElement($titles),
-					'client_type' => $client_types_ok,
-					'name' => $name,
-					'person_name' => $faker->name,
-					'email' => $faker->email,
-					'phone' => $faker->phoneNumber, 
-					
-                    'contract_number' => '751651'.$i,                    
-                    'contract_start' => '2020-'.$faker->randomElement($months).'-01',
-                    'vat_number' => 'vat-651651'.$i,                    
-                    'contract_end' => '2021-'.$faker->randomElement($months).'-01',
+					'client_type_n' => $client_types_ok,
+					'name_t' => $name,
+					'person_name_t' => $faker->name,
+					'email_t' => $faker->email,
+					'phone_n' => $faker->randomElement($phones),					
+                    'contract_number_n' => '751651'.$i,                    
+                    'contract_start_t' => '2020-'.$faker->randomElement($months).'-01',
+                    'vat_number_t' => 'vat-651651'.$i,                    
+                    'contract_end_t' => '2021-'.$faker->randomElement($months).'-01',
                     'description' => $faker->text,
 					
                     //'address'

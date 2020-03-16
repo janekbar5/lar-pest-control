@@ -20,12 +20,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
 	
+///////////////////////////////////////////////////////////////////////////////////////////////////////RECCURENCES 	
+Route::get('v1/api/reccurences/index', 'ReccurenceController@index');	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////HISTORY  
 Route::get('v1/api/history/index', 'HistoryController@index');
-Route::get('/v1/api/home/searchbox', 'HomeController@searchBox')->name('home.search'); //list 
-Route::get('/v1/api/home/globalsettings', 'HomeController@globalsettings');
-Route::get('/v1/api/home/loadstatistics', 'HomeController@loadStatistics');
+Route::get('v1/api/home/searchbox', 'HomeController@searchBox')->name('home.search'); //list 
+Route::get('v1/api/home/globalsettings', 'HomeController@globalsettings');
+
+Route::get('v1/api/home/loadstatistics', 'HomeController@loadStatistics');
 Route::get('v1/api/home/admincalendar', 'HomeController@adminCalendar'); //list
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////USERS
 Route::get('v1/api/users/usersettings', 'UserController@userSettings');
 Route::post('v1/api/users/updatesettings/{id}', 'UserController@updateSettings'); //update  post
@@ -75,7 +80,7 @@ Route::get('v1/api/tasks/create', 'TaskController@create'); //create
 Route::post('v1/api/tasks/create', 'TaskController@store'); //create post
 Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post
 Route::post('v1/api/tasks/update/{id}', 'TaskController@update'); //update  post
-Route::post('v1/api/tasks/updatefromcalendar/{id}', 'TaskController@updateFromCalendar'); //update  post 
+//Route::post('v1/api/tasks/updatefromcalendar/{id}', 'TaskController@updateFromCalendar'); //update  post 
 Route::delete('v1/api/tasks/delete/{id}', 'TaskController@destroy'); //update  post
 
 Route::get('/v1/api/tasks/gettasksbydate', 'TaskController@getTasksByDate'); //list 

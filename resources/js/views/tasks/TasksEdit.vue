@@ -1,18 +1,22 @@
 <template>
     <div>        
 
-            <div class="panel-heading">
-                <div>                   
-                    <Buttons :editMode="editMode" ></Buttons>
+         <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <Buttons :editMode="editMode" :model="model"></Buttons>
                 </div>
             </div>
-        
+        </div>
+
             <div class="row">
+                
                 <div class="col-md-12">
                     <div class="card">
 
                         <div class="card-header">
-                            <h3 class="card-title">Quick Example {{ editMode }} </h3>
+                            <!-- <h3 class="card-title">Quick Example {{ editMode }} </h3> -->
+                            <!-- <Buttons :editMode="editMode" ></Buttons> -->
                         </div>
                                             
 
@@ -32,8 +36,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Location</label>
-                                        <typeahead :url="dataURL" :initialize="form.locations" @input="onLocation" />
-                                        <!-- <input v-model="form.location_id" type="text" name="location_id" class="form-control" :class="{ 'is-invalid': errors.location_id }" > -->
+                                        <typeahead :url="dataURL" :initialize="form.locations" @input="onLocation" />                                      
                                         <input v-model="form.location_id" type="hidden" name="location" class="form-control" :class="{ 'is-invalid': errors.location_id }" >
                                          <div class="alert alert-danger" v-if="errors.location_id"> {{errors.location_id[0]}}</div>
                                     </div>                                                                    
@@ -101,16 +104,7 @@
                             </div>
 
                             <div class="row"> </div>
-                           <div class="row">
-                                                                 
-                                 <!-- <div class="col-md-4">                                   
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <input v-model="form.status_id" type="text" name="status_id" class="form-control" :class="{ 'is-invalid': errors.status_id }" >
-                                         <div class="alert alert-danger" v-if="errors.status_id"> {{errors.status_id[0]}}</div>
-                                    </div>  
-                                </div> -->
-
+                           <div class="row">                                
                                 <div class="col-md-4">
                                     <div class="form-group">
                                     <label>Status</label>
@@ -138,12 +132,7 @@
                                   </div>   
                                
                             </div>
-
-
-                           
-
-
-
+                         
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -157,7 +146,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                                 
 
@@ -178,13 +166,12 @@
                                          <div class="alert alert-danger" v-if="errors.comment"> {{errors.comment[0]}}</div>
                                     </div>  
                                 </div> 
-                            </div>
-                                    
+                            </div>                                    
                        </div> 
                         
                         <div class="card-footer">
                             <div>                               
-                                <Buttons :editMode="editMode" ></Buttons>
+                                <Buttons :editMode="editMode" :model="model"></Buttons>
                             </div>
                         </div>
                         
@@ -193,7 +180,7 @@
          </div>
       </div>          
             
-
+    <RecordsRepository ref="RecordsRepo" > </RecordsRepository>
     </div>
 </template>
 <script type="text/javascript">
@@ -201,110 +188,56 @@
     import moment from 'moment'
     import {get, byMethod } from '../../lib/api'
     import {Typeahead } from '../../components/typeahead'
-    import DzoneComponent from '../../components/dzone/DzoneComponent';
-    import Buttons from './Buttons';
+    import DzoneComponent from '../../components/dzone/DzoneComponent'
+    import Buttons from '../../components/buttons/Buttons'
     import Multiselect from 'vue-multiselect' 
     import Datepicker from 'vuejs-datetimepicker'
-
+    import RecordsRepository from '../../repositories/RecordsRepository.vue'
     export default {
-        components: { DzoneComponent, Buttons, Multiselect, Datepicker, Typeahead },
+        components: { DzoneComponent, Buttons, Multiselect, Datepicker, Typeahead, RecordsRepository },
         data () {
             return {
-               
-                modelSingular: '',
-                apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
-                //
-                urlList:'', urlCreate:'', urlEdit:'',              
+                model:'tasks',                              
                 // 
                 editMode: this.$route.meta.mode,
-                form: {
-                   //locations:{}
-                   status_id: this.$route.meta.mode==="edit" ? '' : 1,
-                   //start: this.$route.meta.mode==="edit" ? '' : moment().format('MMMM Do YYYY, h:mm'),
+                form: {                  
+                   status_id: this.$route.meta.mode==="edit" ? '' : 1,                   
                    start: this.$route.meta.mode==="edit" ? '' : '',
-                   end: this.$route.meta.mode==="edit" ? '' : '',
-                   //selectedTreatments:[],
+                   end: this.$route.meta.mode==="edit" ? '' : '',                   
                 },               
                 errors: {},               
                 //
-                photable_Type: "App\\Task",
-                photable_Id: this.$route.params.id,
-                photos_List: [],
+                photable_Type: "App\\Task", photable_Id: this.$route.params.id, photos_List: [],
                 //
-                roles: null,
-                allroles: [],
-                statuses:[],
-                substatuses:[],
+                roles: null, allroles: [], statuses:[], substatuses:[],
                 //
-                dataURL: '/v1/api/locations/searchlocations',
-                //fieldusers: [],
-                //options:[],
-                selected_users:[], //dont need allPermissions in form only selected 
-                allAvailableFieldUsers:[], //dont need allPermissions in form only selected 
-                //
-                grantedTreatments:[], //dont need allPermissions in form only selected 
-                selectedTreatments:[],
-                allTreatments:[], //dont need allPermissions in form only selected 
-                //
-                modelPlural: 'tasks', modelSingular: 'Task', 
-                urlList:'/tasks',
-                urlCreate:'/tasks/create',
-                urlEdit:'/tasks/',
-                apiList:'/v1/api/tasks/index',
-                apiCreate:'/v1/api/tasks/create',
-                apiEdit:'/v1/api/tasks/edit/',       
-                apiUpdate:'/v1/api/tasks/update/',     
-                apiDelete:'/v1/api/tasks/delete/',
-                newStart:'',
-                newEnd:'',
+                dataURL: '/v1/api/locations/searchlocations',               
+                selected_users:[], allAvailableFieldUsers:[], grantedTreatments:[], selectedTreatments:[], allTreatments:[], 
+                //               
+                newStart:'', newEnd:'',
                
             }
         },
-        beforeRouteEnter(to, from, next) {            
-            get('/v1/api'+to.path)
-                .then((res) => {
-                    next(vm => vm.setData(res))
-                })
-        },
-        beforeRouteUpdate(to, from, next) {
-            this.show = false           
-            get('/v1/api'+to.path)
-                .then((res) => {
-                    this.setData(res)
-                    next()
-                })
-        },
-        computed: {
-            
-        },
+        beforeRouteEnter(to, from, next) {           
+            get('/v1/api'+to.path).then((res) => {  next(vm => vm.setData(res))  })
+        },        
+        
         watch: {
-            'form.start_t': function(newVal1) {
-                //console.log('value changed from ' + newVal1);
+            'form.start_t': function(newVal1) {                
                 this.newStart = newVal1
                 this.Search()  
             },
-            'form.end_t': function(newVal2) {              
-                //console.log('value changed from ' + newVal2);
+            'form.end_t': function(newVal2) { 
                 this.newEnd = newVal2
                 this.Search()            
                 },
-
-           
-
-            
-        },
-        // created() {
-        //     this.$eventHub.$on('settings', this.modelSettings) 
-        // },
-        methods: {
-            onStatusChange(id){
-
-            },
+        },       
+        methods: {           
             Search(){
             if (this.newStart && this.newEnd ) {
                 console.log('value changed from ' + this.newStart + this.newEnd );
                 axios.get('/v1/api/tasks/getfreefieldusersfordate?start_t='+this.newStart+'&end_t='+this.newEnd)
-                    .then((res) => {                        
+                    .then((res) => {                      
                     this.setFreeUser(res) 
                 })   
             }
@@ -313,8 +246,7 @@
                 const locations = e.target.value
                 Vue.set(this.$data.form, 'locations', locations) 
                 Vue.set(this.$data.form, 'location_id', locations.id) 
-                Vue.set(this.$data.form, 'price', locations.price)
-                //Vue.set(this.$data.form, 'grantedTreatments', locations.treatments)  
+                Vue.set(this.$data.form, 'price', locations.price)                
                 this.grantedTreatments = locations.treatments
                 this.objectToArray();                                         
             },
@@ -324,21 +256,16 @@
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
                     Vue.set(this.$data, 'form', res.data.form)
-                    this.store = this.apiUpdate + this.$route.params.id
-                    this.method = 'PUT'
-                    this.title = 'Edit'                    
+                    this.store = this.apiUpdate + this.$route.params.id                                      
                     this.roles =  res.data.form.roles //assigned roles                   
                     this.photos_List = res.data.form.photos;
-
                     this.grantedTreatments = res.data.form.locations.treatments
                 }
-                this.photos_List = res.data.form.photos;
-                //for create get only available users
+                this.photos_List = res.data.form.photos               
                 this.allAvvailableFieldUsers =  [] //all roles 
                 this.statuses =  res.data.statuses //all roles
                 this.substatuses =  res.data.substatuses.data //all roles
                 this.allTreatments = res.data.alltreatments
-
                 this.objectToArray();
             }, 
             objectToArray() {                
@@ -347,84 +274,13 @@
                     treatment_array.push(element.id);
                 });
                 this.form.selectedTreatments = treatment_array;
-            },           
-            // objectToArray() {                
-            //     var user_array = [];               
-            //     this.allFieldUsers.forEach(element => {
-            //         user_array.push(element.id);
-            //     });
-            //     this.selected_users = user_array;
-            // }, 
+            },   
             nameWithSuename ({ name, last_name }) {
-            return `${name} ${last_name}`
-            },  
-            // addTag2 (newTag) {
-            //     const tag = {
-            //         name: newTag,                   
-            //     }
-            //     this.selected_users.push(tag)
-            //     this.allFieldUsers.push(tag)
-            //     //console.log(options)
-            // },
+                return `${name} ${last_name}`
+            },             
             onSave() {
-                this.errors = {}
-                this.isProcessing = true                
-                byMethod('POST',this.$route.meta.mode === 'edit' ? this.apiUpdate+this.form.id : this.apiCreate , this.form)
-                    .then((res) => {
-                        if(res.data && res.data.saved) {
-                            this.success(res)
-                            this.loadToast('success',''+this.modelSingular+' updated successfully');  
-                        }
-                        if(res.data && res.data.created) {
-                            this.success(res)
-                            this.loadToast('success',''+this.modelSingular+' created successfully');    
-                        }
-                    })
-                    .catch((error) => {
-                        if(error.response.status === 422) {
-                            this.errors = error.response.data.errors
-                            this.loadToast('error','Check the forms'); 
-                        }
-                        this.isProcessing = false
-                    })
-            },
-            success(res) {
-                //this.$router.push(this.urlList+'/'+res.data.id)
-                //console.log(this.urlList+'/'+res.data.id)
-                this.$router.push(this.urlList)
-                
-            },
-            
-            loadToast(icon,text){
-              toast.fire({icon: icon,title: text })
-            }, 
-            onDelete(){
-                swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!"+this.urlList,
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        // Send request to the server
-                         if (result.value) {
-                                //byMethod('delete', `/api/properties/${this.model.id}`).then(()=>{
-                                byMethod('delete',this.apiDelete+this.$route.params.id).then(()=>{
-                                        swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
-                                        'success'
-                                        )
-                                    //Fire.$emit('AfterCreate');
-                                    this.$router.push(this.urlList)
-                                }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
-                                });
-                         }
-                    })
-            },
+                this.$refs.RecordsRepo.onSave(this.model,this.$route.params.id,this.form,this.$route.meta.mode) 
+            } 
         }
     }
 </script>

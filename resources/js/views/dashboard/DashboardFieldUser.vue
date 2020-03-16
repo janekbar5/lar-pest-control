@@ -173,8 +173,8 @@ export default {
       statuses:{},
       todos:{},
       config: {
-        defaultView: "agendaWeek",
-        //defaultView: "month",
+        //defaultView: "agendaWeek",
+        defaultView: "month",
         editable: true,
         droppable: true,
         eventLimit: true,

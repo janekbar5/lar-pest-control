@@ -1,8 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
-    <img src="img/newlogo.png" alt="AdminLTE Logo" class="brand-image "
-      style="opacity: .8">
+    <img src="img/newlogo.png" alt="AdminLTE Logo" class="brand-image " style="opacity: .8">
     <span class="brand-text font-weight-light">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   </a>
 
@@ -11,10 +10,8 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-
         @auth  
-        <!--  {{ Auth::user()->photos }} -->
-        
+        <!--  {{ Auth::user()->photos }} -->        
         @endauth
         <img src="https://adminlte.io/themes/dev/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
@@ -38,19 +35,13 @@
                   <i class="nav-icon fas fa-tachometer-alt orange"></i> <p> Dashboard </p>
                 </router-link>
         </li>
-
         
         @can('client-list')
         <li class="nav-item">
             <router-link to="/clients" class="nav-link">
               <i class="nav-icon fas fa-users orange"></i> <p>Clients </p>
             </router-link>
-        </li>
-        <!-- <li class="nav-item">
-            <router-link to="/clients2" class="nav-link">
-              <i class="nav-icon fas fa-users orange"></i> <p>Clients 2 </p>
-            </router-link>
-        </li> -->
+        </li>      
         @endcan
 
         @can('location-list') 
@@ -58,40 +49,18 @@
             <router-link to="/locations" class="nav-link">
               <i class="nav-icon fas fa-map-marker orange"></i> <p>Locations </p>
             </router-link>
-          </li>
-          <!-- <li class="nav-item">
-            <router-link to="/locations2" class="nav-link">
-              <i class="nav-icon fas fa-map-marker orange"></i> <p>Locations 2</p>
-            </router-link>
-          </li> -->
+          </li>         
          @endcan
-
 
          @can('task-list') 
          <li class="nav-item">
             <router-link to="/tasks" class="nav-link">
               <i class="nav-icon fas fa-cogs orange"></i> <p>Task </p>
             </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/taskshistory" class="nav-link">
-              <i class="nav-icon fas fa-cogs orange"></i> <p>Task History </p>
-            </router-link>
-          </li>
-          
+          </li>                  
           @endcan
           
-                  
-
-          <!-- @can('treatment-list') 
-          <li class="nav-item">
-             <router-link to="/treatments" class="nav-link">
-               <i class="nav-icon fas fa-wrench orange"></i> <p>Treatment </p>
-             </router-link>
-           </li>
-           @endcan -->
-
-
+    
           @can('history-list') 
           <li class="nav-item">
               <router-link to="/history" class="nav-link">
@@ -133,36 +102,7 @@
           </ul>
         </li>
         @endcan
-
-        <!-- @can('role-list')
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link"><i class="nav-icon fa fa-cubes orange" aria-hidden="true"></i> <p> Users Roles <i class="fas fa-angle-left right"></i>                           
-            </p>
-          </a>
-         
-         
-          <ul class="nav nav-treeview">
-            @can('role-create')
-            <li class="nav-item">
-              <router-link to="/roles/create" class="nav-link sub">
-                <i class="fa fa-plus" aria-hidden="true"></i> <p>Create</p>
-              </router-link>
-            </li>
-            @endcan
-
-            
-            <li class="nav-item">
-              <router-link to="/roles" class="nav-link sub">
-                <i class="fa fa-list" aria-hidden="true"></i> <p>List</p>
-              </router-link>
-            </li>
-           
-            
-          </ul>
-        </li>
-        @endcan -->
-
-
+       
         @role('Admin')
         <li class="nav-item">
             <router-link to="/globalsettings" class="nav-link">

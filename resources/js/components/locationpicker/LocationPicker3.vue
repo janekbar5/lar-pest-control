@@ -35,10 +35,7 @@ export default {
         }
       },
 
-      mounted() {  
-		
-	  
-	  
+      mounted() {  	
         this.myMap = L.map("locationPicker"); //map div
         this.myMap.setView([this.lat, this.lng],15);  //Current position $ Zoom
         /////////////////add links
@@ -66,11 +63,9 @@ export default {
         mapSetView(res){
           console.log(res.data[0].lat); 
           this.lat = res.data[0].lat
-		  this.lng = res.data[0].lon
-		  //Vue.set(this.form.address, 'lat', this.lat) 
-		  //Vue.set(this.form.address, 'lat', this.lng)
-		  this.$parent.form.address.lat =  this.lat
-		  this.$parent.form.address.lng =  this.lng
+		  this.lng = res.data[0].lon		  
+		  this.$parent.form.lat =  this.lat
+		  this.$parent.form.lng =  this.lng
 
           this.myMap.setView([this.lat, this.lng],15);  //Current position $ Zoom
           this.doMarker()

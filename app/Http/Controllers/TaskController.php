@@ -31,7 +31,7 @@ class TaskController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX    
 	public function index()    {       
 		
-		$tasks = Task::with('photos','statuses','users');
+		$tasks = Task::with('statuses','users','locations');
 		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
 		$tasks = $tasks->orderBy(request('field'),request('order'));
 		////////////////////////////////////////////////////////////Own Filter Loop
@@ -46,12 +46,12 @@ class TaskController extends Controller
 		}
 		////////////////////////////////////////////////////////////Foreign Filters NO -
 		if(request('location_id')){ //foreach $_GET if contain _id
-            $tasks = $tasks->whereHas('locations',function($query) { $query->where('title','LIKE', '%'.request('location_id').'%');});       
+            $tasks = $tasks->whereHas('locations',function($query) { $query->where('title_t','LIKE', '%'.request('location_id').'%');});       
         }
         /////////////////////////////////////////////////////////////Foreign Order
         if(request('field')=='location_id'){
             $tasks = $tasks
-            ->join('locations','locations.id','=','tasks.location_id')->select('locations.title as regionName','tasks.*')
+            ->join('locations','locations.id','=','tasks.location_id')->select('locations.title_t as regionName','tasks.*')
             ->orderBy('regionName',request('order'));
         }	
         $tasks = $tasks->paginate(request('perPage'));  
@@ -164,7 +164,7 @@ class TaskController extends Controller
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST FROM CALENDAR
-	public function updateFromCalendar(Request $request, $id)
+	/* public function updateFromCalendar(Request $request, $id)
     {
         //dd($request->all());       
         $task = $this->br->getTaskById($id);
@@ -176,7 +176,7 @@ class TaskController extends Controller
         }		
         $task->users()->sync($array_users);  
         return ['saved' => 'true','id' => $task->id];        
-    }
+    } */
 	
     /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY 
     public function destroy($id)
@@ -220,15 +220,17 @@ class TaskController extends Controller
     public function calendar(Request $request)    { 
 	
         $unassignedtasks = $this->br->getUnassignedTasks();		  		
-		$assignedtasks = $this->br->getAssignedTasks();
-		
+		$assignedtasks = $this->br->getAssignedTasks();		
 	    $alllocations = $this->br->getAllLocations(); 
+		/* foreach($unassignedtasks as $task){
+		   echo $task->id.'</br>';
+		} */
         return response()->json([            
             'unassignedtasks' => $unassignedtasks,
             'assignedtasks' => $assignedtasks,
 			'alllocations' => $alllocations,
 			
-        ]);
+        ]); 
     }
 	/**///////////////////////////////////////////////////////////////////////////////////////////// FIELD USER CALENDAR
 	public function userCalendar()    {
@@ -264,7 +266,7 @@ class TaskController extends Controller
 		//->get(['status_id','title','start','end'])
 		->get()		
 		->groupBy(function($date) {
-			return Carbon::parse($date->start-t)->format('yy-m-d'); // grouping by years			
+			return Carbon::parse($date->start_t)->format('yy-m-d'); // grouping by years			
 		});  
 		
 		
@@ -286,7 +288,7 @@ class TaskController extends Controller
 	 if($request->has('taskid') && $request->has('statusid')){	    
 		 $task = Task::where('id','=',$request->input('taskid'))->first();
 		 //dd($task);
-		 $task->status_id = request('statusid');
+		 $task->status_id_n = request('statusid');
 		 $task->update();
 		 $saved = true;
 	 }else{
@@ -309,14 +311,14 @@ class TaskController extends Controller
 		           ->whereHas("roles", function($q){ $q->where("name", "Field User"); })
 					   ->WhereDoesntHave('tasks', function ($q) use ( $startTime, $endTime) {
 						$q
-						  /*->whereRaw("start_t >= '$startTime' AND start_t < '$endTime'")
+						->whereRaw("start_t >= '$startTime' AND start_t < '$endTime'")
 						->orwhereRaw("start_t <= '$startTime' AND end_t > '$endTime'")
 						->orwhereRaw("end_t > '$startTime' AND end_t <= '$endTime'")
-						->orwhereRaw("start_t >= '$startTime' AND end_t <= '$endTime'");*/
-                          ->where('start_t', '>=', $startTime)->orwhere('start_t', '<', $endTime)
-                        ->orwhere('start_t', '<=', $startTime)->orwhere('end_t', '>', $endTime)
-                        ->orwhere('end_t'   ,'>' , $startTime)->orwhere('end_t', '<=', $endTime)    
-                        ->orwhere('start_t', '>=', $startTime)->orwhere('end_t', '<=', $endTime);                        
+						->orwhereRaw("start_t >= '$startTime' AND end_t <= '$endTime'");
+                          //->where('start_t', '>=', $startTime)->orwhere('end_t', '<=', $endTime);
+                        //->orwhere('start_t', '<=', $startTime)->orwhere('end_t', '>', $endTime)
+                        //->orwhere('end_t'   ,'>' , $startTime)->orwhere('end_t', '<=', $endTime)    
+                        //->orwhere('start_t', '>=', $startTime)->orwhere('end_t', '<=', $endTime);                        
 					})
 				   ->get(); 
        

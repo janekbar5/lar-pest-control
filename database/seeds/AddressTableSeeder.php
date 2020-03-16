@@ -21,7 +21,7 @@ class AddressesTableSeeder extends Seeder
                     'address_line1' => $faker->streetName,
                     'address_line2' => $faker->streetAddress,
                     'city' => $faker->city,
-                    'post_code'=> $faker->postcode,
+                    'postcode'=> $faker->postcode,
                     'lat'=> 50.8224867,
                     'lng'=> 16.2737286,                    
 

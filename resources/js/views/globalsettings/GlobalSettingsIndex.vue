@@ -135,17 +135,16 @@
       </div>
     </section>
         
+        <RecordsRepository ref="RecordsRepo" > </RecordsRepository>
     </div>
 </template>
 
 <script>
     import VueBootstrap4Table from 'vue-bootstrap4-table'
-    import Repository from "../../repositories/RepositoryFactory";
-
-    const RecordsRepository = Repository.get("records");
+    import RecordsRepository from '../../repositories/RecordsRepository.vue'
     export default {
         name: 'Global',
-        components: { VueBootstrap4Table },
+        components: { VueBootstrap4Table,RecordsRepository },
         data: function() {
             return {
                 editmode: false,
@@ -206,8 +205,9 @@
                 this.currentModel = model
                 this.currentForm = form                
             },
+            
             updateModel(model,form){              
-                RecordsRepository.updatePost(model,this[form].id,this[form]).then((res) => {
+                this.$refs.RecordsRepo.updatePost(model,this[form].id,this[form]).then((res) => {
                         if(res.data.saved) {
                             this.fetchData(model)
                             $('#'+form).modal('hide')
@@ -224,7 +224,7 @@
                         })                  
             },
             createModel(model,form){                
-                RecordsRepository.createPost(model,this[form]).then((res) => {                        
+                this.$refs.RecordsRepo.createPost(model,this[form]).then((res) => {                        
                         if(res.data.created) {                            
                             this.fetchData(model)
                             $('#'+form).modal('hide')
@@ -246,7 +246,7 @@
                 }).then((result) => {
                 // Send request to the server
                 if (result.value) {
-                    RecordsRepository.delete(model,id).then(()=>{
+                    this.$refs.RecordsRepo.delete(model,id).then(()=>{
                     swal.fire('Deleted!','Your '+model+' has been deleted.','success')
                     this.fetchData(model)                                         
                 }).catch(()=> {
@@ -258,12 +258,7 @@
             loadToast(icon,text){ toast.fire({icon: icon,title: text }) }, 
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////TABLE
-            test(model){
-              //let self = this;  
-              //var costam = self.rows_[model]
-              //console.log('costam'+model)
-              //console.log('costam'+this.model)
-            },
+           
             onChange_formTreatment(queryParams) {
                 var model1
                 this.queryParams = queryParams                                   
@@ -299,7 +294,7 @@
                 var pageparams = { page: this.serverParams.page };
                 var page = Object.keys(pageparams).map(key => key + '=' + pageparams[key]).join('&'); 
 
-                const { data } = await RecordsRepository.sortFilter(model,this.querySorting+'&'+filterParams.join('&')+'&'+queryPer+'&'+page); 
+                const { data } = await this.$refs.RecordsRepo.sortFilter(model,this.querySorting+'&'+filterParams.join('&')+'&'+queryPer+'&'+page); 
                 //self.rows_[model] = data.rows.data;
                 this[model] = data.rows.data;
                 self.total_rows = data.rows.total; 
@@ -320,44 +315,5 @@
     width:50%
 }
 
-.table-active .form-control{
-display: block;
-    width: 100%;
-    height: calc(1.5em + 0.75rem + 2px);
-    padding: 0.375rem 0.75rem;
-    padding-right: 0.75rem;
-    font-size: 0.8rem;
-    font-weight: 200;
-    line-height: 1.2;
-    color: #495057;
-    background-color:#fff;
-    background-clip: padding-box;
-    border: 1px solid  #ced4da;
-    border-radius: 0.25rem;
-    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
 
-.table{
-    font-size:14px;
-}
-.table th, .table td {
-    padding: 0rem;
-    vertical-align: top;
-    border-top: 1px solid 
-    #dee2e6;
-}
-.table th, .table td {
-    padding: 0rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
-}
-.table th, .table td {
-    padding: 0.5rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
-}
-.text-center {
-    text-align: center !important;
-}
 </style>

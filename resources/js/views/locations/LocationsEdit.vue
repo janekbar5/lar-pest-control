@@ -1,18 +1,21 @@
 <template>
     <div>        
 
-            <div class="panel-heading">
-                <div>                   
-                    <Buttons :editMode="editMode" ></Buttons>
+            <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <Buttons :editMode="editMode" :model="model"></Buttons>
                 </div>
             </div>
+        </div>
+
         
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
 
                         <div class="card-header">
-                            <h3 class="card-title">Quick Example {{ editMode }} </h3>
+                            
                         </div>
                         
                         <div class="card-body">
@@ -21,8 +24,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Title</label>
-                                        <input v-model="form.title" type="text" name="title" class="form-control" :class="{ 'is-invalid': errors.title }" >
-                                         <div class="alert alert-danger" v-if="errors.title"> {{errors.title[0]}}</div>
+                                        <input v-model="form.title_t" type="text" name="title_t" class="form-control" :class="{ 'is-invalid': errors.title_t }" >
+                                         <div class="alert alert-danger" v-if="errors.title_t"> {{errors.title_t[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                                            
@@ -30,16 +33,16 @@
                                 <div class="col-md-4">                                   
                                         <div class="form-group">
                                             <label>Surface Area</label>
-                                            <input v-model="form.surface" type="text" name="surface" class="form-control" :class="{ 'is-invalid': errors.surface }" >
-                                            <div class="alert alert-danger" v-if="errors.surface"> {{errors.surface[0]}}</div>
+                                            <input v-model="form.surface_n" type="text" name="surface_n" class="form-control" :class="{ 'is-invalid': errors.surface_n }" >
+                                            <div class="alert alert-danger" v-if="errors.surface_n"> {{errors.surface_n[0]}}</div>
                                         </div>  
                                 </div>  
 
                                 <div class="col-md-4">                                   
                                         <div class="form-group">
                                             <label>Price</label>
-                                            <input v-model="form.price" type="text" name="price" class="form-control" :class="{ 'is-invalid': errors.price }" >
-                                            <div class="alert alert-danger" v-if="errors.price"> {{errors.price[0]}}</div>
+                                            <input v-model="form.price_n" type="text" name="price_n" class="form-control" :class="{ 'is-invalid': errors.price_n }" >
+                                            <div class="alert alert-danger" v-if="errors.price_n"> {{errors.price_n[0]}}</div>
                                         </div>  
                                 </div> 
                                                              
@@ -58,44 +61,23 @@
                             </div>    
 
 
-
-                            
-
-
-                            <!-- <div class="row"> 
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                            <label> Client </label>
-                                                <typeahead :url="dataURL" :initialize="form.clients" @input="onClient" />                                                
-                                                 <small class="error-control" v-if="errors.customer_id">
-                                                    {{errors.customer_id[0]}}
-                                                </small> 
-                                                <div class="alert alert-danger" v-if="errors.client_id"> {{errors.client_id[0]}}</div>
-                                    </div>
-                                    <input v-model="form.client_id" type="hidden" name="name" class="form-control" :class="{ 'is-invalid': errors.client_id }" >                                     
-                                   </div>
-                            </div>   -->
-
                              <div class="row">
                                 <div class="col-md-12">                                   
                                     <div class="form-group">
                                         <label>Clients</label>      
-
                                             <multiselect 
                                             v-model="form.clients" 
                                             :options="allclients"
                                             :custom-label="nameWithNameLastName"                                                                                         
                                             placeholder="Select clients"
                                             :multiple="true"                                            
-                                            label="person_name" 
-                                            track-by="person_name">
+                                            label="person_name_t" 
+                                            track-by="person_name_t">
                                             </multiselect>
                                      </div>  
                                 </div>                                 
                             </div>   
-
-
-                             
+                           
 
 
                             <div class="row">
@@ -115,14 +97,14 @@
                             </div>
                             </br>  </br>  </br>
 
+                   
 
-
-
+                          errors {{ errors }}
                             <div class="row">
                                <div class="col-md-3">
                                <div class="form-group">
                                         <label>Address 1</label>
-                                        <input v-model="form.address.address_line1" type="text" name="address_line1" class="form-control" :class="{ 'is-invalid': errors.address_line1 }" >
+                                        <input v-model="form.address_line1" type="text" name="address_line1" class="form-control" :class="{ 'is-invalid': errors.address_line1 }" >
                                         <div class="alert alert-danger" v-if="errors.address_line1"> {{errors.address_line1[0]}}</div>
                                 </div> 
                                 </div> 
@@ -130,7 +112,7 @@
                                  <div class="col-md-3">
                                <div class="form-group">
                                         <label>Address 2</label>
-                                        <input v-model="form.address.address_line2" type="text" name="address_line2" class="form-control" :class="{ 'is-invalid': errors.address_line2 }" >
+                                        <input v-model="form.address_line2" type="text" name="address_line2" class="form-control" :class="{ 'is-invalid': errors.address_line2 }" >
                                         <div class="alert alert-danger" v-if="errors.address_line2"> {{errors.address_line2[0]}}</div>
                                 </div> 
                                 </div> 
@@ -139,7 +121,7 @@
                                 <div class="col-md-3">
                                  <div class="form-group">
                                         <label>City</label>
-                                        <input v-model="form.address.city" type="text" name="city" class="form-control" :class="{ 'is-invalid': errors.city }" >
+                                        <input v-model="form.city" type="text" name="city" class="form-control" :class="{ 'is-invalid': errors.city }" >
                                          <div class="alert alert-danger" v-if="errors.city"> {{errors.city[0]}}</div>
                                 </div> 
                                 </div>
@@ -147,8 +129,8 @@
                                 <div class="col-md-3">
                                  <div class="form-group">
                                         <label>Postcode</label>
-                                        <input v-model="form.address.post_code" type="text" name="post_code" class="form-control" :class="{ 'is-invalid': errors.post_code }" >
-                                         <div class="alert alert-danger" v-if="errors.post_code"> {{errors.post_code[0]}}</div>
+                                        <input v-model="form.postcode" type="text" name="postcode" class="form-control" :class="{ 'is-invalid': errors.postcode }" >
+                                         <div class="alert alert-danger" v-if="errors.postcode"> {{errors.postcode[0]}}</div>
                                 </div> 
                                 </div>
 
@@ -159,32 +141,24 @@
                             <div class="row">
                   
                                 <div class="col-md-3">
-                                    <!-- <input type="text" class="form-control" id="address" placeholder="Address">    -->
-                                    <!-- <input v-model="form.address.city1" type="text" class="form-control" id="city1" placeholder="city1">                                     -->
+                                    <input v-model="form.lat" type="text" class="form-control" id="latitude" placeholder="Latitude" disabled>
+                                </div>
+                                <div class="col-md-3">
+                                    <input v-model="form.lng" type="text" class="form-control" id="longitude" placeholder="Longitude" disabled>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <input v-model="form.address.lat" type="text" class="form-control" id="latitude" placeholder="Latitude" disabled>
-                                </div>
-                                <div class="col-md-3">
-                                    <input v-model="form.address.lng" type="text" class="form-control" id="longitude" placeholder="Longitude" disabled>
-                                </div>
-
-                                <div class="col-md-3">
-                                  
+                                <div class="col-md-3">                                  
                                    <button id="target2" @click="searchLocation2()" class="btn btn-secondary">Search Location...</button>
                                 </div>
                             </div>
 
-
-
                             <LocationPicker ref="LocationPicker" v-if="isMounted" :lat="lat" :lng="lng" @update-location="updateLocation"> </LocationPicker>
                                     
                        </div> 
-                        {{ apiUpdate }}
+                     
                         <div class="card-footer">
                             <div>                               
-                                <Buttons :editMode="editMode" ></Buttons>
+                               <Buttons :editMode="editMode" :model="model"></Buttons>
                             </div>
                         </div>
                         
@@ -193,121 +167,61 @@
          </div>
       </div>          
             
-
+    <RecordsRepository ref="RecordsRepo" > </RecordsRepository>
     </div>
 </template>
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'
-    //import {Typeahead } from '../../components/typeahead'
-    //import DzoneComponent from '../../components/dzone/DzoneComponent';
-    import Buttons from './Buttons';
+    import Buttons from '../../components/buttons/Buttons'
     import LocationPicker from '../../components/locationpicker/LocationPicker3'  
     import Multiselect from 'vue-multiselect'
+    import RecordsRepository from '../../repositories/RecordsRepository.vue'
     export default {
-        components: {  Buttons, Multiselect, LocationPicker },
+        components: {  Buttons, Multiselect, LocationPicker, RecordsRepository },
         data () {
             return {
+                model:'locations', 
+                editMode: this.$route.meta.mode,     
                 lat:'',lng:'',
-                isMounted: false,
-                modelSingular: '',
-                //apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
-                //
-                //urlList:'', urlCreate:'', urlEdit:'', 
-                modelPlural: 'locations', modelSingular: 'Location', 
-                urlList:'/locations',
-                urlCreate:'/locations/create',
-                urlEdit:'/locations/',
-                apiList:'/v1/api/locations/index',
-                apiCreate:'/v1/api/locations/create',
-                apiEdit:'/v1/api/locations/edit/',       
-                apiUpdate:'/v1/api/locations/update/',     
-                apiDelete:'/v1/api/locations/delete/',             
-                ////////////////////////////////////////////////////////// 
-                editMode: this.$route.meta.mode,
+                isMounted: false,           
+                //////////////////////////////////////////////////////////                 
                 form: {
-                    address:[],
+                    address:{address_line1:'',},
                     clients:[],                    
                 },                
-                errors: {},                         
-                ////////////////////////////////////////////////////////// 
-                dataURL: '/v1/api/clients/searchclients',              
-                //photable_Type: "App\\User",
-                //photable_Id: this.$route.params.id,
-                grantedTreatments:[], //dont need allPermissions in form only selected 
-                allTreatments:[], //dont need allPermissions in form only selected 
-                allclients:[],
+                errors: {                   
+                },     
+                            
+                //////////////////////////////////////////////////////////                
+                grantedTreatments:[], allTreatments:[], allclients:[],
             }
         },
         beforeRouteEnter(to, from, next) {            
             get('/v1/api'+to.path)
-                .then((res) => {
-                    next(vm => vm.setData(res))
-                })
-        },
-        beforeRouteUpdate(to, from, next) {
-            this.show = false            
-            get('/v1/api'+to.path)
-                .then((res) => {
-                    this.setData(res)
-                    next()
-                })
-        },
-        computed: {          
-        },
-        created() {
-            //this.$eventHub.$on('settings', this.modelSettings) 
-            //console.log(this.apiUpdate)
-        },
-        mounted(){
-            console.log(this.apiUpdate)
-        },
+                .then((res) => { next(vm => vm.setData(res))  })
+        },       
         methods: {
-            nameWithNameLastName ({ person_name  }) {
-                    return `${person_name}`
-             },
-            // onClient(e) {
-            //     const customer = e.target.value
-            //     Vue.set(this.$data.form, 'clients', customer)
-            //     Vue.set(this.$data.form, 'client_id', customer.id) 
-            // },
+            nameWithNameLastName ({ person_name_t  }) {
+                    return `${person_name_t}`
+             },           
             updateLocation(itm) {             
-               Vue.set(this.form.address, 'lat', itm.lat) 
-               Vue.set(this.form.address, 'lng', itm.lng)               
+               Vue.set(this.form, 'lat', itm.lat) 
+               Vue.set(this.form, 'lng', itm.lng)               
             },
              searchLocation2(){
-              var city = this.form.address.city
-              var address_line1 = this.form.address.address_line1
+              var city = this.form.city
+              var address_line1 = this.form.address_line1
               //var address_line2 = this.form.address.address_line2
               //var text = string.concat(city)
               this.$refs.LocationPicker.searchLocation2(city);
-            },
-            // modelSettings(settings){                
-            //     //return name
-            //     this.settings = settings;
-            //     this.urlList = settings.urlList
-            //     this.urlEdit = settings.urlEdit
-            //     this.urlCreate = settings.urlCreate
-            //     //         
-            //     this.apiList = settings.apiList
-            //     this.apiDelete = settings.apiDelete
-            //     this.apiCreate = settings.apiCreate
-            //     this.apiEdit = settings.apiEdit
-            //     this.apiUpdate = settings.apiUpdate
-            //     //
-            //     this.modelSingular = settings.modelSingular
-            //     console.log(settings)                
-            // },
+            },           
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
                     Vue.set(this.$data, 'form', res.data.form)
-                    //Vue.set(this.$data2, 'form.client', res.data.clients)
-                    this.store = this.apiUpdate + this.$route.params.id
-                    this.method = 'PUT'
-                    this.title = 'Edit'
                     this.grantedTreatments = res.data.form.treatments                    
-                    this.lat = res.data.form.address.lat
-                    this.lng = res.data.form.address.lng              
+                    this.lat = res.data.form.lat
+                    this.lng = res.data.form.lng              
                     this.isMounted = true
                 } 
                 this.isMounted = true
@@ -324,64 +238,10 @@
                 });
                 this.form.selectedTreatments = treatment_array;
             },         
-           
             onSave() {
-                this.errors = {}                           
-                byMethod('POST',this.$route.meta.mode === 'edit' ? this.apiUpdate+this.form.id : this.apiCreate , this.form)
-                    .then((res) => {
-                        if(res.data && res.data.saved) {
-                            this.success(res)
-                             this.loadToast('success',''+this.modelSingular+' updated successfully');  
-                        }
-                        if(res.data && res.data.created) {
-                            this.success(res)
-                             this.loadToast('success',''+this.modelSingular+' created successfully');  
-                        }
-                    })
-                    .catch((error) => {
-                        if(error.response.status === 422) {
-                            this.errors = error.response.data.errors
-                            this.loadToast('error','Check the forms'); 
-                        }
-                        
-                    })
-            },
-            success(res) {
-                // this.$router.push(this.urlList+'/'+res.data.id)
-                // console.log(this.urlList+'/'+res.data.id)
-                this.$router.push(this.urlList)
-                
-            },           
-            loadToast(icon,text){
-              toast.fire({icon: icon,title: text })
-            }, 
-            onDelete(){
-                swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!"+this.urlList,
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        // Send request to the server
-                         if (result.value) {
-                                //byMethod('delete', `/api/properties/${this.model.id}`).then(()=>{
-                                byMethod('delete',this.apiDelete+this.$route.params.id).then(()=>{
-                                        swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
-                                        'success'
-                                        )
-                                    //Fire.$emit('AfterCreate');
-                                    this.$router.push(this.urlList)
-                                }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
-                                });
-                         }
-                    })
-            },
+                this.$refs.RecordsRepo.onSave(this.model,this.$route.params.id,this.form,this.$route.meta.mode)                 
+            } 
+           
         }
     }
 </script>

@@ -23,7 +23,7 @@ class CreateAddressesTable extends Migration
 			$table->string('address_line1');
 			$table->string('address_line2');
 			$table->string('city');
-            $table->string('post_code');
+            $table->string('postcode');
             $table->decimal('lat', 10, 7);
             $table->decimal('lng', 10, 7);
             $table->timestamps();
