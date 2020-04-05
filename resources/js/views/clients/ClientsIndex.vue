@@ -59,28 +59,7 @@
         data() {
             return {
                 model:'clients',   
-                editMode: this.$route.meta.mode,             
-                // classes: {
-                //     tableWrapper: "outer-table-div-class wrapper-class-two", 
-                //     table : {
-                //         "table-striped my-class" : true,
-                //         "table-bordered my-class-two" : function(rows) {
-                //             return true
-                //         }
-                //     },
-                //     row : {
-                //         "my-row my-row2" : true,
-                //         "function-class" : function(row) {
-                //             return row.id == 1
-                //         }
-                //     },
-                //     cell : {
-                //         "my-cell my-cell2" : true,
-                //         "text-danger" : function(row,column,cellValue) {
-                //             return column.name == "salary" && row.salary > 2500
-                //         }
-                //     }
-                // },
+                editMode: this.$route.meta.mode, 
                 rows: [],
                 columns: [
                      {label: "Id",name: "id",filter: {},sort: true,column_classes: "client_id",initial_sort: true, initial_sort_order: "asc" },                     
@@ -119,10 +98,7 @@
                 self.columns[listesColumn].filter.options = res.data.reccurences                
             })          
         },
-        methods: { 
-            customCreate() {
-                return 'axios.get(url)'
-            },
+        methods: {             
             newRecord() {        
                 this.$router.push(this.model+'/create')
             },
@@ -130,43 +106,13 @@
                 this.$router.push(this.model+'/'+id+'/edit')
             },
             deleteRecord(id) {
-                this.$refs.RecordsRepo.deleteRecord(this.model,id) 
+                this.$refs.RecordsRepo.deleteRecord(this.model,this.serverParams, this.queryParams,id) 
             }, 
-
             ////////////////////////////////////////////////////////////////////////////////////////////////////////TABLE            
             onChangeQuery(queryParams) {
                 this.queryParams = queryParams                                   
-                this.fetchData();                   
-            },
-            fetchData: async function() {
-                let self = this;
-                this.$Progress.start()
-                this.serverParams = Object.assign({}, this.serverParams, this.queryParams)                                    
-                //sorting params   
-                var params = { field: this.serverParams.sort[0].name,order: this.serverParams.sort[0].order }                       
-                this.querySorting = Object.keys(params).map(key => key + '=' + params[key]).join('&')
-                // filter params
-                var filterParams = []
-                this.serverParams.filters.forEach(element => {                   
-                    if(element.type==='simple'){
-                    filterParams.push(element.name+'='+ element.text)
-                    }else{
-                    filterParams.push(element.name+'='+ element.selected_options)    
-                    }                   
-                });
-                //per page
-                var perpage = { perPage: this.serverParams.per_page };
-                var queryPer = Object.keys(perpage).map(key => key + '=' + perpage[key]).join('&'); 
-                //which page
-                var pageparams = { page: this.serverParams.page };
-                var page = Object.keys(pageparams).map(key => key + '=' + pageparams[key]).join('&'); 
-
-                const { data } = await this.$refs.RecordsRepo.sortFilter(this.model,this.querySorting+'&'+queryPer+'&'+page+'&'+filterParams.join('&')); 
-                self.rows = data.rows.data;
-              
-                this.$Progress.finish()
-                self.total_rows = data.rows.total;      
-            }
+                this.$refs.RecordsRepo.fetchData(this.model,this.serverParams, this.queryParams);                   
+            }           
 
         }//meth
         

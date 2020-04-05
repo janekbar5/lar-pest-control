@@ -33,8 +33,12 @@ class UserController extends Controller
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
     public function index()
     {       
-        $users = $this->br->getAdminUsers();       
-        return response()->json(['results' => $users]);
+        $users = User::query();
+		$this->br->ownFilterLoop($_GET,$users);
+		$users = $users->orderBy(request('field'),request('order'));
+		
+		$users = $users->paginate(request('perPage'));  
+        return response()->json(['rows' => $users]);
     }
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)
@@ -71,22 +75,17 @@ class UserController extends Controller
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
     public function update(Request $request, $id){
-    $user = User::findOrFail($id);
-    $this->validate($request,[
-        'name' => 'required|string|max:191',           
-        'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-        'password' => 'min:6|required_with:confirm_password|same:confirm_password',
-		'confirm_password' => 'min:6',
-        'roles' => 'required'
-    ]);
-    //$user->update($request->all());
+	// dd($request->all());
+    $user = User::findOrFail($id);    
+	$fv = $this->validate($request, $this->vr->newAdminUsers());
+   
 	$user->update(array_merge($request->all(), ['password' => bcrypt($request->input('password'))]));
 	
     DB::table('model_has_roles')->where('model_id', $id)->delete();       
     foreach($request->input('roles') as $role){ 
         $user->assignRole($role['name']);
-    }      
-		return ['saved' => 'Saved the user info','id' => $user->id];
+    }   
+		return ['saved' => 'true','id' => $user->id];
 	}
 	
    /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   

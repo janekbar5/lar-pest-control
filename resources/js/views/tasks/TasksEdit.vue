@@ -235,7 +235,7 @@
         methods: {           
             Search(){
             if (this.newStart && this.newEnd ) {
-                console.log('value changed from ' + this.newStart + this.newEnd );
+                //console.log('value changed from ' + this.newStart + this.newEnd );
                 axios.get('/v1/api/tasks/getfreefieldusersfordate?start_t='+this.newStart+'&end_t='+this.newEnd)
                     .then((res) => {                      
                     this.setFreeUser(res) 
@@ -275,8 +275,8 @@
                 });
                 this.form.selectedTreatments = treatment_array;
             },   
-            nameWithSuename ({ name, last_name }) {
-                return `${name} ${last_name}`
+            nameWithSuename ({ name_t, last_name_t }) {
+                return `${name_t} ${last_name_t}`
             },             
             onSave() {
                 this.$refs.RecordsRepo.onSave(this.model,this.$route.params.id,this.form,this.$route.meta.mode) 

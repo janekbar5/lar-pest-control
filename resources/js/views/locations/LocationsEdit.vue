@@ -97,9 +97,6 @@
                             </div>
                             </br>  </br>  </br>
 
-                   
-
-                          errors {{ errors }}
                             <div class="row">
                                <div class="col-md-3">
                                <div class="form-group">
@@ -136,8 +133,6 @@
 
                         </div>
 
-
-
                             <div class="row">
                   
                                 <div class="col-md-3">
@@ -155,6 +150,7 @@
                             <LocationPicker ref="LocationPicker" v-if="isMounted" :lat="lat" :lng="lng" @update-location="updateLocation"> </LocationPicker>
                                     
                        </div> 
+                       <!-- {{form}} -->
                      
                         <div class="card-footer">
                             <div>                               
@@ -185,25 +181,18 @@
                 editMode: this.$route.meta.mode,     
                 lat:'',lng:'',
                 isMounted: false,           
-                //////////////////////////////////////////////////////////                 
-                form: {
-                    address:{address_line1:'',},
-                    clients:[],                    
-                },                
-                errors: {                   
-                },     
-                            
+                ////////////////////////////////////////////////////////// 
+                form: {},errors: {},       
                 //////////////////////////////////////////////////////////                
                 grantedTreatments:[], allTreatments:[], allclients:[],
             }
         },
         beforeRouteEnter(to, from, next) {            
-            get('/v1/api'+to.path)
-                .then((res) => { next(vm => vm.setData(res))  })
+            get('/v1/api'+to.path).then((res) => { next(vm => vm.setData(res))  })
         },       
         methods: {
             nameWithNameLastName ({ person_name_t  }) {
-                    return `${person_name_t}`
+                return `${person_name_t}`
              },           
             updateLocation(itm) {             
                Vue.set(this.form, 'lat', itm.lat) 
@@ -211,10 +200,8 @@
             },
              searchLocation2(){
               var city = this.form.city
-              var address_line1 = this.form.address_line1
-              //var address_line2 = this.form.address.address_line2
-              //var text = string.concat(city)
-              this.$refs.LocationPicker.searchLocation2(city);
+              var address_line1 = this.form.address_line1             
+              this.$refs.LocationPicker.searchLocation2(city)
             },           
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
@@ -225,7 +212,7 @@
                     this.isMounted = true
                 } 
                 this.isMounted = true
-                var itm;
+                var itm
                 this.updateLocation(itm = {lat:40.446947, lng:13.004})
                 this.allTreatments = res.data.alltreatments  
                 this.allclients = res.data.allclients    
@@ -238,7 +225,7 @@
                 });
                 this.form.selectedTreatments = treatment_array;
             },         
-            onSave() {
+            onSave() {                
                 this.$refs.RecordsRepo.onSave(this.model,this.$route.params.id,this.form,this.$route.meta.mode)                 
             } 
            

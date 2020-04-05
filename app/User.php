@@ -26,7 +26,7 @@ class User extends Authenticatable implements Auditable, Searchable
 	
 	
 	protected $fillable = [
-        'name', 'email', 'password',
+        'name_t', 'email_t', 'password',
     ];
 	
     ////////////////////////////////////////////first photo  Assesors setAttribute
@@ -37,7 +37,7 @@ class User extends Authenticatable implements Auditable, Searchable
     {        
         return $this->photos->first();	  
     }
-	    
+	
 	
 	//////////////////////////////////////////Soft delete	
     protected $dates = ['deleted_at'];
@@ -45,12 +45,12 @@ class User extends Authenticatable implements Auditable, Searchable
     public function getSearchResult(): SearchResult
     {
        $url = route('home.search', $this->id);         
-       return new SearchResult($this, $this->name, $url);
+       return new SearchResult($this, $this->name_t, $url);
     }
      /////////////////////////////////////////////////////////////For typehead search     
      public function getTextAttribute()
      {
-         return $this->attributes['name']. ' - '.$this->attributes['last_name'];
+         return $this->attributes['name_t']. ' - '.$this->attributes['last_name_t'];
      }
 
 

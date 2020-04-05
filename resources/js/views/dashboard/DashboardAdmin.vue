@@ -41,7 +41,7 @@
                     <div class="small-box bg-info">
                       <div class="inner">
                         <p>Tasks number: {{assignedtasks.length}}</p>
-                        <p>Tasks value: {{unassignedtasksCount}}</p>
+                        <p>Tasks value: {{assignedtasksCount}}</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-bag"></i>
@@ -54,7 +54,7 @@
                     <div class="small-box bg-success">
                       <div class="inner">
                         <h3>53<sup style="font-size: 20px">%</sup></h3>
-                        <p>Bounce Rate</p>
+                        <p>Bounce Rate {{unassignedtasksCount}}</p>
                       </div>
                       <div class="icon">
                         <i class="ion ion-stats-bars"></i>
@@ -344,7 +344,6 @@ export default {
                         title: 'User Created in successfully'
                         })
                     this.$Progress.finish();
-
                 })
                 .catch(()=>{})
     },
@@ -479,7 +478,8 @@ export default {
       this.assignedtasks = res.data.assignedtasks
       this.events = res.data.assignedtasks              
       this.locations = res.data.alllocations
-      this.unassignedtasksCount = this.assignedtasks.reduce(function(prev, cur) { return prev + cur.price_n    }, 0)
+      this.assignedtasksCount = this.assignedtasks.reduce(function(prev, cur) { return prev + cur.price_n    }, 0)
+      this.unassignedtasksCount = this.unassignedtasks.reduce(function(prev1, cur2) { return prev1 + cur2.price_n    }, 0)
     },
     setStats(res) { 
       this.dueTasksCount = res.data.dueTasksCount

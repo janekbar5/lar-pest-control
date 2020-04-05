@@ -10,7 +10,22 @@ use DB;
 class BackendRepository implements BackendRepositoryInterface
 {
 
-    /////////////////////////////////////////////////////////////////////////////////Reccurences
+    
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////FILTERS
+	public function ownFilterLoop($get,$var){
+        $count = 0;
+	    foreach($get as $key => $value){
+		$count++;
+			if($count > 4){ //skipping first 4 				
+				if(strpos($key, '_t') || strpos($key, '_n') ){
+				 $var = $var->where($key,'LIKE', '%'.$value.'%');				
+				}				
+			}
+		} 
+    }
+	/////////////////////////////////////////////////////////////////////////////////Reccurences
 	public function getReccurences(){
         return Reccurence::all(); 
     }

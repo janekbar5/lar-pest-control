@@ -181,9 +181,7 @@
             }
         },       
         mounted() {
-            let model = 'treatments'
-            //this.fetchData(model='treatments')
-            //this.test(model)
+            let model = 'treatments'          
         },
         methods: { 
             ///////////////////////////////////////      

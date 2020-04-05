@@ -130,7 +130,7 @@
                          />  
 
                       <div class="card-footer clearfix">
-                     {{events}}
+                     <!-- {{events}} -->
                       </div>
                     </div>
               </div>   
@@ -198,7 +198,7 @@
                      
                     </div>
 
-                    <div style="display:block">
+                    <div style="display:none">
 
                      <div class="form-group">
                         <input v-model="form.itemid" type="text" name="itemid"  placeholder="itemid"  class="form-control" :class="{ 'is-invalid': form.errors.has('itemid') }">
@@ -302,7 +302,7 @@ export default {
             }
             if(event.users) {             
               event.users.forEach(function (item) {                   
-                  //element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
+                  element.find('.fc-content').append(' <span style="font-size:12px"><i class="delete fas fa-user"></i> '+item.name+' '+item.last_name+'</span></br>');                      
               });   
             }           
          },
@@ -357,12 +357,12 @@ export default {
             'form.start_t': function(newVal1) {              
                 this.newStart = newVal1
                 this.getFreeUsers()  
-                console.log(newVal1)
+                //console.log(newVal1)
             },
             'form.end_t': function(newVal2) { 
                 this.newEnd = newVal2
                 this.getFreeUsers() 
-                console.log(newVal2)                          
+                //console.log(newVal2)                          
             }, 
                    
   },
@@ -399,6 +399,7 @@ export default {
       this.form.users = []
       //this.allAvailableFieldUsers = [];
       $("#assignTaskToUserModal").modal("hide")
+      this.errors = ''
       this.form.reset()
       this.loadCalendar()           
     },   

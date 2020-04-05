@@ -1,6 +1,6 @@
 <template>
-<div style="position:fixed;z-index:10000">
-
+<!-- <div style="position:fixed;z-index:10000"> -->
+<div>
 <!----------------LIST------------------------> 
 <router-link v-show="editMode==='create' || editMode==='view' || editMode==='edit'" :to="{path: '/'+model}" class="btn btn-primary">
     <i aria-hidden="true" class="fa fa-list"></i> Back to list

@@ -189,6 +189,7 @@
 
     </div>
 </template>
+
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'    
@@ -208,7 +209,7 @@
                
                 form: { active:0,}, errors: {},                         
                 //////////////////////////////////////////////////////////               
-                photable_Type: "App\\User", photable_Id: this.$route.params.id,                
+                photable_Type: "App\\Client", photable_Id: this.$route.params.id,                
                 //
                 datetime:'',date:'',
                 //
@@ -227,8 +228,7 @@
             },           
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
-                    Vue.set(this.$data, 'form', res.data.form)                     
-                    this.store = this.apiUpdate + this.$route.params.id
+                    Vue.set(this.$data, 'form', res.data.form) 
                     this.locations =  res.data.form.locations //assigned locations                    
                 } 
                 this.reccurences =  res.data.reccurences

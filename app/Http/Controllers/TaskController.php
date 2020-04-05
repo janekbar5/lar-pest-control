@@ -32,8 +32,7 @@ class TaskController extends Controller
 	public function index()    {       
 		
 		$tasks = Task::with('statuses','users','locations');
-		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
-		$tasks = $tasks->orderBy(request('field'),request('order'));
+		
 		////////////////////////////////////////////////////////////Own Filter Loop
 		$count = 0;
 		foreach($_GET as $key => $value){
@@ -53,7 +52,13 @@ class TaskController extends Controller
             $tasks = $tasks
             ->join('locations','locations.id','=','tasks.location_id')->select('locations.title_t as regionName','tasks.*')
             ->orderBy('regionName',request('order'));
-        }	
+        }else{
+		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
+		     $tasks = $tasks->orderBy(request('field'),request('order'));		
+		}	
+		
+		
+		
         $tasks = $tasks->paginate(request('perPage'));  
         return response()->json(['rows' => $tasks]);		
     }

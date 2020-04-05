@@ -3,7 +3,7 @@
 
             <div class="panel-heading">
                 <div>                   
-                    <Buttons :editMode="editMode" ></Buttons>
+                    <Buttons :editMode="editMode" :model="model"></Buttons>
                 </div>
             </div>
         
@@ -32,8 +32,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': errors.name }" >
-                                         <div class="alert alert-danger" v-if="errors.name"> {{errors.name[0]}}</div>
+                                        <input v-model="form.name_t" type="text" name="name_t" class="form-control" :class="{ 'is-invalid': errors.name_t }" >
+                                         <div class="alert alert-danger" v-if="errors.name_t"> {{errors.name_t[0]}}</div>
                                     </div>                                                                    
                                 </div>
                                                            
@@ -93,7 +93,7 @@
 
                         <div class="card-footer">
                             <div>                               
-                                <Buttons :editMode="editMode" ></Buttons>
+                                <Buttons :editMode="editMode" :model="model"></Buttons>
                             </div>
                         </div>
                         
@@ -101,155 +101,65 @@
             </div>
          </div>
       </div>          
-            
+
+       <RecordsRepository ref="RecordsRepo" > </RecordsRepository>     
 
     </div>
 </template>
+
 <script type="text/javascript">
     import Vue from 'vue'
     import {get, byMethod } from '../../lib/api'    
-    import DzoneComponent from '../../components/dzone/DzoneComponent';
-    import Buttons from './Buttons';
+    import Buttons from '../../components/buttons/Buttons'
+    import Datepicker from 'vuejs-datetimepicker'
     import Multiselect from 'vue-multiselect'
-  
+    import RecordsRepository from "../../repositories/RecordsRepository.vue"
+    import DzoneComponent from '../../components/dzone/DzoneComponent'  
+
     export default {
-        components: { DzoneComponent, Buttons, Multiselect },
+        components: { Buttons, Datepicker, Multiselect, RecordsRepository, DzoneComponent },
+       
         data () {
             return {
-                isMounted: false,
-                apiList:'', apiCreate:'', apiEdit:'', apiCreate:'', apiUpdate:'',     
-                //
-                urlList:'', urlCreate:'', urlEdit:'',              
+                model:'users', isMounted: false, allroles:[],roles:[],                         
                 ////////////////////////////////////////////////////////// 
                 editMode: this.$route.meta.mode,
-                form: {},
-                errors: {},              
+               
+                form: { active:0,}, errors: {},                         
+                //////////////////////////////////////////////////////////               
+                photable_Type: "App\\User", photable_Id: this.$route.params.id,                
                 //
-                photable_Type: "App\\User",
-                photable_Id: this.$route.params.id,
-                photos_List: [],
+                datetime:'',date:'',
                 //
-                roles: null,
-                allroles: [],
+                // client_type:'',alllocations:[],reccurences: [],clienttype:'',clienttypes:[
+                //     {id: 1,name: 'Private' },
+                //     {id: 2,name: 'Company' },                            
+                // ],
             }
         },
-        beforeRouteEnter(to, from, next) {
-            //console.log(to)
-            get('/v1/api'+to.path)
-                .then((res) => {
-                    next(vm => vm.setData(res))
-                })
-        },
-        beforeRouteUpdate(to, from, next) {
-            this.show = false
-            //get(initialize(to))
-            get('/v1/api'+to.path)
-                .then((res) => {
-                    this.setData(res)
-                    next()
-                })
-        },
-        computed: {
-          
-        },
-        created() {
-            this.$eventHub.$on('settings', this.modelSettings) 
-        },
-        methods: {
-            modelSettings(settings){                
-                //return name
-                this.settings = settings;
-                this.urlList = settings.urlList
-                this.urlEdit = settings.urlEdit
-                this.urlCreate = settings.urlCreate
-                //         
-                this.apiList = settings.apiList
-                this.apiDelete = settings.apiDelete
-                this.apiCreate = settings.apiCreate
-                this.apiEdit = settings.apiEdit
-                this.apiUpdate = settings.apiUpdate
-                //console.log(settings)                
-            },
+        beforeRouteEnter(to, from, next) {            
+            get('/v1/api'+to.path).then((res) => {  next(vm => vm.setData(res))  })
+        },         
+        methods: {           
+            nameWithNameLastName ({ title_t }) {
+                return `${title_t}`
+            },           
             setData(res) { 
                 if(this.$route.meta.mode === 'edit') {
-                    Vue.set(this.$data, 'form', res.data.form)
-                    this.store = this.apiUpdate + this.$route.params.id
-                    this.method = 'PUT'
-                    this.title = 'Edit'                    
+                    Vue.set(this.$data, 'form', res.data.form)                                       
                     this.roles =  res.data.form.roles //assigned roles                  
                     this.photos_List = res.data.form.photos;
                     //console.log('setData-parent')
                 }                
                 //    console.log(this.photos_List)
                 this.allroles =  res.data.allroles //all roles
-                this.isMounted = true 
+                this.isMounted = true            
             },
-         
-            // addTag2 (newTag) {
-            //     const tag = {
-            //         name: newTag,
-            //         code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-            //     }
-            //     this.allroles.push(tag)
-            //     this.roles.push(tag)               
-            // },
             onSave() {
-                this.errors = {}
-                byMethod('POST',this.$route.meta.mode === 'edit' ? '/v1/api/users/update/'+this.form.id : '/v1/api/users/create' , this.form)
-                    .then((res) => {
-                        if(res.data && res.data.saved) {
-                            this.success(res)
-                             this.loadToast('success','Updated successfully');  
-                        }
-                        if(res.data && res.data.created) {
-                            this.success(res)
-                             this.loadToast('success','Created successfully');  
-                        }
-                    })
-                    .catch((error) => {
-                        if(error.response.status === 422) {
-                            this.errors = error.response.data.errors
-                            this.loadToast('error','Check the forms'); 
-                        }
-                        this.isProcessing = false
-                    })
-            },
-            success(res) {
-                this.$router.push('/users')
-                
-            },
-            
-            loadToast(icon,text){
-              toast.fire({icon: icon,title: text })
-            }, 
-            onDelete(){
-                swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!"+this.urlList,
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                        // Send request to the server
-                         if (result.value) {
-                                //byMethod('delete', `/api/properties/${this.model.id}`).then(()=>{
-                                byMethod('delete',this.apiDelete+this.$route.params.id).then(()=>{
-                                        swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
-                                        'success'
-                                        )
-                                    //Fire.$emit('AfterCreate');
-                                    this.$router.push(this.urlList)
-                                }).catch(()=> {
-                                    swal.fire("Failed!", "There was something wronge.", "warning");
-                                });
-                         }
-                    })
-            },
+                this.$refs.RecordsRepo.onSave(this.model,this.$route.params.id,this.form,this.$route.meta.mode) 
+            }                               
+  
         }
     }
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+ <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

@@ -56,6 +56,11 @@ $fa-font-path: "../webfonts";
   // background-color: #eb2344;
   // color:#fff !important;
 }
+////////////////////////////////////icons
+.fa-trash:hover,.fa-pen:hover {
+  color: red;
+  cursor:pointer;
+}
 ////////////////////////////////for menu
 .sub{
   padding: 0px 0px 0px 0px !important;

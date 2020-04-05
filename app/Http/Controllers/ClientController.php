@@ -19,33 +19,21 @@ class ClientController extends Controller
         $this->vr = $vr;
         $this->im = $im;
     }    
-    /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    
+    /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX    
 	public function index()    { 
-		$clients = Client::with('locations');
-		
+		$clients = Client::with('locations');		
+		////////////////////////////////////////////////////////////Own Filter Loop	
+		$this->br->ownFilterLoop($_GET,$clients);		
 		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
-		$clients = $clients->orderBy(request('field'),request('order'));
-		////////////////////////////////////////////////////////////Own Filter Loop		
-		$count = 0;
-		foreach($_GET as $key => $value){
-		$count++;
-			if($count > 4){ //skipping first 4 				
-				if(strpos($key, '_t') || strpos($key, '_n') ){
-				$clients = $clients->where($key,'LIKE', '%'.$value.'%');				
-				}				
-			}
-		}
-		////////////////////////////////////////////////////////////Foreign Filters NO -
-		/* if(request('reccurence_id_n')){ //foreach $_GET if contain _id
-            $clients = $clients->whereHas('reccurences',function($query) { $query->where('title','LIKE', '%'.request('reccurence_id_n').'%');});       
-        }  */
+		$clients = $clients->orderBy(request('field'),request('order'));		
         /////////////////////////////////////////////////////////////Foreign Order
         if(request('field')=='reccurence_id_n'){
             $clients = $clients
             ->join('reccurences','reccurences.id','=','clients.reccurence_id_n')->select('reccurences.title as regionName','clients.*')
             ->orderBy('regionName',request('order'));
         }	
+		
+		
         $clients = $clients->paginate(request('perPage'));  
         return response()->json(['rows' => $clients]);		
     }
@@ -80,7 +68,7 @@ class ClientController extends Controller
     {
         $fv = $this->validate($request, $this->vr->clientUpdate()); 
         $client = Client::create($request->all());    
-        return ['saved' => 'true','id' => $client->id];    
+        return ['saved' =>'true','id' => $client->id];    
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
     public function update(Request $request, $id){
@@ -94,7 +82,7 @@ class ClientController extends Controller
         }		
         $client->locations()->sync($array_locations);
 		
-        return ['saved' => 'true','id' => $client->id];
+        return ['saved' =>'true','id' => $client->id];
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////6 DESTROY   
    public function destroy($id)
@@ -102,7 +90,7 @@ class ClientController extends Controller
        $client = $this->br->getClientById($id);      
        $client->delete();
        return response()
-           ->json(['deleted' => true]);
+           ->json(['deleted' =>'true']);
    }
     /**/////////////////////////////////////////////////////////////////////////////////////////////7 SEARCH CLIENTS
     public function searchClients()

@@ -1,180 +1,131 @@
 <template>
     <div>
-        <Buttons :editMode="editMode" style="display:none"></Buttons>
-  
-      <vue-bootstrap4-table 
-      :rows="rows"
-      :columns="columns"
-      :config="config"
-      :actions="actions"
-      @on-download="newUser"                               
-      >
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <Buttons :editMode="editMode" :model="model"></Buttons>
+                    </div>
+                </div>
+            </div>  
 
-       <template slot="photo" slot-scope="props">           
-              <img v-if="(props.cell_value) == null" :src="'https://dummyimage.com/60x50/807c80/fff'" style="width:60px;height:50px">
-              <img v-else :src="'images/thumb_medium-' + props.cell_value" style="width:60px;height:50px">
-       </template>
+        <vue-bootstrap4-table 
+            :rows="rows"        
+            :columns="columns"
+            :config="config"
+            @on-change-query="onChangeQuery"
+            :total-rows="total_rows"
+                       
+            >
+             <!-- :actions="actions"
+            @on-download="newRecord" -->
+
+         <template slot="column_reccurence_id_n" slot-scope="props">            
+                {{props.column.label}}            
+        </template>   
+                              
+          <template slot="photos" slot-scope="props">  
+           <img v-if="props.row.photos[0] == null" src="https://dummyimage.com/50x40/807c80/fff" style="width:50px;height:40px">
+           <img v-else :src="'images/thumb_medium-' + props.row.photos[0].path" style="width:50px;height:40px" /> 
+         </template> 
+
+          <template slot="clienttypes" slot-scope="props">          
+           {{ props.row.client_type_n == 1 ? 'Private' : 'Company' }}        
+         </template>
+
+         <template slot="reccurences" slot-scope="props"> 
+           <small class="badge"><i class="fa fa-clock"></i> {{props.row.reccurences.title}}</small>     
+         </template>
 
         <template slot="actions" slot-scope="props"> 
-            <i aria-hidden="true" class="fa fa-pen" @click="modelEdit(props.cell_value)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
-            <i aria-hidden="true" class="fa fa-trash" @click="modelDelete(props.cell_value)"></i>     
-       </template>
+            <i aria-hidden="true" class="fa fa-pen" @click="editRecord(props.cell_value)"></i>&nbsp;&nbsp;&nbsp;&nbsp;                                
+            <i aria-hidden="true" class="fa fa-trash" @click="deleteRecord(props.cell_value)"></i>     
+       </template>       
+
 
         </vue-bootstrap4-table>
+
+
+        <RecordsRepository ref="RecordsRepo" > </RecordsRepository>
     </div>
 </template>
 
-
-<script type="text/javascript">
-import Vue from 'vue'
-import { get, byMethod } from '../../lib/api'
-// import {isEmpty} from "lodash"
-import Buttons from './Buttons'
-// import {Typeahead } from '../../components/typeahead'
-import VueBootstrap4Table from 'vue-bootstrap4-table'
-
-export default {
-    components: { VueBootstrap4Table, Buttons },
-data () {
-return {
-    rows: [],
+<script>
+    import VueBootstrap4Table from 'vue-bootstrap4-table'   
+    import RecordsRepository from "../../repositories/RecordsRepository.vue"
+    import Buttons from '../../components/buttons/Buttons'
+    export default {
+        name: 'App',
+        components: { VueBootstrap4Table, RecordsRepository, Buttons },
+        data() {
+            return {
+                model:'users',   
+                editMode: this.$route.meta.mode, 
+                rows: [],
                 columns: [
-                        {label: "id", name: "id",},
-                        {label: "Photo",name: "photos[0].path",slot_name: "photo"},
-                        {label: "Name", name: "name",filter: {type: "simple",placeholder: "Enter name"},sort: true,},
+                     {label: "Id",name: "id",filter: {},sort: true,column_classes: "user_id",initial_sort: true, initial_sort_order: "asc" },
+                     {label: "Photo",name: "id",slot_name: "photos"},                      
+                     //Own Text                     
+                     {label: "Name",name: "name_t",filter: {type: "simple",placeholder: "Name",},sort: true,column_classes: "user_name"}, 
+                     {label: "Surname",name: "last_name_t",filter: {type: "simple",placeholder: "Surname",},sort: true,column_classes: "user_name"},   
+                     {label: "Email",name: "email",filter: {type: "simple",placeholder: "Email",},sort: true },  
+                     {label: "Private Phone",name: "personal_phone_t",filter: {type: "simple",placeholder: "Private Phone",},sort: true,column_classes: "user_phone" },
+                     {label: "Work Phone",name: "work_phone_t",filter: {type: "simple",placeholder: "Work Phone",},sort: true,column_classes: "user_phone" },
+                     {label: "Leave Days",name: "leaves_day_n",filter: {type: "simple",placeholder: "Leave Days",},sort: true },               
+                                     
+                     //Own Number                   
                        
-                        {label: "Surname", name: "last_name",filter: {type: "simple",placeholder: "Enter surname"},sort: true,},
-                        {label: "Email", name: "email",filter: {type: "simple",placeholder: "Enter email"},sort: true,},
-                        {label: "Work Phone", name: "work_phone",filter: {type: "simple",placeholder: "Enter phone"},sort: true,},
-                        {label: "Leaves Days", name: "leaves_day",filter: {type: "simple",placeholder: "Enter days"},sort: true,},
-                        {label: "Personal Phone", name: "personal_phone",filter: {type: "simple",placeholder: "Enter phone"},sort: true,},
-                        
-                        {label: "Role",name: "roles[0].name",filter: {type: "simple",placeholder: "Enter Role"},sort: true,},
-                        {label: "Actions",name: "id",slot_name: "actions"}, 
-                   ],
-                   actions: [ { btn_text: "New User", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],                    
-                    config: {
-                        checkbox_rows: false,
-                        rows_selectable: true,
-                        card_title: "Users"
-                    },
-    ////
-    // url:'',
-    // settings: {},
-    modelPlural: 'users', modelSingular: 'user', 
-    urlList:'/users',
-    urlCreate:'/users/create',
-    urlEdit:'/users/',
-    apiList:'/v1/api/users/index',
-    apiCreate:'/v1/api/users/create',
-    apiEdit:'/v1/api/users/edit/',       
-    apiUpdate:'/v1/api/users/update/',     
-    apiDelete:'/v1/api/users/delete/',
-    //    
-    editMode: this.$route.meta.mode,
-    model: {
-        // urlList:'',
-        // data: []
-    },
-    dataUser:'/v1/api/users/searchusers',
-    perpage:10,
-    
-}
-},
-created() {
-    //this.$eventHub.$on('settings', this.modelSettings) 
-},
-beforeDestroy(){
-    //this.$eventHub.$off('settings');
-},
-//
-mounted() {   
-    this.onFilter() 
-},          
-methods: {
-    // modelSettings(settings){
-    //     //return name
-    //     this.settings = settings;
-    //     this.urlList = settings.urlList
-    //     this.urlEdit = settings.urlEdit
-    //     this.urlCreate = settings.urlCreate
-    //     //
-    //     this.apiList = settings.apiList
-    //     this.apiDelete = settings.apiDelete
-    //     //console.log(settings)  
-    // },
-    newUser(){
-       //this.$router.push(this.urlCreate) 
-    },
-   
-    modelEdit(item) {        
-        this.$router.push(this.urlList+'/'+item+'/edit')
-    },   
-    onFilter() {      
-         axios    
-            .get('/v1/api/users/filterusers')
-                .then((res) => {
-                    this.setData(res)                   
-            })
-            .catch(error => {				
-					this.errored = true
-					})
-			.finally(() => this.loading = false)                   
+                    //{label: "Reccurences",name: "reccurence_id_n",slot_name: "reccurences", 
+                    //filter: {type: "select",mode: "single",closeDropdownOnSelection: true,placeholder: "Reccurence",options: []},sort: true,column_classes: "reccurence_id" },   
+
+                    {label: "Actions",name: "id",slot_name: "actions"},              
+                ],
+                actions: [ { btn_text: "New Task", event_name: "on-download",class: "btn btn-secondary",event_payload: { msg: "my custom msg" } } ],
+                config: { server_mode: true,show_reset_button: false,show_refresh_button: false,global_search: {visibility: false,},per_page: 20,per_page_options: [20, 40, 60, 80], },
+                queryParams: {sort: [],filters: [],global_search: "",per_page: 20,page: 1,},
+                total_rows: 0,
+                //////
+                serverParams:[],querySorting:[],queryFilters:[]
+            }
+        },       
+        mounted() {
+            // let self = this;
+            // axios.get('/v1/api/reccurences/index').then((res) => {
+            //     let listesColumn = 9
+            //     self.columns[listesColumn].filter.options = res.data.reccurences                
+            // })          
         },
-        setData(res) {            
-            this.rows = res.data.results
-            //this.$bar.finish()
-        },
-    getApi(url){
-        get(url)
-        .then((res) => {
-            this.setData(res)                   
-        })
-    },
-    modelDelete(item){
-        swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-        // Send request to the server
-        if (result.value) {
-            byMethod('delete',  this.apiDelete+item).then(()=>{
-            swal.fire('Deleted!','Your file has been deleted.','success')
-            this.getApi('/v1/api/users/filterusers')                                         
-        }).catch(()=> {
-            swal.fire("Failed!", "There was something wronge.", "warning");
-            });
-        }
-        })
-    },
+        methods: {             
+            newRecord() {        
+                this.$router.push(this.model+'/create')
+            },
+            editRecord(id) {        
+                this.$router.push(this.model+'/'+id+'/edit')
+            },
+            deleteRecord(id) {
+                this.$refs.RecordsRepo.deleteRecord(this.model,this.serverParams, this.queryParams,id) 
+            }, 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////TABLE            
+            onChangeQuery(queryParams) {
+                this.queryParams = queryParams                                   
+                this.$refs.RecordsRepo.fetchData(this.model,this.serverParams, this.queryParams);                   
+            }           
 
-
-
+        }//meth
+        
     }
-}
 </script>
+
 <style>
-/* .fa-pen:hover {
-    color: red;
-} */
-.fa-trash:hover,.fa-pen:hover {
-    color: red;
-    cursor:pointer;
+.user_id{
+    width:5%;     
 }
-.table-active {
-    background-color:white;    
+.user_name{
+    width:15%;       
 }
-.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
-color: #fff;
-background-color:grey;
-border-color:grey;
+.user_phone{
+    width:10%;   
 }
-.page-item.active .page-link {
-    background-color:grey; 
-}   
+.user_id{
+   width:10%; 
+}
 </style>

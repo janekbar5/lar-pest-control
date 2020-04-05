@@ -63,7 +63,7 @@ class ValidationRepository
 			//'end' => 'required|date|after:start',
 			'location_id' => 'required',
 			'status_id_n' => 'required',
-			//'users' => 'required',
+			'users' => 'required',
 			
          );        
          return $rules;
@@ -85,7 +85,7 @@ class ValidationRepository
             'title_t' => 'required',
 			'surface_n' => 'required|numeric',
 			'price_n' => 'required|numeric',
-			//'description' => 'required',
+			'description' => 'required',
 			//
 			'address_line1' => 'required',
 			'city' => 'required',			
@@ -119,9 +119,10 @@ class ValidationRepository
     public function newAdminUsers()
      {        
          $rules = array(
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm_password',
+            'name_t' => 'required',
+            //'email' => 'required|email|unique:users,email',
+			'email' => 'required|email',
+            //'password' => 'required|same:confirm_password',
             'roles' => 'required'
          );        
          return $rules;

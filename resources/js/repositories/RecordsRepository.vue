@@ -73,21 +73,59 @@ export default {
     loadToast(icon,text){
       toast.fire({icon: icon,title: text })
     },
-    deleteRecord(model,id){
+    deleteRecord(model,serverParams,queryParams,id){
             swal.fire({title: 'Are you sure?',text: "You won't be able to revert this!",type: 'warning',showCancelButton: true,
-            confirmButtonColor: '#3085d6',cancelButtonColor: '#d33',confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {                      
-            if (result.value) {
-                byMethod('DELETE','/v1/api/'+model+'/delete/'+id).then(()=>{
-                swal.fire('Deleted!','Your '+ model +' has been deleted.','success')
-                this.$parent.fetchData()                                         
-            }).catch(()=> {
-                swal.fire("Failed!", "There was something wronge.", "warning")
-                });
-            }
-            })
+            confirmButtonColor: '#3085d6',cancelButtonColor: '#d33',confirmButtonText: 'Yes, delete it!'})
+                .then((result) => {                      
+                if (result.value) {
+                    byMethod('DELETE','/v1/api/'+model+'/delete/'+id)
+                    .then((res)=>{
+                        if(res.data.deleted) {                          
+                        swal.fire('Deleted!','Your '+ model +' has been deleted.','success')
+                        this.fetchData(model,serverParams,queryParams) 
+                        }
+                    }).catch((res)=> {
+                        if(res.status === 422) {                            
+                            swal.fire("Failed!", "There was something wronge.", "warning")
+                        }
+                        
+                    });
+                }
+                })
         
-            },     
+    },
+    fetchData: async function(model,serverParams,queryParams) {  
+                
+                this.queryParams = queryParams
+                this.serverParams = serverParams             
+                let self = this;
+                this.$Progress.start()
+                this.serverParams = Object.assign({}, this.serverParams, this.queryParams)                                    
+                //sorting params   
+                var params = { field: this.serverParams.sort[0].name,order: this.serverParams.sort[0].order }                       
+                this.querySorting = Object.keys(params).map(key => key + '=' + params[key]).join('&')
+                // filter params
+                var filterParams = []
+                this.serverParams.filters.forEach(element => {                   
+                    if(element.type==='simple'){
+                    filterParams.push(element.name+'='+ element.text)
+                    }else{
+                    filterParams.push(element.name+'='+ element.selected_options)    
+                    }                   
+                });
+                //per page
+                var perpage = { perPage: this.serverParams.per_page };
+                var queryPer = Object.keys(perpage).map(key => key + '=' + perpage[key]).join('&'); 
+                //which page
+                var pageparams = { page: this.serverParams.page };
+                var page = Object.keys(pageparams).map(key => key + '=' + pageparams[key]).join('&'); 
+
+                const { data } = await this.sortFilter(model,this.querySorting+'&'+queryPer+'&'+page+'&'+filterParams.join('&')); 
+                self.$parent.rows = data.rows.data;              
+                this.$Progress.finish()
+                self.$parent.total_rows = data.rows.total;      
+            }
+   
   }//meth
 }
 </script>

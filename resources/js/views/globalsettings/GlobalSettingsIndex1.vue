@@ -206,24 +206,20 @@
                     </button>
                 </div>
                 <form @submit.prevent="editmode ? updateTreatment() : createTreatment()">
-                <div class="modal-body">
-                     <div class="form-group">
-                        <input v-model="formTreatment.title" type="text" name="title"
-                            placeholder="Title"
-                            class="form-control" :class="{ 'is-invalid': formTreatment.errors.has('title') }">
-                        <has-error :form="formTreatment" field="title"></has-error>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input v-model="formTreatment.title" type="text" name="title"
+                                placeholder="Title"
+                                class="form-control" :class="{ 'is-invalid': formTreatment.errors.has('title') }">
+                            <has-error :form="formTreatment" field="title"></has-error>
+                        </div>                    
                     </div>
-
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" @click="formHideReset('formTreatment')">Close</button>
-                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
-                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
-                </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="formHideReset('formTreatment')">Close</button>
+                        <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                        <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                    </div>
                 </form>
-
                 </div>
             </div>
             </div> 

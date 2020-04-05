@@ -21,31 +21,43 @@ class LocationController extends Controller
         $this->im = $im;
     }    
     /**/////////////////////////////////////////////////////////////////////////////////////////////1 INDEX
-    public function index()    { 
-		$locations = Location::with('clients');			
-		$locations = $locations->orderBy(request('field'),request('order'));/////////////////Own Order ALWAYS EXIST		
-		$count = 0;//////////////////////////////////////////////////////////////////////////Own Filter Loop
-		foreach($_GET as $key => $value){
-		$count++;
-			if($count > 4){ //skipping first 4 				
-				if(strpos($key, '_t') || strpos($key, '_n') ){
-				$locations = $locations->where($key,'LIKE', '%'.$value.'%');				
-				}				
-			}
-		}
-		
-		/* if(request('location_id')){ //foreach $_GET if contain _id //////////////////////////Foreign Filters NO -
-            $clients = $clients->whereHas('locations',function($query) { $query->where('title_t','LIKE', '%'.request('location_id').'%');});       
-        } */ 
-       
-        /* if(request('field')=='location_id'){ /////////////////////////////////////////////////////////////Foreign Order
-            $clients = $clients
-            ->join('locations','locations.id','=','clients.location_id')->select('locations.title as regionName','clients.*')
-            ->orderBy('regionName',request('order'));
-        }	 */
-        $locations = $locations->paginate(request('perPage'));  
-        return response()->json(['rows' => $locations]);		
+    public function index()    {
+		$locations = Location::with('clients');	
+		//////////////////////////////////////////////////////////////////////////Own Filter Loop
+		$this->br->ownFilterLoop($_GET,$locations);
+		////////////////////////////////////////////////////////////Own Order ALWAYS EXIST
+		$locations = $locations->orderBy(request('field'),request('order'));
+					
+				
+		if(request('city')){ //foreach $_GET if contain _id //////////////////////////Foreign Filters Text
+            $locations = $locations->whereHas('address',function($query) { $query->where('city','LIKE', '%'.request('city').'%');});       
+        }
+		if(request('postcode')){ //foreach $_GET if contain _id //////////////////////////Foreign Filters Text
+            $locations = $locations->whereHas('address',function($query) { $query->where('postcode','LIKE', '%'.request('postcode').'%');});       
+        } 
+        		
+		/////////////////////////////////////////////////////////////Foreign Order morphOne
+        if(request('field')=='city'){
+            $locations = $locations
+           ->join('addresses', function ($join) {
+		         $join->on('locations.id', '=', 'addresses.addressable_id')
+			          ->where('addressable_type','=','App\Location'); 
+			})
+		   ->orderBy(request('field'),request('order'));
+        }
+		if(request('field')=='postcode'){
+            $locations = $locations
+           ->join('addresses', function ($join) {
+		         $join->on('locations.id', '=', 'addresses.addressable_id')
+			          ->where('addressable_type','=','App\Location'); 
+			})
+		   ->orderBy(request('field'),request('order'));
+        }
+							
+        $locations = $locations->paginate(request('perPage')); 		
+        return response()->json(['rows' => $locations]);		 
     }
+		
     /**/////////////////////////////////////////////////////////////////////////////////////////////2 EDIT
     public function edit($id)
     {        
@@ -85,20 +97,13 @@ class LocationController extends Controller
     }
    /**/////////////////////////////////////////////////////////////////////////////////////////////5 UPDATE POST
    public function update(Request $request, $id)
-   {
-       //dd($request->all()['clients']['id']);
-	   //dd($request->all());
-       //$property = Property::findOrFail($id);
-       $location = $this->br->getLocationsById($id);
-       $fv = $this->validate($request, $this->vr->locationUpdate());       
-       
-       $location->update($request->all());
-       //$location->update(array_merge($request->all(), ['client_id' => $request->all()['clients']['id']]));
-       
-       $address = $this->br->getUserAddressById($type='App\Location',$id);
-       $address->update($request->all()['address']);
-       
-      
+   {      
+       //dd( $request->all() );
+	   $location = $this->br->getLocationsById($id);
+       $fv = $this->validate($request, $this->vr->locationUpdate());  
+       $location->update($request->all());      
+       $address = $this->br->getUserAddressById($type='App\Location',$id);	   
+       $address->update($request->all());  
 	  /* aleady made in vue script in objectToArray()
 	  "selectedTreatments" => array:3 [
 		0 => 2

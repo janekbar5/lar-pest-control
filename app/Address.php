@@ -13,7 +13,7 @@ class Address extends Model
 		'address_line1',
 		'address_line2',
 		'city',
-		'post_code',	
+		'postcode',	
 		'lat',
 		'lng',
 			

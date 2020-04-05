@@ -26,12 +26,14 @@ class Location extends Model implements Auditable, Searchable
     /////////////////////////////////////////////////////////////For loocation typehead search
     protected $appends = [
 	'text','address_line1','address_line2','city','postcode','lat','lng'
+	//'text',
+	//'city','postcode','lat','lng'
 	];
     public function getTextAttribute()
 	{        
 		return $this->title_t;
     }
-	public function getAddressline1Attribute()
+	 public function getAddressline1Attribute()
 	{        
 		return $this->address->address_line1;
     }
@@ -54,13 +56,12 @@ class Location extends Model implements Auditable, Searchable
 	public function getLngAttribute()
 	{        
 		return $this->address->lng;
-    }
+    } 
 	
 	
 
     protected $fillable = [  
-                'user_id',
-                'client_id',
+                'user_id',                
                 'title_t',
                 'description',
 				'surface_n',
